@@ -9,7 +9,7 @@ services:
       INFLUXDB_DB: esp
     volumes:
       - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
-      - nussknacker_storage_influxdb:/var/lib/influxdb
+      - storage_influxdb:/var/lib/influxdb
 
   telegraf:
     container_name: nussknacker_telegraf
@@ -25,8 +25,8 @@ services:
       ZOO_MY_ID: 1
       JVMFLAGS: "-Xms64m -Xmx128m"
     volumes:
-      - nussknacker_storage_zookeeper_datalog:/datalog
-      - nussknacker_storage_zookeeper_data:/data
+      - storage_zookeeper_datalog:/datalog
+      - storage_zookeeper_data:/data
 
   kafka:
     container_name: nussknacker_kafka
@@ -44,7 +44,7 @@ services:
       KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - nussknacker_storage_kafka_data:/kafka
+      - storage_kafka_data:/kafka
     depends_on:
       - zookeeper
 
@@ -99,7 +99,7 @@ services:
       - ./flink/flink-entrypoint.sh:/flink-entrypoint.sh
       # can be removed unless you use database enricher
       - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
-      - nussknacker_storage_flink:/opt/flink/data
+      - storage_flink:/opt/flink/data
 
   taskmanager:
     container_name: nussknacker_taskmanager
@@ -118,7 +118,7 @@ services:
     volumes:
       - ./flink/flink-conf.yaml:/tmp/flink-conf.yaml
       - ./flink/flink-entrypoint.sh:/flink-entrypoint.sh
-      - nussknacker_storage_flink:/opt/flink/data
+      - storage_flink:/opt/flink/data
       # can be removed unless you use database enricher
       - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
     ulimits:
@@ -166,8 +166,17 @@ services:
       - "5432:5432"
 
 volumes:
-  nussknacker_storage_zookeeper_datalog:
-  nussknacker_storage_zookeeper_data:
-  nussknacker_storage_kafka_data:
-  nussknacker_storage_flink:
-  nussknacker_storage_influxdb:
+  storage_zookeeper_datalog:
+    name: nussknacker_storage_zookeeper_datalog
+  storage_zookeeper_data:
+    name: nussknacker_storage_zookeeper_data
+  storage_kafka_data:
+    name: nussknacker_storage_kafka_data
+  storage_flink:
+    name: nussknacker_storage_flink
+  storage_influxdb:
+    name: nussknacker_storage_influxdb
+
+networks:
+  default:
+    name: nussknacker_network
