@@ -1,8 +1,8 @@
 version: '3.7'
 
 services:
-  app:
-    container_name: nussknacker_app
+  designer:
+    container_name: nussknacker_designer
     image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest}
     ports:
       - "3081:8080"
@@ -18,14 +18,14 @@ services:
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
       COUNTS_URL: http://influxdb:8086/query
     volumes:
-      - storage_app:/opt/nussknacker/storage
+      - storage_designer:/opt/nussknacker/storage
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
       - ./nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
 
 volumes:
-  storage_app:
-    name: nussknacker_storage_app
+  storage_designer:
+    name: nussknacker_storage_designer
   storage_flink:
     name: nussknacker_storage_flink
 

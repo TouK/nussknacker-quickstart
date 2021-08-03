@@ -49,17 +49,17 @@ waitForOK() {
   fi
 }
 
-waitForOK "api/processes" "Checking Frontend API response.." "Frontend not started" "app"
+waitForOK "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
 
 echo "Creating process"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
 if [[ $CODE == 201 ]]; then
-  echo "Process creation success"
+  echo "Scenario creation success"
 elif [[ $CODE == 400 ]]; then
-  echo "Process has already exists in db."
+  echo "Scenario has already exists in db."
 else
-  echo "Process creation failed with $CODE"
-  docker logs nussknacker_app
+  echo "Scenario creation failed with $CODE"
+  docker logs nussknacker_designer
   exit 1
 fi
 
@@ -68,11 +68,11 @@ if [[ $CODE == 200 ]]; then
   echo "Counts queried"
 else
   echo "Counts query failed with $CODE"
-  docker logs nussknacker_app
+  docker logs nussknacker_designer
   exit 1
 fi
 
-waitForOK "api/processes/status" "Checking connect with Flink.." "Frontend not connected with flink" "app"
+waitForOK "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
 
 waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
 
