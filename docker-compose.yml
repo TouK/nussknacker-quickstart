@@ -9,9 +9,14 @@ services:
     environment:
       #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
-      NUSSKNACKER_CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
+      CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
       JDK_JAVA_OPTIONS: -Xmx256M
       FLINK_ROCKSDB_CHECKPOINT_DATA_URI: file:///opt/flink/data/rocksdb-checkpoints
+      FLINK_REST_URL: http://jobmanager:8081
+      FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
+      KAFKA_ADDRESS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      COUNTS_URL: http://influxdb:8086/query
     volumes:
       - storage_app:/opt/nussknacker/storage
       #this is needed to be able to verify savepoints during deployments
