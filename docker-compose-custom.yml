@@ -1,0 +1,17 @@
+version: '3.7'
+
+services:
+  customerservice:
+    container_name: nussknacker_customerservice
+    build: customerservice
+
+  postgres:
+    container_name: nussknacker_postgres
+    hostname: nussknacker_postgres
+    image: ghusta/postgres-world-db
+    ports:
+      - "5432:5432"
+
+networks:
+  default:
+    name: nussknacker_network
