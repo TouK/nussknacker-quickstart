@@ -22,6 +22,4 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Test quickstart
         shell: bash
-        env:
-          NUSSKNACKER_VERSION: ${{ env.NUSSKNACKER_VERSION }}
-        run: ./demo/docker/testQuickstart.sh
+        run: ./testQuickstart.sh
