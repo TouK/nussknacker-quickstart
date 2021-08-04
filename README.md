@@ -1,3 +1,5 @@
+[![Build status](https://github.com/touk/nussknacker-quickstart/workflows/CI/badge.svg)](https://github.com/touk/nussknacker-quickstart/actions?query=workflow%3A%22CI%22)
+
 # Nussknacker Quickstart
 
 This is a part of Nussknacker's [quickstart](https://nussknacker.io/quickstart/docker).
