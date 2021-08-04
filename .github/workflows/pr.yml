@@ -3,12 +3,12 @@ name: CI
 on:
   pull_request:
     branches:
-      - master
+      - main
       - staging
       - release/*
   push:
     branches:
-      - master
+      - main
       - staging
       - release/*
 
@@ -20,8 +20,7 @@ jobs:
         uses: styfle/cancel-workflow-action@0.8.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
       - name: Test quickstart
         shell: bash
-        env:
-          NUSSKNACKER_VERSION: ${{ env.NUSSKNACKER_VERSION }}
-        run: ./demo/docker/testQuickstart.sh
+        run: ./testQuickstart.sh
