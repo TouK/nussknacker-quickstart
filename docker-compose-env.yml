@@ -120,7 +120,6 @@ services:
     command: taskmanager
     environment:
       TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
-      JOB_MANAGER_RPC_ADDRESS: jobmanager
     depends_on:
       - zookeeper
       - kafka

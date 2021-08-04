@@ -38,7 +38,7 @@ env.java.opts.taskmanager: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hos
 
 taskmanager.numberOfTaskSlots: <configured_by_flink_entrypoint>
 
-jobmanager.rpc.address: <configured_by_flink_entrypoint>
+jobmanager.rpc.address: jobmanager
 
 # The port where the JobManager's main actor system listens for messages.
 
