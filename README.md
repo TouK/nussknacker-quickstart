@@ -1,19 +1,31 @@
-This is part of Nussknacker's [quickstart](https://touk.github.io/nussknacker/Quickstart.html).
+[![Build status](https://github.com/touk/nussknacker-quickstart/workflows/CI/badge.svg)](https://github.com/touk/nussknacker-quickstart/actions?query=workflow%3A%22CI%22)
 
-Images
-=====
-Docker images are published on each commit. You can find them at https://hub.docker.com/r/touk/nussknacker/tags. Default image tag is: demo-latest.  
+# Nussknacker Quickstart
 
-Demo version
-=======
-Demo version available at: https://demo.nussknacker.io. You can sign in by Github
+This is a part of Nussknacker's [quickstart](https://nussknacker.io/quickstart/docker).
+On this page you can find information about how to start work with Nussknacker designer tool.
+If you want to start your own project using Nussknacker, just fork this repo, change `./conf/nusskacker/nussknacker.conf`,
+register own schemas (similar to those available at `./testData/schema`) and start designing own scenarios!
 
-Running
-=======
-* Env variable NUSSKNACKER_VERSION has to point to docker tag with model. You can set it in .env file
-* You can change each components version like kafka / flink / etc.. by setting corresponding env at .env file
-* Full env: `docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d` // Full env tests
-* App env: `docker-compose up -d` // Only launch standalone application (available on 3081 port)
-* Dependencies envs: `docker-compose -f docker-compose-env.yml up -d` // Envs for dev integration tests
-* Cleanup local environment `docker-compose down --rmi all --volumes --remove-orphans`
-* JVM options for Nussknacker (e.g. heap size etc) can be configure with JDK_JAVA_OPTIONS env variable
+## Running
+
+Just run:
+```bash
+./start.sh
+``` 
+
+After doing it, you can will have available:
+* [Nussknacker](http://localhost:8081/) - user/password: admin/admin
+* [Apache Flink UI](http://localhost:8081/flink/)
+* [Grafana](http://localhost:8081/grafana/)
+* [AKHQ](http://localhost:8081/akhq/)
+
+## What's next?
+
+More advanced usages of Nussknacker image (available properties and so on) you can find out on our [Installation guide](https://nussknacker.io/TODO)
+
+### Contributing
+
+Please send your feedback on our [mailing list](https://groups.google.com/g/nussknacker).
+Issues and pull request can be reported on our [project page](https://github.com/TouK/nussknacker)
+

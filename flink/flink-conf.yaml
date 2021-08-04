@@ -36,7 +36,7 @@ env.java.opts.taskmanager: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hos
 
 # The number of task slots that each TaskManager offers. Each slot runs one parallel pipeline.
 
-taskmanager.numberOfTaskSlots: 40
+taskmanager.numberOfTaskSlots: <configured_by_flink_entrypoint>
 
 jobmanager.rpc.address: jobmanager
 
@@ -65,7 +65,7 @@ web.log.path: /opt/flink/data/logs
 
 high-availability: zookeeper
 high-availability.zookeeper.quorum: zookeeper:2181
-high-availability.zookeeper.path.root: /demo
+high-availability.zookeeper.path.root: /flink
 high-availability.cluster-id: nussknacker
 high-availability.storageDir: file:///opt/flink/data/storage
 
@@ -93,12 +93,12 @@ metrics.reporter.influxdb_reporter.host: telegraf
 metrics.reporter.influxdb_reporter.port: 8087
 metrics.reporter.influxdb_reporter.db: esp
 
-metrics.scope.jm: demo.<host>.jobmanagerGlobal
-metrics.scope.jm.job: demo.<host>.jobmanagerJob.<job_name>
-metrics.scope.tm: demo.<host>.taskmanagerGlobal.<tm_id>
-metrics.scope.tm.job: demo.<host>.taskmanagerJob.<tm_id>.<job_name>
-metrics.scope.task: demo.<host>.taskmanagerTask.<tm_id>.<job_name>.<task_name>.<subtask_index>
-metrics.scope.operator: demo.<host>.taskmanagerTask.<tm_id>.<job_name>.<operator_name>.<subtask_index>
+metrics.scope.jm: local.<host>.jobmanagerGlobal
+metrics.scope.jm.job: local.<host>.jobmanagerJob.<job_name>
+metrics.scope.tm: local.<host>.taskmanagerGlobal.<tm_id>
+metrics.scope.tm.job: local.<host>.taskmanagerJob.<tm_id>.<job_name>
+metrics.scope.task: local.<host>.taskmanagerTask.<tm_id>.<job_name>.<task_name>.<subtask_index>
+metrics.scope.operator: local.<host>.taskmanagerTask.<tm_id>.<job_name>.<operator_name>.<subtask_index>
 
 #Uncomment if you encounter problems with classloading with complex custom components
 #classloader.resolve-order: parent-first
@@ -106,3 +106,5 @@ akka.framesize: 209715200b
 
 query.server.port: 6125
 blob.server.port: 6124
+
+queryable-state.enable: true

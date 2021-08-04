@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - master
+      - staging
+      - release/*
+  push:
+    branches:
+      - master
+      - staging
+      - release/*
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test quickstart
+        shell: bash
+        env:
+          NUSSKNACKER_VERSION: ${{ env.NUSSKNACKER_VERSION }}
+        run: ./demo/docker/testQuickstart.sh
