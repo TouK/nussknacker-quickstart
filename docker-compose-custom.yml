@@ -4,6 +4,8 @@ services:
   customerservice:
     container_name: nussknacker_customerservice
     build: customerservice
+    ports:
+      - "5000:5000"
 
   postgres:
     container_name: nussknacker_postgres
