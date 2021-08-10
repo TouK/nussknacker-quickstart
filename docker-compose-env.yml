@@ -96,8 +96,10 @@ services:
     command: jobmanager
     environment:
       # those environment variables are duplicated here and in designer service, in case of setup with designer run in other network than flink
-      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      FLINK_ROCKSDB_CHECKPOINT_DATA_URI: file:///opt/flink/data/rocksdb-checkpoints
       KAFKA_ADDRESS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      OPENAPI_SERVICE_URL: http://customerservice:5000
     depends_on:
       - zookeeper
       - kafka

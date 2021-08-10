@@ -17,6 +17,7 @@ services:
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
       COUNTS_URL: http://influxdb:8086/query
+      OPENAPI_SERVICE_URL: http://customerservice:5000
     volumes:
       - storage_designer:/opt/nussknacker/storage
       #this is needed to be able to verify savepoints during deployments
