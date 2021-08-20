@@ -20,9 +20,7 @@ main() {
   waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
   waitForOK "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
 
-  #Creating required schemas for DetectLargeTransactions
-  ./testData/schema/createSchemas.sh
-
+  sleep 1
   echo "Creating process"
   CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
   if [[ $CODE == 201 ]]; then
@@ -35,14 +33,23 @@ main() {
     exit 1
   fi
 
+  echo "Creating required schemas for DetectLargeTransactions"
+  ./testData/schema/createSchemas.sh
+
   echo "Importing scenario"
-  RESPONSE=$(curl -s -F "process=@$SCHEMA" "http://admin:admin@localhost:8081/api/processes/import/DetectLargeTransactions")
+  RESPONSE=$(curl -s -F "process=@$SCHEMA" -w "\n%{http_code}" "http://admin:admin@localhost:8081/api/processes/import/DetectLargeTransactions")
+  HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+  SCENARIO=$(echo "$RESPONSE" | sed \$d)
+  if [[ "$HTTP_CODE" != 200 ]]; then
+    echo "Failed to import scenario"
+    exit 1
+  fi
 
   echo "Saving scenario"
-  start='{"process":'
-  end=',"comment": ""}'
+  START='{"process":'
+  END=',"comment": ""}'
   curl -s -o /dev/null -u admin:admin -H 'Accept: application/json, text/plain, */*' -H 'Content-Type: application/json;charset=UTF-8' \
-    --data-raw "${start}${RESPONSE}${end}" -X PUT 'http://localhost:8081/api/processes/DetectLargeTransactions'
+    --data-raw "${START}${SCENARIO}${END}" -X PUT 'http://localhost:8081/api/processes/DetectLargeTransactions'
 
   echo "Deploying scenario"
   curl -u admin:admin -X POST 'http://localhost:8081/api/processManagement/deploy/DetectLargeTransactions' &
