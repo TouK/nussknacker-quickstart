@@ -3,14 +3,14 @@
 echo "Process clear out"
 #just in case
 curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
-curl -u admin:admin -X DELETE http://localhost:8081/api/processes/DetectLargeTransactions -v
+curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
 
 main() {
   SCHEMA=$1
   echo "Starting docker containers"
 
   #just in case
-  docker-compose -f docker-compose.yml -f docker-compose-env.yml kill
+  docker-compose -f docker-compose.yml -f docker-compose-env.yml stop
   docker-compose -f docker-compose.yml -f docker-compose-env.yml rm -f -v
   docker-compose -f docker-compose.yml -f docker-compose-env.yml build
   docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d --no-recreate
@@ -20,7 +20,6 @@ main() {
   waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
   waitForOK "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
 
-  sleep 1
   echo "Creating process"
   CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
   if [[ $CODE == 201 ]]; then
