@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-echo "Process clear out"
-#just in case
-curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
-curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
-
 main() {
   SCHEMA=$1
   echo "Starting docker containers"
@@ -19,6 +14,11 @@ main() {
   waitForOK "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
   waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
   waitForOK "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
+
+  echo "Process clear out"
+  #just in case
+  curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
+  curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
 
   echo "Creating process"
   CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
@@ -108,4 +108,5 @@ waitForOK() {
   fi
 }
 
+# With parameter that contains importing scheme file path
 main "$1"
