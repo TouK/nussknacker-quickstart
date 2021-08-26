@@ -1,8 +1,10 @@
 #!/bin/bash
 
-./specificSendTransactions.sh 50 &
+# Before executing, make sure if DetectLargeTransactionsWithAlertOnSpecific is deployed
+
+./specificSendTransactions.sh "$1" &
 
 if (docker exec -i nussknacker_kafka kafka-console-consumer.sh --topic alerts --bootstrap-server localhost:9092 &) | grep -q "Last packet"; then
-  echo "Verification done"
+  printf "\nVerification done\n"
   exit 0
 fi
