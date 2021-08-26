@@ -13,6 +13,6 @@ for i in $(seq 1 "$RANGE"); do
   TIME=$((NOW - RANDOM % 20))
   echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $TIME}"
   if [ "$i" == "$RANGE" ]; then
-    echo "{ \"clientId\": \"999\", \"amount\": 100, \"eventDate\": $TIME}"
+    echo "{ \"clientId\": \"999\", \"amount\": 999, \"eventDate\": $TIME}"
   fi
 done | ./../sendToKafka.sh transactions

@@ -61,90 +61,88 @@
         [
           {
             "nextFalse" : [
-            ],
-            "id" : "only large ones",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "#input.amount > 20"
-            },
-            "isDisabled" : null,
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 0,
-                "y" : 360
+              {
+                "nextFalse" : [
+                ],
+                "id" : "only large ones",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "#input.amount > 20"
+                },
+                "isDisabled" : null,
+                "additionalFields" : {
+                  "description" : null,
+                  "layoutData" : {
+                    "x" : 0,
+                    "y" : 540
+                  }
+                },
+                "type" : "Filter"
+              },
+              {
+                "id" : "send for audit",
+                "ref" : {
+                  "typ" : "kafka-registry-typed-json-raw",
+                  "parameters" : [
+                    {
+                      "name" : "Topic",
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : "'processedEvents'"
+                      }
+                    },
+                    {
+                      "name" : "Schema version",
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : "'latest'"
+                      }
+                    },
+                    {
+                      "name" : "Value validation mode",
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : "'strict'"
+                      }
+                    },
+                    {
+                      "name" : "Key",
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : ""
+                      }
+                    },
+                    {
+                      "name" : "Value",
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : "#input"
+                      }
+                    }
+                  ]
+                },
+                "endResult" : null,
+                "isDisabled" : null,
+                "additionalFields" : {
+                  "description" : null,
+                  "layoutData" : {
+                    "x" : 0,
+                    "y" : 720
+                  }
+                },
+                "type" : "Sink"
               }
-            },
-            "type" : "Filter"
-          },
-          {
-            "id" : "send for audit",
-            "ref" : {
-              "typ" : "kafka-registry-typed-json-raw",
-              "parameters" : [
-                {
-                  "name" : "Topic",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'processedEvents'"
-                  }
-                },
-                {
-                  "name" : "Schema version",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'latest'"
-                  }
-                },
-                {
-                  "name" : "Value validation mode",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'strict'"
-                  }
-                },
-                {
-                  "name" : "Key",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : ""
-                  }
-                },
-                {
-                  "name" : "Value",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "#input"
-                  }
-                }
-              ]
-            },
-            "endResult" : null,
-            "isDisabled" : null,
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 0,
-                "y" : 540
-              }
-            },
-            "type" : "Sink"
-          }
-        ],
-        [
-          {
-            "nextFalse" : [
             ],
             "id" : "last packet",
             "expression" : {
               "language" : "spel",
-              "expression" : "#input.clientId == \"999\""
+              "expression" : "#input.amount == 999"
             },
             "isDisabled" : null,
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 360,
+                "x" : 180,
                 "y" : 360
               }
             },
@@ -180,7 +178,7 @@
                   "name" : "message",
                   "expression" : {
                     "language" : "spel",
-                    "expression" : "\"Last packet\""
+                    "expression" : "\"Last request\""
                   }
                 }
               ]
