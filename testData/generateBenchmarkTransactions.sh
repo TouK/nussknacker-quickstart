@@ -4,18 +4,24 @@ set -e
 
 cd "$(dirname $0)"
 
-CLIENTID_COUNT=${1:-100}
-TRANSACTIONS_PER_CLIENT=${2:-10}
-TRANSACTION_COUNT=$((CLIENTID_COUNT * TRANSACTIONS_PER_CLIENT))
-TIME_DEVIATION_PARAMETER=${3:-10}
-WINDOW_LENGTH=2000 #still don't know window length so using completely arbitrary value
+TRANSACTION_COUNT=${1:-1000}
+CLIENT_COUNT=${2:-10}
+TIME_SPREAD_MULTIPLIER=${3:-10}
 
-for ((i=1;i<=TRANSACTION_COUNT;i++));
+TIME_SPREAD_MILLIS=$((1000*60*TIME_SPREAD_MULTIPLIER))
+
+for ((i=0;i<TRANSACTION_COUNT;i++));
 do
-  ID=$((1 + RANDOM % CLIENTID_COUNT))
-  AMOUNT=$((1 + RANDOM % 30))
+  ID=$((1 + i % CLIENT_COUNT))
+  AMOUNT=$((1 + i % 30))
   NOW=`date +%s%3N`
-  TIME=$((NOW - RANDOM % (WINDOW_LENGTH*TIME_DEVIATION_PARAMETER)))
+  TIME=$((NOW + (TIME_SPREAD_MILLIS * i) / TRANSACTION_COUNT))
   echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $TIME}"
-done > benchmarkTransactions.json
+done
+
+# for now we treat last record as a flag, information that all data has been processed, but in the end we need better indicator
+# we can't be sure our last send record will be flink's last processed, especially with multiple partitions on kafka topic
+LAST_RECORD_TIMESTAMP=$((`date +%s%3N` + TIME_SPREAD_MILLIS))
+LAST_RECORD_MARK="-1"
+echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $LAST_RECORD_TIMESTAMP, \"description\": \"$LAST_RECORD_MARK\"}"
 

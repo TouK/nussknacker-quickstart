@@ -5,24 +5,21 @@ set -e
 cd "$(dirname $0)"
 
 CONTAINER_NAME=nussknacker_kafka
-TOPIC=$1
-PARTITION_COUNT=$2
-TRANSACTION_COUNT=$((CLIENTID_COUNT * TRANSACTIONS_PER_CLIENT))
+TOPIC=${1-transactions}
+PARTITION_COUNT=${2-10}
+TRANSACTION_COUNT=1000
+CLIENT_COUNT=10
+TIME_SPREAD_MULTIPLIER=10
 
 calcOffsetSumInTopic() {
   docker exec nussknacker_kafka kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
   grep -e ':[[:digit:]]*:' | awk -F ":" '{sum += $3} END {print sum}'
 }
 
-CLIENTID_COUNT=100
-TRANSACTIONS_PER_CLIENT=10
-TIME_DEVIATION_PARAMETER=10
-./generateBenchmarkTransactions.sh $CLIENTID_COUNT $TRANSACTIONS_PER_CLIENT $TIME_DEVIATION_PARAMETER
-
 docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1 --if-not-exists
 
 sumBefore=$(calcOffsetSumInTopic)
-cat ./benchmarkTransactions.json | ./sendToKafka.sh transactions
+./generateBenchmarkTransactions.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MULTIPLIER | ./sendToKafka.sh transactions
 sumAfter=$(calcOffsetSumInTopic)
 
 waitTime=0
@@ -48,7 +45,4 @@ then
   exit 1
 fi
 
-echo "Number of records in topic ${TOPIC}: "$((sumAfter - sumBefore))
-echo $sumBefore
-echo $sumAfter
-
+echo "Number of records sent to topic: ${TOPIC}: "$((sumAfter - sumBefore))
