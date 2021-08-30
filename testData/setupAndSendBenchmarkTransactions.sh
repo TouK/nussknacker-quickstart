@@ -9,7 +9,7 @@ TOPIC=${1-transactions}
 TRANSACTION_COUNT=${2-1000}
 CLIENT_COUNT=${3-10}
 PARTITION_COUNT=${4-10}
-TIME_SPREAD_MULTIPLIER_MINUTES=${5-10}
+TIME_SPREAD_MINUTES=${5-10}
 
 calcOffsetSumInTopic() {
   docker exec nussknacker_kafka kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
@@ -19,7 +19,7 @@ calcOffsetSumInTopic() {
 docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1 --if-not-exists
 
 sumBefore=$(calcOffsetSumInTopic)
-./generateBenchmarkTransactions.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MULTIPLIER_MINUTES | ./sendToKafka.sh transactions
+./generateBenchmarkTransactions.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MINUTES | ./sendToKafka.sh transactions
 sumAfter=$(calcOffsetSumInTopic)
 
 waitTime=0
