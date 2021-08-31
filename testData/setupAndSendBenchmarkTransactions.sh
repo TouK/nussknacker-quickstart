@@ -10,39 +10,16 @@ TRANSACTION_COUNT=${2-1000}
 CLIENT_COUNT=${3-10}
 PARTITION_COUNT=${4-10}
 TIME_SPREAD_MINUTES=${5-10}
+#data is generated with timestamps in range [now, now + time_spread_minutes * 60000 millis]
+#generating data for future instead of past is for benefit of watermarks if other real time process
+#is running at the same time
 
-calcOffsetSumInTopic() {
-  docker exec nussknacker_kafka kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
-  grep -e ':[[:digit:]]*:' | awk -F ":" '{sum += $3} END {print sum}'
-}
+docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
+docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1
 
-docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1 --if-not-exists
+./generateBenchmarkTransactions.sh "$TRANSACTION_COUNT" "$CLIENT_COUNT" "$TIME_SPREAD_MINUTES" | ./sendToKafka.sh transactions
 
-sumBefore=$(calcOffsetSumInTopic)
-./generateBenchmarkTransactions.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MINUTES | ./sendToKafka.sh transactions
-sumAfter=$(calcOffsetSumInTopic)
-
-waitTime=0
+#transaction_count + 1 is because of mark record at the end
 sleep=10
 waitLimit=120
-offsetSum=$((sumAfter - sumBefore))
-
-while [[ $waitTime -lt $waitLimit && ($offsetSum -lt $TRANSACTION_COUNT)]]
-do
-  sleep $sleep
-  waitTime=$((waitTime+sleep))
-  sumAfter=$(calcOffsetSumInTopic)
-  offsetSum=$((sumAfter-sumBefore))
-  if [[ offsetSum -lt $TRANSACTION_COUNT ]]
-  then
-    echo "All transactions have yet not been obtained by kafka within $waitTime sec, $offsetSum transactions processed so far."
-  fi
-done
-
-if [[ offsetSum -lt $TRANSACTION_COUNT ]]
-then
-  echo "Transactions not obtained within time limit"
-  exit 1
-fi
-
-echo "Number of records sent to topic: ${TOPIC}: "$((sumAfter - sumBefore))
+./waitForKafka.sh "$TOPIC $((TRANSACTION_COUNT+1)) $sleep $waitLimit"
