@@ -3,8 +3,6 @@
 main() {
   SCHEMA=$1
 
-  ../restartDocker.sh
-
   curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
   curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
 

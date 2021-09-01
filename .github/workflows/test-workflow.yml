@@ -1,0 +1,22 @@
+name: Nussknacker benchmark
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  nussknacker-benchmark:
+    name: Nussknacker benchmark
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Prepare test transactions
+        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh
+      - name: Run scenario
+        run: ./testData/benchmark/importAndDeploy.sh
+      - name: Verify if finished
+        run: ./testData/benchmark/verifyScenarioFinish.sh
