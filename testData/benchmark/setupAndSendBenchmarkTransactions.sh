@@ -14,6 +14,8 @@ TIME_SPREAD_MINUTES=${5-10}
 #generating data for future instead of past is for benefit of watermarks if other real time process
 #is running at the same time
 
+../restartDocker.sh
+
 docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
 docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1
 
@@ -22,4 +24,4 @@ docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeepe
 #transaction_count + 1 is because of mark record at the end
 sleep=10
 waitLimit=120
-./waitForKafka.sh "$TOPIC $((TRANSACTION_COUNT+1)) $sleep $waitLimit"
+./waitForKafka.sh "$TOPIC" "$((TRANSACTION_COUNT+1))" "$sleep" "$waitLimit"
