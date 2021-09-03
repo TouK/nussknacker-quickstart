@@ -11,6 +11,7 @@ services:
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
       CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
       JDK_JAVA_OPTIONS: -Xmx256M
+      FLINK_ROCKSDB_CHECKPOINT_DATA_URI: file:///opt/flink/data/rocksdb-checkpoints
       FLINK_REST_URL: http://jobmanager:8081
       FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
       KAFKA_ADDRESS: kafka:9092

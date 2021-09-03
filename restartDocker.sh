@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname $0)"
 
-echo "Starting docker containers"
+echo "Restarting docker containers"
 
 docker-compose -f docker-compose.yml -f docker-compose-env.yml stop
 docker-compose -f docker-compose.yml -f docker-compose-env.yml rm -f -v
@@ -15,3 +15,5 @@ docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d --no-recrea
 ./testData/waitForOkFromUrl.sh "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
 ./testData/waitForOkFromUrl.sh "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
 ./testData/waitForOkFromUrl.sh "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
+
+echo "Containers up and running"
