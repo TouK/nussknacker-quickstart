@@ -11,7 +11,7 @@ TIME_SPREAD_MULTIPLIER=${3:-10}
 TIME_SPREAD_MILLIS=$((1000*60*TIME_SPREAD_MULTIPLIER))
 
 FRAUDULENT_CLIENT_ID=1
-NOW=`date +%s%3N`
+NOW=$(date +%s%3N)
 
 for ((i=0;i<TRANSACTION_COUNT;i++));
 do
@@ -30,5 +30,4 @@ done
 # we can't be sure our last send record will be flink's last processed, especially with multiple partitions on kafka topic
 LAST_RECORD_TIMESTAMP=$((NOW + TIME_SPREAD_MILLIS))
 LAST_RECORD_MARK="-1"
-echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $LAST_RECORD_TIMESTAMP, \"description\": \"$LAST_RECORD_MARK\"}"
-
+echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"isLast\": true, \"eventDate\": $LAST_RECORD_TIMESTAMP}"

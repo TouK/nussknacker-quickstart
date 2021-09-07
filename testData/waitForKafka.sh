@@ -4,7 +4,6 @@ set -e
 
 cd "$(dirname $0)"
 
-
 CONTAINER_NAME=nussknacker_kafka
 TOPIC=${1}
 RECORD_COUNT=${2}

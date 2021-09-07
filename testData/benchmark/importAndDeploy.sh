@@ -5,7 +5,7 @@ set -e
 cd "$(dirname $0)"
 
 main() {
-  SCHEMA=${1:-"./DetectLargeTransactions.json"}
+  SCHEMA=${1:-"./DetectLargeTransactionsWithFinishVerification.json"}
 
   curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
   curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v

@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Before executing, make sure if DetectLargeTransactionsWithFinishVerification is deployed
+set -e
 
-if docker exec -it nussknacker_kafka sh -c "set -e; (kafka-console-consumer.sh --topic alerts --bootstrap-server localhost:9092 &) | grep -q 'Last request'"
+cd "$(dirname $0)"
+
+if docker exec nussknacker_kafka kafka-console-consumer.sh \
+              --bootstrap-server localhost:9092 --topic alerts --from-beginning --timeout-ms 1000 | \
+              grep -q "Last request"
 then
-  printf "\nLast request has been prepared\n"
-else
-  printf "\nLast request hasn't been found\n"
+  echo "Last request has been processed"
+  exit 0
+else1
+  echo "Last request hasn't been found"
+  exit 1
 fi
