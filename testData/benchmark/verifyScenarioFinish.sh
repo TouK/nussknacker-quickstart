@@ -5,7 +5,7 @@ set -e
 cd "$(dirname $0)"
 
 if docker exec nussknacker_kafka kafka-console-consumer.sh \
-              --bootstrap-server localhost:9092 --topic alerts --from-beginning --timeout-ms 1000 | \
+              --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
               grep -q "Last request"
 then
   echo "Last request has been processed"

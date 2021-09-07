@@ -14,7 +14,7 @@ docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d --no-recrea
 
 trap 'docker-compose -f docker-compose.yml -f docker-compose-env.yml kill && docker-compose -f docker-compose.yml -f docker-compose-env.yml rm -f -v' EXIT
 
-./testData/waitForOkFromUrl "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
+./testData/waitForOkFromUrl.sh "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
 
 echo "Creating process"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
@@ -37,11 +37,11 @@ else
   exit 1
 fi
 
-./testData/waitForOkFromUrl "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
+./testData/waitForOkFromUrl.sh  "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
 
-./testData/waitForOkFromUrl "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
+./testData/waitForOkFromUrl.sh  "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
 
-./testData/waitForOkFromUrl "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
+./testData/waitForOkFromUrl.sh  "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
 
 #TODO:
 #check import process
