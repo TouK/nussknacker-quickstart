@@ -18,7 +18,7 @@ main() {
     echo "Scenario has already exists in db."
   else
     echo "Scenario creation failed with $CODE"
-    docker logs nussknacker_designer
+    docker logs "$(docker ps | grep nussknacker_designer | awk '{print $1}')"
     exit 1
   fi
 

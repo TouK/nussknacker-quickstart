@@ -4,7 +4,7 @@ set -e
 
 cd "$(dirname $0)"
 
-CONTAINER_NAME=nussknacker_kafka
+CONTAINER_NAME=$(docker ps | grep nussknacker_kafka | awk '{print $1}')
 TOPIC=${1}
 RECORD_COUNT=${2}
 SLEEP=${3-10}
