@@ -22,7 +22,7 @@ After doing it, you can will have available:
 
 ## What's next?
 
-More advanced usages of Nussknacker image (available properties and so on) you can find out on our [Installation guide](https://nussknacker.io/TODO)
+More advanced usages of Nussknacker image (available properties and so on) you can find out on our [Installation guide](https://docs.nussknacker.io/docs/next/installation_configuration_guide/Installation)
 
 ### Contributing
 
