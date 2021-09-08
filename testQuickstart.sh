@@ -14,42 +14,7 @@ docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d --no-recrea
 
 trap 'docker-compose -f docker-compose.yml -f docker-compose-env.yml kill && docker-compose -f docker-compose.yml -f docker-compose-env.yml rm -f -v' EXIT
 
-#TODO: Consider rewriting below, e.g. in Python
-waitTime=0
-sleep=10
-waitLimit=120
-
-checkCode() {
- echo "$(curl -s -o /dev/null -w "%{http_code}" "http://admin:admin@localhost:8081/$1")"
-}
-
-waitForOK() {
-  echo "$2"
-
-  URL_PATH=$1
-  STATUS_CODE=$(checkCode "$URL_PATH")
-  CONTAINER_FOR_LOGS=$4
-
-  while [[ $waitTime -lt $waitLimit && $STATUS_CODE != 200 ]]
-  do
-    sleep $sleep
-    waitTime=$((waitTime+sleep))
-    STATUS_CODE=$(checkCode "$URL_PATH")
-
-    if [[ $STATUS_CODE != 200  ]]
-    then
-      echo "Service still not started within $waitTime sec and response code: $STATUS_CODE.."
-    fi
-  done
-  if [[ $STATUS_CODE != 200 ]]
-  then
-    echo "$3"
-    docker-compose -f docker-compose-env.yml -f docker-compose.yml logs --tail=200 $CONTAINER_FOR_LOGS
-    exit 1
-  fi
-}
-
-waitForOK "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
+./testData/waitForOkFromUrl.sh "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
 
 echo "Creating process"
 CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "http://admin:admin@localhost:8081/api/processes/DetectLargeTransactions/Default?isSubprocess=false")
@@ -72,11 +37,11 @@ else
   exit 1
 fi
 
-waitForOK "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
+./testData/waitForOkFromUrl.sh  "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
 
-waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
+./testData/waitForOkFromUrl.sh  "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
 
-waitForOK "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
+./testData/waitForOkFromUrl.sh  "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
 
 #TODO:
 #check import process

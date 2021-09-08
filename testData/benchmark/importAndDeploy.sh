@@ -1,22 +1,12 @@
 #!/usr/bin/env bash
 
+set -e
+
+cd "$(dirname $0)"
+
 main() {
-  SCHEMA=$1
-  echo "Starting docker containers"
+  SCHEMA=${1:-"./DetectLargeTransactionsWithFinishVerification.json"}
 
-  #just in case
-  docker-compose -f docker-compose.yml -f docker-compose-env.yml stop
-  docker-compose -f docker-compose.yml -f docker-compose-env.yml rm -f -v
-  docker-compose -f docker-compose.yml -f docker-compose-env.yml build
-  docker-compose -f docker-compose.yml -f docker-compose-env.yml up -d --no-recreate
-
-  waitForOK "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
-  waitForOK "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
-  waitForOK "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
-  waitForOK "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
-
-  echo "Process clear out"
-  #just in case
   curl -X POST -u admin:admin 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
   curl -u admin:admin -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
 
@@ -33,7 +23,7 @@ main() {
   fi
 
   echo "Creating required schemas for DetectLargeTransactions"
-  ./testData/schema/createSchemas.sh
+  ../schema/createSchemas.sh
 
   echo "Importing scenario"
   RESPONSE=$(curl -s -F "process=@$SCHEMA" -w "\n%{http_code}" "http://admin:admin@localhost:8081/api/processes/import/DetectLargeTransactions")
@@ -73,37 +63,6 @@ main() {
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
-    exit 1
-  fi
-}
-
-checkCode() {
-  curl -s -o /dev/null -w "%{http_code}" "http://admin:admin@localhost:8081/$1"
-}
-
-waitForOK() {
-  waitTime=0
-  sleep=10
-  waitLimit=120
-
-  echo "$2"
-
-  URL_PATH=$1
-  STATUS_CODE=$(checkCode "$URL_PATH")
-  CONTAINER_FOR_LOGS=$4
-
-  while [[ $waitTime -lt $waitLimit && $STATUS_CODE != 200 ]]; do
-    sleep $sleep
-    waitTime=$((waitTime + sleep))
-    STATUS_CODE=$(checkCode "$URL_PATH")
-
-    if [[ $STATUS_CODE != 200 ]]; then
-      echo "Service still not started within $waitTime sec and response code: $STATUS_CODE.."
-    fi
-  done
-  if [[ $STATUS_CODE != 200 ]]; then
-    echo "$3"
-    docker-compose -f docker-compose-env.yml -f docker-compose.yml logs --tail=200 "$CONTAINER_FOR_LOGS"
     exit 1
   fi
 }
