@@ -4,8 +4,6 @@ set -e
 
 cd "$(dirname $0)"
 
-../../restartDocker.sh
-
 CONTAINER_NAME=nussknacker_kafka
 TOPIC=${1-transactions}
 TRANSACTION_COUNT=${2-1000}
@@ -16,9 +14,10 @@ TIME_SPREAD_MINUTES=${5-10}
 #generating data for future instead of past is for benefit of watermarks if other real time process
 #is running at the same time
 
-docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
-#todo add waitForOk for topic deletion?
-docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1
+../../restartDocker.sh
+
+#docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
+#docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1 --if-not-exists
 
 ./generateBenchmarkTransactions.sh "$TRANSACTION_COUNT" "$CLIENT_COUNT" "$TIME_SPREAD_MINUTES" | ../sendToKafka.sh "$TOPIC"
 
