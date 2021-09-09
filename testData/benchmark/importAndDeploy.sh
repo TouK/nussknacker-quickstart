@@ -7,7 +7,8 @@ cd "$(dirname $0)"
 main() {
   SCHEMA=${1:-"./DetectLargeTransactionsWithFinishVerification.json"}
   #Default authorization is basic encoded admin:admin
-  AUTHORIZATION_HEADER=${2:-"authorization: Basic YWRtaW46YWRtaW4="}
+  AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
+  AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
 
   curl -X POST -H "$AUTHORIZATION_HEADER" 'http://localhost:8081/api/processManagement/cancel/DetectLargeTransactions'
   curl -H "$AUTHORIZATION_HEADER" -X DELETE 'http://localhost:8081/api/processes/DetectLargeTransactions' -v
@@ -24,7 +25,7 @@ main() {
     exit 1
   fi
 
-  echo "Creating required schemas for DetectLargeTransactions"
+  echo "Creating required schemas for $SCHEMA"
   ../schema/createSchemas.sh
 
   echo "Importing scenario $SCHEMA"
