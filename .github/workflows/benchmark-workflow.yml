@@ -14,9 +14,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get start time
+        id: start
+        run: echo "::set-output name=start_time::$(date +%s%3N)"
       - name: Prepare test transactions
         run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh transactions 100000
       - name: Run scenario
         run: ./testData/benchmark/importAndDeploy.sh
       - name: Verify if finished
         run: ./testData/benchmark/verifyScenarioFinish.sh
+      - name: Meassure time
+        run: |
+          echo $(($(date +%s%3N) - ${{steps.start.outputs.start_time}})) |  >> timeElapsed.txt
+      - name: Save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmarkTimeMillis
+          path: timeElapsed.txt

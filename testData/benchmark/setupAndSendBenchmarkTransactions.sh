@@ -16,8 +16,11 @@ TIME_SPREAD_MINUTES=${5-10}
 
 ../../restartDocker.sh
 
-#docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
-#docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1 --if-not-exists
+docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic alerts --zookeeper zookeeper:2181 --if-exists
+docker exec $CONTAINER_NAME kafka-topics.sh --create --topic alerts --zookeeper zookeeper:2181 --partitions 1 --replication-factor 1
+
+docker exec $CONTAINER_NAME kafka-topics.sh --delete --topic "$TOPIC" --zookeeper zookeeper:2181 --if-exists
+docker exec $CONTAINER_NAME kafka-topics.sh --create --topic "$TOPIC" --zookeeper zookeeper:2181 --partitions "$PARTITION_COUNT" --replication-factor 1
 
 ./generateBenchmarkTransactions.sh "$TRANSACTION_COUNT" "$CLIENT_COUNT" "$TIME_SPREAD_MINUTES" | ../sendToKafka.sh "$TOPIC"
 
