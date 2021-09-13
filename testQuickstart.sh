@@ -16,13 +16,13 @@ trap 'docker-compose -f docker-compose.yml -f docker-compose-env.yml kill && doc
 
 ./testData/waitForOkFromUrl.sh "api/processes" "Checking Nussknacker API response.." "Nussknacker not started" "designer"
 
-./testData/waitForOkFromUrl.sh  "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
-
 ./testData/waitForOkFromUrl.sh  "flink/" "Checking Flink response.." "Flink not started" "jobmanager"
 
 ./testData/waitForOkFromUrl.sh  "metrics" "Checking Grafana response.." "Grafana not started" "grafana"
 
-./testData/benchmark/importAndDeploy.sh
+./testData/importAndDeploy.sh ./DetectLargeTransactionsWithAggregation.json
+
+./testData/waitForOkFromUrl.sh  "api/processes/status" "Checking connect with Flink.." "Nussknacker not connected with flink" "designer"
 
 CODE=$(curl -s -o /dev/null -w "%{http_code}" "http://admin:admin@localhost:8081/api/processCounts/DetectLargeTransactions?dateFrom=2021-08-04T00:00:00%2B02:00&dateTo=2021-08-04T23:59:59%2B02:00")
 if [[ $CODE == 200 ]]; then

@@ -5,7 +5,7 @@ set -e
 cd "$(dirname $0)"
 
 main() {
-  SCHEMA=${1:-"./DetectLargeTransactionsWithFinishVerification.json"}
+  SCHEMA=${1:-"./benchmark/DetectLargeTransactionsWithFinishVerification.json"}
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
@@ -26,7 +26,7 @@ main() {
   fi
 
   echo "Creating required schemas for $SCHEMA"
-  ../schema/createSchemas.sh
+  ./schema/createSchemas.sh
 
   echo "Importing scenario $SCHEMA"
   RESPONSE=$(curl -s -F "process=@$SCHEMA" -w "\n%{http_code}" -H "$AUTHORIZATION_HEADER" "http://localhost:8081/api/processes/import/DetectLargeTransactions")
