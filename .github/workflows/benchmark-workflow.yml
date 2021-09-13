@@ -18,7 +18,7 @@ jobs:
         id: start
         run: echo "::set-output name=startTimestamp::$(date +%s%3N)"
       - name: Prepare test transactions
-        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh transactions 100000
+        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh transactions 10000000
       - name: Fetch data prep timestamp
         id: dataPrep
         run: echo "::set-output name=dataPrepTimestamp::$(date +%s%3N)"
