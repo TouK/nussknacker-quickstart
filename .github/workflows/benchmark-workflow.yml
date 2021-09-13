@@ -14,9 +14,33 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Get start time
+        id: start
+        run: echo "::set-output name=startTimestamp::$(date +%s%3N)"
       - name: Prepare test transactions
-        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh
+        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh transactions 100000
+      - name: Fetch data prep timestamp
+        id: dataPrep
+        run: echo "::set-output name=dataPrepTimestamp::$(date +%s%3N)"
       - name: Run scenario
         run: ./testData/benchmark/importAndDeploy.sh
+      - name: Fetch deploy timestamp
+        id: deploy
+        run: echo "::set-output name=importAndDeployTimestamp::$(date +%s%3N)"
       - name: Verify if finished
         run: ./testData/benchmark/verifyScenarioFinish.sh
+      - name: Record finish time
+        run: |
+          {
+          echo "Preparation of test data in ms:"
+          echo $((${{steps.dataPrep.outputs.dataPrepTimestamp}} - ${{steps.start.outputs.startTimestamp}}))
+          echo "Import and deploy scenario time ms: "
+          echo $((${{steps.deploy.outputs.importAndDeployTimestamp}} - ${{steps.dataPrep.outputs.dataPrepTimestamp}}))
+          echo "Overall benchmark time ms: "
+          echo $(($(date +%s%3N) - ${{steps.start.outputs.startTimestamp}}))
+          } > benchmarkDetails.txt
+      - name: Save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmarkDetails
+          path: benchmarkDetails.txt
