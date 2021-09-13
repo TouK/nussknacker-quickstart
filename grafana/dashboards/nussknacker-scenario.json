@@ -16,16 +16,12 @@
   "gnetId": null,
   "graphTooltip": 1,
   "id": 1,
-  "iteration": 1628767589266,
+  "iteration": 1631534794448,
   "links": [],
   "panels": [
     {
       "collapsed": false,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -589,7 +585,7 @@
           "measurement": "error.instantRateByNode.count.count",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"error_instantRateByNode_count\"\n  WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), process, slot\n)\nGROUP BY time($__interval), process, nodeId\n",
+          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"error_instantRateByNode_count\"\n  WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), process, nodeId, slot\n)\nGROUP BY time($__interval), process, nodeId\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -716,7 +712,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_process]] [[tag_operator_name]] [[tag_slot]]",
+          "alias": "[[tag_process]] - [[tag_operator_name]] (slot [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -872,7 +868,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_process]] [[tag_nodeId]] [[tag_slot]]",
+          "alias": "[[tag_process]] - [[tag_nodeId]] (slot [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1034,7 +1030,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_process]] [[tag_nodeId]] [[tag_slot]]",
+          "alias": "[[tag_process]] - [[tag_nodeId]] (slot [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1196,7 +1192,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_process]] [[tag_nodeId]] [[tag_slot]]",
+          "alias": "[[tag_process]] - [[tag_nodeId]] (slot [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1358,7 +1354,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_process]] [[tag_nodeId]] [[tag_slot]]",
+          "alias": "[[tag_process]] - [[tag_nodeId]] (slot [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1470,10 +1466,6 @@
     {
       "collapsed": true,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1490,13 +1482,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 29
+            "y": 30
           },
           "hiddenSeries": false,
           "id": 10,
@@ -1515,9 +1513,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -1527,7 +1526,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_process]] - [[tag_serviceName]]",
+              "alias": "[[tag_process]] - [[tag_serviceName]] (slot [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1538,39 +1537,70 @@
                 },
                 {
                   "params": [
+                    "process"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "serviceName"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "slot"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
                     "null"
                   ],
                   "type": "fill"
                 }
               ],
+              "measurement": "service_OK_histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "query": "SELECT max(\"p50\") FROM \"service_OK_histogram\" WHERE \"process\" =~ /$processName$/ AND \"env\" =~ /^$env$/ AND $timeFilter GROUP BY time($__interval), \"process\", \"serviceName\" fill(null)",
-              "rawQuery": true,
+              "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
                 [
                   {
                     "params": [
-                      "value"
+                      "p50"
                     ],
                     "type": "field"
                   },
                   {
                     "params": [],
-                    "type": "mean"
+                    "type": "max"
                   }
                 ]
               ],
-              "tags": []
+              "tags": [
+                {
+                  "key": "env",
+                  "operator": "=~",
+                  "value": "/^$env$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "process",
+                  "operator": "=~",
+                  "value": "/^$processName$/"
+                }
+              ]
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - median OK",
+          "title": "Services - median OK",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1616,13 +1646,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 29
+            "y": 30
           },
           "hiddenSeries": false,
           "id": 11,
@@ -1641,9 +1677,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -1653,7 +1690,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_process]] - [[tag_serviceName]]",
+              "alias": "[[tag_process]] - [[tag_serviceName]] (slot [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1664,39 +1701,70 @@
                 },
                 {
                   "params": [
+                    "process"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "serviceName"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "slot"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
                     "null"
                   ],
                   "type": "fill"
                 }
               ],
+              "measurement": "service_OK_histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "query": "SELECT max(\"p99\") FROM \"service_OK_histogram\" WHERE \"process\" =~ /$processName$/ AND \"env\" =~ /^$env$/ AND $timeFilter GROUP BY time($__interval), \"process\", \"serviceName\" fill(null)",
-              "rawQuery": true,
+              "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
                 [
                   {
                     "params": [
-                      "value"
+                      "p99"
                     ],
                     "type": "field"
                   },
                   {
                     "params": [],
-                    "type": "mean"
+                    "type": "max"
                   }
                 ]
               ],
-              "tags": []
+              "tags": [
+                {
+                  "key": "env",
+                  "operator": "=~",
+                  "value": "/^$env$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "process",
+                  "operator": "=~",
+                  "value": "/^$processName$/"
+                }
+              ]
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - 99th percentile OK",
+          "title": "Services - 99th percentile OK",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1742,13 +1810,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 29
+            "y": 30
           },
           "hiddenSeries": false,
           "id": 12,
@@ -1767,9 +1841,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -1810,7 +1885,7 @@
               "measurement": "serviceInstant.OK",
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_OK_instantRate\"\n  WHERE process =~ /^$processName$/ AND env = '$env'\n  GROUP BY time($__interval), process, serviceName, slot\n)\nWHERE $timeFilter\nGROUP BY time($__interval), process, serviceName",
+              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_OK_instantRate\"\n  WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), process, serviceName, slot\n)\nGROUP BY time($__interval), process, serviceName",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -1847,7 +1922,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - throughput OK",
+          "title": "Services - throughput OK",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -1893,13 +1968,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 0,
-            "y": 36
+            "y": 37
           },
           "hiddenSeries": false,
           "id": 15,
@@ -1918,9 +1999,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -1930,7 +2012,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_process]] - [[tag_serviceName]]",
+              "alias": "[[tag_process]] - [[tag_serviceName]] (slot [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1941,39 +2023,70 @@
                 },
                 {
                   "params": [
+                    "process"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "serviceName"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "slot"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
                     "null"
                   ],
                   "type": "fill"
                 }
               ],
+              "measurement": "service_FAIL_histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "query": "SELECT max(\"p50\") FROM \"service_FAIL_histogram\" WHERE \"process\" =~ /$processName$/ AND \"env\" =~ /^$env$/ AND $timeFilter GROUP BY time($__interval), \"process\", \"serviceName\" fill(null)",
-              "rawQuery": true,
+              "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
                 [
                   {
                     "params": [
-                      "value"
+                      "p50"
                     ],
                     "type": "field"
                   },
                   {
                     "params": [],
-                    "type": "mean"
+                    "type": "max"
                   }
                 ]
               ],
-              "tags": []
+              "tags": [
+                {
+                  "key": "env",
+                  "operator": "=~",
+                  "value": "/^$env$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "process",
+                  "operator": "=~",
+                  "value": "/^$processName$/"
+                }
+              ]
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - median FAIL",
+          "title": "Services - median FAIL",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2019,13 +2132,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 8,
-            "y": 36
+            "y": 37
           },
           "hiddenSeries": false,
           "id": 16,
@@ -2044,9 +2163,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -2056,7 +2176,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_process]] - [[tag_serviceName]]",
+              "alias": "[[tag_process]] - [[tag_serviceName]] (slot [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -2067,39 +2187,70 @@
                 },
                 {
                   "params": [
+                    "process"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "serviceName"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "slot"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
                     "null"
                   ],
                   "type": "fill"
                 }
               ],
+              "measurement": "service_FAIL_histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "query": "SELECT max(\"p99\") FROM \"service_FAIL_histogram\" WHERE \"process\" =~ /$processName$/ AND \"env\" =~ /^$env$/ AND $timeFilter GROUP BY time($__interval), \"process\", \"serviceName\" fill(null)",
-              "rawQuery": true,
+              "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
                 [
                   {
                     "params": [
-                      "value"
+                      "p99"
                     ],
                     "type": "field"
                   },
                   {
                     "params": [],
-                    "type": "mean"
+                    "type": "max"
                   }
                 ]
               ],
-              "tags": []
+              "tags": [
+                {
+                  "key": "env",
+                  "operator": "=~",
+                  "value": "/^$env$/"
+                },
+                {
+                  "condition": "AND",
+                  "key": "process",
+                  "operator": "=~",
+                  "value": "/^$processName$/"
+                }
+              ]
             }
           ],
           "thresholds": [],
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - 99th percentile FAIL",
+          "title": "Services - 99th percentile FAIL",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2145,13 +2296,19 @@
           "datasource": "influx",
           "editable": true,
           "error": false,
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
             "h": 7,
             "w": 8,
             "x": 16,
-            "y": 36
+            "y": 37
           },
           "hiddenSeries": false,
           "id": 17,
@@ -2170,9 +2327,10 @@
           "links": [],
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
@@ -2214,7 +2372,7 @@
               "measurement": "serviceInstant.FAIL",
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_FAIL_instantRate\"\n  WHERE process =~ /^$processName$/ AND env = '$env'\n  GROUP BY time($__interval), process, serviceName, slot\n)\nWHERE $timeFilter\nGROUP BY time($__interval), serviceName, action",
+              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_FAIL_instantRate\"\n  WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), process, serviceName, slot\n)\nGROUP BY time($__interval), process, serviceName",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -2251,7 +2409,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "HTTP services - throughput FAIL",
+          "title": "Services - throughput FAIL",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -2296,10 +2454,6 @@
     {
       "collapsed": true,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -2319,9 +2473,9 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
-            "w": 12,
+            "w": 8,
             "x": 0,
-            "y": 3
+            "y": 45
           },
           "hiddenSeries": false,
           "id": 19,
@@ -2338,9 +2492,10 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2350,7 +2505,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "$m [[tag_operator_name]] [[tag_slot]]",
+              "alias": "[[tag_process]] - [[tag_operator_name]] ($0)",
               "groupBy": [
                 {
                   "params": [
@@ -2380,56 +2535,9 @@
               "measurement": "/^.*.cur-size-all-mem-tables/",
               "orderByTime": "ASC",
               "policy": "default",
+              "query": "\nSELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.cur-size-all-mem-tables/ \n   WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter \n   GROUP BY time($__interval), \"process\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"process\", \"operator_name\" fill(linear)",
+              "rawQuery": true,
               "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            },
-            {
-              "alias": "$m [[tag_operator_name]] [[tag_slot]]",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "slot"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "operator_name"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "/^.*.estimate-live-data-size/",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "B",
               "resultFormat": "time_series",
               "select": [
                 [
@@ -2452,7 +2560,148 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "RocksDB data size",
+          "title": "RocksDB cur-size-all-mem-tables",
+          "tooltip": {
+            "shared": true,
+            "sort": 0,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "buckets": null,
+            "mode": "time",
+            "name": null,
+            "show": true,
+            "values": []
+          },
+          "yaxes": [
+            {
+              "format": "bytes",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ],
+          "yaxis": {
+            "align": false,
+            "alignLevel": null
+          }
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "dashLength": 10,
+          "dashes": false,
+          "datasource": null,
+          "description": "Estimates of RocksDB state size. Aggregates (such as session windows) can have many internal states, which are reported separately. ",
+          "fieldConfig": {
+            "defaults": {
+              "links": []
+            },
+            "overrides": []
+          },
+          "fill": 1,
+          "fillGradient": 0,
+          "gridPos": {
+            "h": 8,
+            "w": 8,
+            "x": 8,
+            "y": 45
+          },
+          "hiddenSeries": false,
+          "id": 39,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "nullPointMode": "null",
+          "options": {
+            "alertThreshold": true
+          },
+          "percentage": false,
+          "pluginVersion": "8.0.6",
+          "pointradius": 2,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "spaceLength": 10,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "[[tag_process]] - [[tag_operator_name]] ($0)",
+              "groupBy": [
+                {
+                  "params": [
+                    "$__interval"
+                  ],
+                  "type": "time"
+                },
+                {
+                  "params": [
+                    "operator_name"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "slot"
+                  ],
+                  "type": "tag"
+                },
+                {
+                  "params": [
+                    "linear"
+                  ],
+                  "type": "fill"
+                }
+              ],
+              "measurement": "/^.*.cur-size-all-mem-tables/",
+              "orderByTime": "ASC",
+              "policy": "default",
+              "query": "SELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.estimate-live-data-size/ \n   WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter\n   GROUP BY time($__interval), \"process\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"process\", \"operator_name\" fill(linear)\n",
+              "rawQuery": true,
+              "refId": "A",
+              "resultFormat": "time_series",
+              "select": [
+                [
+                  {
+                    "params": [
+                      "value"
+                    ],
+                    "type": "field"
+                  },
+                  {
+                    "params": [],
+                    "type": "mean"
+                  }
+                ]
+              ],
+              "tags": []
+            }
+          ],
+          "thresholds": [],
+          "timeFrom": null,
+          "timeRegions": [],
+          "timeShift": null,
+          "title": "RocksDB estimate-live-data-size",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2500,9 +2749,9 @@
           "fillGradient": 0,
           "gridPos": {
             "h": 8,
-            "w": 12,
-            "x": 12,
-            "y": 3
+            "w": 8,
+            "x": 16,
+            "y": 45
           },
           "hiddenSeries": false,
           "id": 20,
@@ -2519,9 +2768,10 @@
           "linewidth": 1,
           "nullPointMode": "null",
           "options": {
-            "dataLinks": []
+            "alertThreshold": true
           },
           "percentage": false,
+          "pluginVersion": "8.0.6",
           "pointradius": 2,
           "points": false,
           "renderer": "flot",
@@ -2531,7 +2781,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "$m [[tag_operator_name]] [[tag_slot]]",
+              "alias": "[[tag_process]] - [[tag_operator_name]] ($0)",
               "groupBy": [
                 {
                   "params": [
@@ -2561,6 +2811,8 @@
               "measurement": "/^.*.estimate-num-keys/",
               "orderByTime": "ASC",
               "policy": "default",
+              "query": "SELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.estimate-num-keys/ \n   WHERE process =~ /^$processName$/ AND env = '$env' AND $timeFilter \n   GROUP BY time($__interval), \"process\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"process\", \"operator_name\" fill(linear)",
+              "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -2584,7 +2836,7 @@
           "timeFrom": null,
           "timeRegions": [],
           "timeShift": null,
-          "title": "RocksDB keys size",
+          "title": "RocksDB estimate-num-keys",
           "tooltip": {
             "shared": true,
             "sort": 0,
@@ -2629,10 +2881,6 @@
     {
       "collapsed": false,
       "datasource": null,
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -3350,7 +3598,7 @@
       "type": "stat"
     }
   ],
-  "refresh": "",
+  "refresh": "30s",
   "schemaVersion": 30,
   "style": "dark",
   "tags": [],
@@ -3362,10 +3610,10 @@
         "current": {
           "selected": false,
           "text": [
-            "aaaa"
+            "All"
           ],
           "value": [
-            "aaaa"
+            "$__all"
           ]
         },
         "datasource": "influx",
@@ -3536,5 +3784,5 @@
   "timezone": "browser",
   "title": "Scenario",
   "uid": "nussknacker-scenario",
-  "version": 2
+  "version": 4
 }
