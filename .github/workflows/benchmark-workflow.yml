@@ -23,7 +23,7 @@ jobs:
         id: dataPrep
         run: echo "::set-output name=dataPrepTimestamp::$(date +%s%3N)"
       - name: Run scenario
-        run: ./testData/benchmark/importAndDeploy.sh
+        run: ./testData/importAndDeploy.sh
       - name: Fetch deploy timestamp
         id: deploy
         run: echo "::set-output name=importAndDeployTimestamp::$(date +%s%3N)"

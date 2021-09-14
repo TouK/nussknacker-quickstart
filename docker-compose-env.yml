@@ -54,13 +54,15 @@ services:
 
   akhq:
     container_name: nussknacker_akhq
-    image: tchiotludo/akhq:${AKHQ_VERSION-0.17.0}
+    image: tchiotludo/akhq:${AKHQ_VERSION-0.18.0}
     environment:
       AKHQ_CONFIGURATION: |
         micronaut:
           server:
             context-path: /akhq
         akhq:
+          security:
+            default-group: reader
           connections:
             nussknacker:
               properties:
