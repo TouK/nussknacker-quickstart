@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="grid.cfg" class="org.apache.ignite.configuration.IgniteConfiguration">
+
+        <property name="consistentId" value="igniteServer1"/>
+
+<!--    Plik konfiguracyjny na potrzeby połączenia przez Thick clienta Ignite'a, np. w procesorze PutIgniteRecord-->
+        <property name="communicationSpi">
+            <bean class="org.apache.ignite.spi.communication.tcp.TcpCommunicationSpi">
+                <property name="localPort" value="47100"/>
+            </bean>
+        </property>
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
+                <property name="localPort" value="47500"/>
+                <property name="ipFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
+                        <property name="addresses">
+                            <list>
+                                <value>ignite:47500</value>
+                            </list>
+                        </property>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+
+        <property name="clientConnectorConfiguration">
+            <bean class="org.apache.ignite.configuration.ClientConnectorConfiguration">
+                <property name="port" value="10800"/>
+            </bean>
+        </property>
+
+        <property name="dataStorageConfiguration">
+            <bean class="org.apache.ignite.configuration.DataStorageConfiguration">
+                <property name="defaultDataRegionConfiguration">
+                    <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                        <property name="persistenceEnabled" value="true"/>
+                        <property name="metricsEnabled" value="true"/>
+                    </bean>
+                </property>
+                <property name="dataRegionConfigurations">
+                    <list>
+                        <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                            <property name="name" value="enrichmentDataRegion"/>
+                            <property name="maxSize" value="#{2L * 1024 * 1024 * 1024}"/>
+                            <property name="persistenceEnabled" value="true"/>
+                        </bean>
+                        <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
+                            <property name="name" value="aggregatesDataRegion"/>
+                            <property name="maxSize" value="#{2L * 1024 * 1024 * 1024}"/>
+                            <property name="persistenceEnabled" value="true"/>
+                        </bean>
+                    </list>
+                </property>
+            </bean>
+        </property>
+
+        <property name="sqlConfiguration">
+            <bean class="org.apache.ignite.configuration.SqlConfiguration">
+                <property name="sqlSchemas">
+                    <list>
+                        <value>ENRICHMENT</value>
+                        <value>AGGREGATION</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        
+         <!-- Template for caches (tables) to be created later. Sets parameters not available in DDL statements -->
+        <property name="cacheConfiguration">
+            <list>
+                <bean abstract="true" class="org.apache.ignite.configuration.CacheConfiguration" id="cache-template-bean">
+                    <!-- when you create a template via XML configuration, you must add an asterisk to the name of the template -->
+                    <property name="name" value="rafmCacheTemplate*"/>
+                    <property name="cacheMode" value="PARTITIONED"/>
+                  <!--  <property name="backups" value="1"/>     w set up'ie lokalnym to nie ma sensu -->
+                    <!-- Other cache parameters -->
+                </bean>
+            </list>
+        </property>
+        
+    </bean>
+</beans>

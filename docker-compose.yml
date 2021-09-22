@@ -22,12 +22,30 @@ services:
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
       - ./nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
+      - ~/.m2/repository/org/apache/ignite/ignite-core/2.10.0/ignite-core-2.10.0.jar:/opt/nussknacker/lib/ignite-core-2.10.0.jar
+      - ~/.m2/repository/org/hsqldb/hsqldb/2.6.0/hsqldb-2.6.0.jar:/opt/nussknacker/lib/hsqldb-2.6.0.jar
+
+  ignite:
+    container_name: nussknacker_ignite
+    image: apacheignite/ignite:${IGNITE_VERSION-2.10.0}
+    ports:
+      - 10800:10800
+      - 9020:9020
+    volumes:
+      - ./ignite:/user_config
+      - storage_ignite:/persistent_storage
+    environment:
+      - OPTION_LIBS=ignite-rest-http,ignite-indexing,ignite-zookeeper
+      - IGNITE_WORK_DIR=/persistent_storage
+      - CONFIG_URI=file:///user_config/ignite-config.xml
 
 volumes:
   storage_designer:
     name: nussknacker_storage_designer
   storage_flink:
     name: nussknacker_storage_flink
+  storage_ignite:
+    name: nussknacker_storage_ignite
 
 networks:
   default:

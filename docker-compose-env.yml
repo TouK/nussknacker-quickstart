@@ -110,6 +110,8 @@ services:
       - ./flink/flink-entrypoint.sh:/flink-entrypoint.sh
       # can be removed unless you use database enricher
       - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+      - ~/.m2/repository/org/hsqldb/hsqldb/2.6.0/hsqldb-2.6.0.jar:/opt/flink/lib/hsqldb-2.6.0.jar
+      - ~/.m2/repository/org/apache/ignite/ignite-core/2.10.0/ignite-core-2.10.0.jar:/opt/flink/lib/ignite-core-2.10.0.jar
       - storage_flink:/opt/flink/data
 
   taskmanager:
@@ -134,6 +136,9 @@ services:
       - storage_flink:/opt/flink/data
       # can be removed unless you use database enricher
       - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+      - ~/.m2/repository/org/hsqldb/hsqldb/2.6.0/hsqldb-2.6.0.jar:/opt/flink/lib/hsqldb-2.6.0.jar
+      - ~/.m2/repository/org/apache/ignite/ignite-core/2.10.0/ignite-core-2.10.0.jar:/opt/flink/lib/ignite-core-2.10.0.jar
+
     ulimits:
       nproc: 70000
       nofile:
