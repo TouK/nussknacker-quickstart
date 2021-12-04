@@ -15,7 +15,7 @@ services:
       FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
-      COUNTS_URL: http://influxdb:8086/query
+      INFLUXDB_URL: http://influxdb:8086
       OPENAPI_SERVICE_URL: http://customerservice:5000
     volumes:
       - storage_designer:/opt/nussknacker/storage

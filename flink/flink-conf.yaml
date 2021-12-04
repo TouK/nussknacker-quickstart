@@ -35,8 +35,8 @@ taskmanager.memory.managed.size: 204m
 env.java.opts.taskmanager: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.port=9009 -Dcom.sun.management.jmxremote.rmi.port=9008 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
 
 # The number of task slots that each TaskManager offers. Each slot runs one parallel pipeline.
-
-taskmanager.numberOfTaskSlots: <configured_by_flink_entrypoint>
+# This setting will be OVERRIDDEN by env variable on TaskManager, but it's needed to properly parse JobManager configuration
+taskmanager.numberOfTaskSlots: 1
 
 jobmanager.rpc.address: jobmanager
 
