@@ -91,7 +91,7 @@ services:
 
   jobmanager:
     container_name: nussknacker_jobmanager
-    image: flink:${FLINK_VERSION-1.13.1}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3031:8081"
     entrypoint: /flink-entrypoint.sh
@@ -101,6 +101,7 @@ services:
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
       OPENAPI_SERVICE_URL: http://customerservice:5000
+      TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
     depends_on:
       - zookeeper
       - kafka
@@ -114,7 +115,7 @@ services:
 
   taskmanager:
     container_name: nussknacker_taskmanager
-    image: flink:${FLINK_VERSION-1.13.1}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3063:9069"
       - "9009:9009"
