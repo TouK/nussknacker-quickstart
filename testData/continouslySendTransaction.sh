@@ -11,7 +11,7 @@ random_number() {
 
 while [ true ]; do
   sleep 0.1
-  ID=$((1 + `random_number`))
+  ID=$((1 + `random_number` % 5))
   AMOUNT=$((1 + `random_number` % 30))
   NOW=`date +%s%3N`
   TIME=$((NOW - `random_number` % 20))
