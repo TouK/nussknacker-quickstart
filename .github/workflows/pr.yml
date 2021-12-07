@@ -22,5 +22,7 @@ jobs:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
       - name: Test quickstart
+        env:
+          NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref == 'staging') && 'staging-latest' || 'latest' }}
         shell: bash
         run: ./testQuickstart.sh

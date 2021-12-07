@@ -66,6 +66,7 @@ main() {
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
+    docker logs nussknacker_jobmanager
     exit 1
   fi
 }
