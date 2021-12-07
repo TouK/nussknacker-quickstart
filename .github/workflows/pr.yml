@@ -23,6 +23,6 @@ jobs:
       - uses: actions/checkout@v2
       - name: Test quickstart
         env:
-          NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref == 'staging') && 'staging-latest' || 'latest' }}
+          NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
         shell: bash
         run: ./testQuickstart.sh
