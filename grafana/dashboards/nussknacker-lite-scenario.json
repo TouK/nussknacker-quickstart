@@ -90,7 +90,7 @@
           "dsType": "influxdb",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"source_count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, slot\n)\nGROUP BY time($__interval), scenario, nodeId\n",
+          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"source.count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, taskId\n)\nGROUP BY time($__interval), scenario, nodeId\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -195,7 +195,7 @@
           "dsType": "influxdb",
           "hide": false,
           "policy": "default",
-          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"end_count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, slot\n)\nGROUP BY time($__interval), scenario, nodeId\n",
+          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"end.count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, taskId\n)\nGROUP BY time($__interval), scenario, nodeId\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -301,7 +301,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"dead_end_count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, slot\n)\nGROUP BY time($__interval), scenario, nodeId\n",
+          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"dead_end.count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, taskId\n)\nGROUP BY time($__interval), scenario, nodeId\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -407,7 +407,7 @@
           "dsType": "influxdb",
           "orderByTime": "ASC",
           "policy": "default",
-          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"error_instantRateByNode_count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, slot\n)\nGROUP BY time($__interval), scenario, nodeId\n",
+          "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"error.instantRateByNode.count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, taskId\n)\nGROUP BY time($__interval), scenario, nodeId\n",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series"
@@ -507,7 +507,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_operator_name]] (slot [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_operator_name]] (taskId [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -530,7 +530,7 @@
             },
             {
               "params": [
-                "slot"
+                "taskId"
               ],
               "type": "tag"
             }
@@ -662,7 +662,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (slot [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -679,7 +679,7 @@
             },
             {
               "params": [
-                "slot"
+                "taskId"
               ],
               "type": "tag"
             },
@@ -696,7 +696,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "eventtimedelay_histogram",
+          "measurement": "eventtimedelay.histogram",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -823,7 +823,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (slot [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -846,7 +846,7 @@
             },
             {
               "params": [
-                "slot"
+                "taskId"
               ],
               "type": "tag"
             },
@@ -857,7 +857,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "eventtimedelay_histogram",
+          "measurement": "eventtimedelay.histogram",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -984,7 +984,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (slot [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1001,7 +1001,7 @@
             },
             {
               "params": [
-                "slot"
+                "taskId"
               ],
               "type": "tag"
             },
@@ -1018,7 +1018,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "eventtimedelay_histogram",
+          "measurement": "eventtimedelay.histogram",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -1145,7 +1145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (slot [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1168,7 +1168,7 @@
             },
             {
               "params": [
-                "slot"
+                "taskId"
               ],
               "type": "tag"
             },
@@ -1179,7 +1179,7 @@
               "type": "fill"
             }
           ],
-          "measurement": "eventtimedelay_minimalDelay",
+          "measurement": "eventtimedelay.minimalDelay",
           "orderByTime": "ASC",
           "policy": "default",
           "refId": "A",
@@ -1316,7 +1316,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (slot [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1339,7 +1339,7 @@
                 },
                 {
                   "params": [
-                    "slot"
+                    "taskId"
                   ],
                   "type": "tag"
                 },
@@ -1350,7 +1350,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "service_OK_histogram",
+              "measurement": "service.OK.histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "rawQuery": false,
@@ -1479,7 +1479,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (slot [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1502,7 +1502,7 @@
                 },
                 {
                   "params": [
-                    "slot"
+                    "taskId"
                   ],
                   "type": "tag"
                 },
@@ -1513,7 +1513,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "service_OK_histogram",
+              "measurement": "service.OK.histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "rawQuery": false,
@@ -1646,7 +1646,7 @@
               "dsType": "influxdb",
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_OK_instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, slot\n)\nGROUP BY time($__interval), scenario, serviceName",
+              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.OK.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, taskId\n)\nGROUP BY time($__interval), scenario, serviceName",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series"
@@ -1746,7 +1746,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (slot [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1769,7 +1769,7 @@
                 },
                 {
                   "params": [
-                    "slot"
+                    "taskId"
                   ],
                   "type": "tag"
                 },
@@ -1780,7 +1780,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "service_FAIL_histogram",
+              "measurement": "service.FAIL.histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "rawQuery": false,
@@ -1909,7 +1909,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (slot [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1932,7 +1932,7 @@
                 },
                 {
                   "params": [
-                    "slot"
+                    "taskId"
                   ],
                   "type": "tag"
                 },
@@ -1943,7 +1943,7 @@
                   "type": "fill"
                 }
               ],
-              "measurement": "service_FAIL_histogram",
+              "measurement": "service.FAIL.histogram",
               "orderByTime": "ASC",
               "policy": "default",
               "rawQuery": false,
@@ -2077,7 +2077,7 @@
               "hide": false,
               "orderByTime": "ASC",
               "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service_FAIL_instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, slot\n)\nGROUP BY time($__interval), scenario, serviceName",
+              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.FAIL.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, taskId\n)\nGROUP BY time($__interval), scenario, serviceName",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series"
@@ -2128,1153 +2128,6 @@
       ],
       "title": "External services",
       "type": "row"
-    },
-    {
-      "collapsed": true,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 30
-      },
-      "id": 22,
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": null,
-          "description": "Estimates of RocksDB state size. Aggregates (such as session windows) can have many internal states, which are reported separately. ",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 0,
-            "y": 45
-          },
-          "hiddenSeries": false,
-          "id": 19,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_operator_name]] ($0)",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "operator_name"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "slot"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "/^.*.cur-size-all-mem-tables/",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "\nSELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.cur-size-all-mem-tables/ \n   WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter \n   GROUP BY time($__interval), \"scenario\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"scenario\", \"operator_name\" fill(linear)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RocksDB cur-size-all-mem-tables",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": null,
-          "description": "Estimates of RocksDB state size. Aggregates (such as session windows) can have many internal states, which are reported separately. ",
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 8,
-            "y": 45
-          },
-          "hiddenSeries": false,
-          "id": 39,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_operator_name]] ($0)",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "operator_name"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "slot"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "/^.*.cur-size-all-mem-tables/",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.estimate-live-data-size/ \n   WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n   GROUP BY time($__interval), \"scenario\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"scenario\", \"operator_name\" fill(linear)\n",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RocksDB estimate-live-data-size",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "bytes",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": null,
-          "description": "Estimates on number of keys in RocksDB state. Aggregates (e.g. session windows) can have many internal states. Please remember that this is only estimate, based on internal RocksDB metrics",
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 8,
-            "w": 8,
-            "x": 16,
-            "y": 45
-          },
-          "hiddenSeries": false,
-          "id": 20,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 2,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_operator_name]] ($0)",
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "operator_name"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "slot"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "/^.*.estimate-num-keys/",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT sum(\"value\")\nFROM (\n   SELECT mean(\"value\") AS \"value\"\n   FROM /^.*.estimate-num-keys/ \n   WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter \n   GROUP BY time($__interval), \"scenario\", \"operator_name\", \"slot\"\n) GROUP BY time($__interval), \"scenario\", \"operator_name\" fill(linear)",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": []
-            }
-          ],
-          "thresholds": [],
-          "timeFrom": null,
-          "timeRegions": [],
-          "timeShift": null,
-          "title": "RocksDB estimate-num-keys",
-          "tooltip": {
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "buckets": null,
-            "mode": "time",
-            "name": null,
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "decimals": null,
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false,
-            "alignLevel": null
-          }
-        }
-      ],
-      "title": "RocksDB state",
-      "type": "row"
-    },
-    {
-      "collapsed": true,
-      "datasource": null,
-      "gridPos": {
-        "h": 1,
-        "w": 24,
-        "x": 0,
-        "y": 31
-      },
-      "id": 28,
-      "panels": [
-        {
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "mappings": [],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  }
-                ]
-              },
-              "unit": "ms"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 12,
-            "x": 0,
-            "y": 32
-          },
-          "id": 30,
-          "options": {
-            "colorMode": "value",
-            "graphMode": "area",
-            "justifyMode": "auto",
-            "orientation": "auto",
-            "reduceOptions": {
-              "calcs": [
-                "mean"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_uptime",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Uptime",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "#299c46",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 1
-                  },
-                  {
-                    "color": "#d44a3a",
-                    "value": 5
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 12,
-            "x": 12,
-            "y": 32
-          },
-          "id": 32,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "sum"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_fullRestarts",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "last"
-                  },
-                  {
-                    "params": [],
-                    "type": "non_negative_difference"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Number of restarts",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "ms"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 0,
-            "y": 37
-          },
-          "id": 37,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_lastCheckpointDuration",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Last checkpoint duration",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "green",
-                    "value": null
-                  },
-                  {
-                    "color": "red",
-                    "value": 80
-                  }
-                ]
-              },
-              "unit": "decbytes"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 6,
-            "y": 37
-          },
-          "id": 38,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "none",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "lastNotNull"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "linear"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_lastCheckpointSize",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "mean"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Last checkpoint size",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "#d44a3a",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 1
-                  },
-                  {
-                    "color": "#299c46",
-                    "value": 5
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 12,
-            "y": 37
-          },
-          "id": 35,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "sum"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_numberOfCompletedCheckpoints",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "last"
-                  },
-                  {
-                    "params": [],
-                    "type": "non_negative_difference"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Completed checkpoints",
-          "type": "stat"
-        },
-        {
-          "cacheTimeout": null,
-          "datasource": null,
-          "fieldConfig": {
-            "defaults": {
-              "color": {
-                "mode": "thresholds"
-              },
-              "mappings": [
-                {
-                  "options": {
-                    "match": "null",
-                    "result": {
-                      "text": "N/A"
-                    }
-                  },
-                  "type": "special"
-                }
-              ],
-              "thresholds": {
-                "mode": "absolute",
-                "steps": [
-                  {
-                    "color": "#299c46",
-                    "value": null
-                  },
-                  {
-                    "color": "rgba(237, 129, 40, 0.89)",
-                    "value": 1
-                  },
-                  {
-                    "color": "#d44a3a",
-                    "value": 5
-                  }
-                ]
-              },
-              "unit": "none"
-            },
-            "overrides": []
-          },
-          "gridPos": {
-            "h": 5,
-            "w": 6,
-            "x": 18,
-            "y": 37
-          },
-          "id": 34,
-          "interval": null,
-          "links": [],
-          "maxDataPoints": 100,
-          "options": {
-            "colorMode": "background",
-            "graphMode": "none",
-            "justifyMode": "auto",
-            "orientation": "horizontal",
-            "reduceOptions": {
-              "calcs": [
-                "sum"
-              ],
-              "fields": "",
-              "values": false
-            },
-            "text": {},
-            "textMode": "auto"
-          },
-          "pluginVersion": "8.0.6",
-          "targets": [
-            {
-              "groupBy": [
-                {
-                  "params": [
-                    "$__interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "jobmanager_job_numberOfFailedCheckpoints",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "value"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "last"
-                  },
-                  {
-                    "params": [],
-                    "type": "non_negative_difference"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Failed checkpoints",
-          "type": "stat"
-        }
-      ],
-      "title": "Scenario health",
-      "type": "row"
     }
   ],
   "refresh": "30s",
@@ -3306,7 +2159,7 @@
         "multiFormat": "pipe",
         "name": "scenarioName",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"source_instantRate\" WITH KEY = \"scenario\"",
+        "query": "SHOW TAG VALUES FROM \"source.instantRate\" WITH KEY = \"scenario\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -3333,7 +2186,7 @@
         "multi": false,
         "name": "env",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"source_instantRate\" WITH KEY = \"env\"",
+        "query": "SHOW TAG VALUES FROM \"source.instantRate\" WITH KEY = \"env\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -3461,7 +2314,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "Scenario",
-  "uid": "nussknacker-scenario",
+  "title": "Lite scenario",
+  "uid": "nussknacker-lite-scenario",
   "version": 101
 }
