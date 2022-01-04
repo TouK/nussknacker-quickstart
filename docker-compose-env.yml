@@ -31,9 +31,8 @@ services:
       - storage_zookeeper_data:/data
 
   kafka:
-    # drewpc changes should be merged soon - go back to previous image
     container_name: nussknacker_kafka
-    image: ${KAFKA_REPOSITORY-drewpc/kafka}:${KAFKA_VERSION-2.12-2.5.0}
+    image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.12-2.3.1}
     ports:
       - "3032:3032"
     environment:
