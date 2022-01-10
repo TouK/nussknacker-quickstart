@@ -507,7 +507,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_operator_name]] (taskId [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_operator_name]] (taskId [[tag_taskId]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -662,7 +662,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_taskId]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -823,7 +823,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_taskId]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -984,7 +984,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_taskId]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1145,7 +1145,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_slot]])",
+          "alias": "[[tag_scenario]] - [[tag_nodeId]] (taskId [[tag_taskId]])",
           "dsType": "influxdb",
           "groupBy": [
             {
@@ -1316,7 +1316,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_taskId]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1479,7 +1479,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_taskId]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1746,7 +1746,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_taskId]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
@@ -1909,7 +1909,7 @@
           "steppedLine": false,
           "targets": [
             {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_slot]])",
+              "alias": "[[tag_scenario]] - [[tag_serviceName]] (taskId [[tag_taskId]])",
               "dsType": "influxdb",
               "groupBy": [
                 {
