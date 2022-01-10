@@ -9,4 +9,5 @@ s/source_count/source.count/g
 s/end_count/end.count/g
 s/dead_end_count/dead_end.count/g
 s/error_instantRateByNode_count/error.instantRateByNode.count/g
-s/slot/taskId/g
+s/slot/instanceId/g
+s/operator_name/taskId/g
