@@ -1,0 +1,12 @@
+s/eventtimedelay_histogram/eventtimedelay.histogram/
+s/eventtimedelay_minimalDelay/eventtimedelay.minimalDelay/
+s/service_OK_histogram/service.OK.histogram/
+s/service_FAIL_histogram/service.FAIL.histogram/
+s/service_OK_instantRate/service.OK.instantRate/
+s/service_FAIL_instantRate/service.FAIL.instantRate/
+s/source_instantRate/source.instantRate/
+s/source_count/source.count/
+s/end_count/end.count/
+s/dead_end_count/dead_end.count/
+s/error_instantRateByNode_count/error.instantRateByNode.count/
+s/slot/taskId/
