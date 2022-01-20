@@ -1,10 +1,9 @@
 #!/bin/bash
 
 set -e
-
 cd "$(dirname $0)"
 
-if docker exec nussknacker_kafka kafka-console-consumer.sh \
+if ../scripts/runInKafka.sh kafka-console-consumer.sh \
               --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
               grep -q "Last request"
 then

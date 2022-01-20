@@ -4,14 +4,13 @@ set -e
 
 cd "$(dirname $0)"
 
-CONTAINER_NAME=$(docker ps | grep nussknacker_kafka | awk '{print $1}')
 TOPIC=${1}
 RECORD_COUNT=${2}
 SLEEP=${3-10}
 WAIT_LIMIT=${4-120}
 
 calcOffsetSumInTopic() {
-  docker exec $CONTAINER_NAME kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
+  ./runInKafka.sh  kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
   grep -e ':[[:digit:]]*:' | awk -F ":" '{sum += $3} END {print sum}'
 }
 
