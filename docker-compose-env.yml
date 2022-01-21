@@ -59,8 +59,7 @@ services:
       interval: 10s
       retries: 5
     depends_on:
-        zookeeper:
-          condition: service_healthy
+      - zookeeper
 
   akhq:
     container_name: nussknacker_akhq
@@ -95,11 +94,11 @@ services:
     ports:
       - "3082:8081"
     depends_on:
-        kafka:
-          condition: service_healthy
+      - kafka
+
     healthcheck:
       test: ["CMD-SHELL", "curl localhost:8081/subjects"]
-      interval: 10s
+      interval: 20s
       retries: 5
 
   jobmanager:

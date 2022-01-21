@@ -23,8 +23,7 @@ services:
       - storage_flink:/opt/flink/data
       - ./nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
     depends_on:
-        schemaregistry:
-          condition: service_healthy
+      - schemaregistry
 volumes:
   storage_designer:
     name: nussknacker_storage_designer
