@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       #FIXME: remove after correct helm publishing
-      HELM_REPO: "dist-ci/*.tgz"
+      HELM_REPO: "touk-snapshots/nussknacker"
       RELEASE: "nu-quickstart-ci"
     steps:
       - name: Cancel previous runs
@@ -51,7 +51,7 @@ jobs:
             --trace
       - name: install quickstart
         shell: bash
-        run: ./install.sh
+        run: ./install.sh --devel --debug 
         working-directory: ./k8s-helm
       - name: Test quickstart
         shell: bash

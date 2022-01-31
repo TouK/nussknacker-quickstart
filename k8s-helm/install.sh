@@ -4,6 +4,7 @@ set -e
 cd "$(dirname $0)"
 
 helm repo add --force-update touk https://helm-charts.touk.pl/public
+helm repo add --force-update touk-snapshots https://helm-charts.touk.pl/nexus/repository/helm-snapshots/
 helm repo update
 
 RELEASE=${RELEASE:-nu-quickstart}
