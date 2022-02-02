@@ -28,7 +28,7 @@ main() {
     echo "Scenario has already exists in db."
   else
     echo "Scenario creation failed with $CODE"
-    ./displayErrors.sh designer
+    ./displayLogs.sh designer
     exit 1
   fi
 
@@ -73,7 +73,7 @@ main() {
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
-    ./displayErrors.sh runtime
+    ./displayLogs.sh runtime
     exit 1
   fi
 }

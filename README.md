@@ -7,7 +7,7 @@ On this page you can find information about how to start work with Nussknacker D
 If you want to start your own project using Nussknacker, just fork this repo, adjust configuration,
 register own schemas (similar to those available at `./common/schemas`) and start designing own scenarios!
 
-Available modes:
+Available showcases:
 - `docker-compose` based (for Flink runtime)
 - Kubernetes and helm based (for streaming-lite runtime)
 
@@ -24,7 +24,7 @@ After doing it, you can will have available:
 * [Grafana](http://localhost:8081/grafana/)
 * [AKHQ](http://localhost:8081/akhq/)
 
-## Running kubernetes + helm mode mode
+## Running kubernetes + helm chart mode
 
 We assume that you have configured `kubectl` and `helm`. 
 
@@ -48,6 +48,7 @@ After doing it, you can will have available:
 * [Nussknacker](http://localhost:8081/) - user/password: admin/admin
 * [Grafana](http://localhost:8081/grafana/)
 * [AKHQ](http://localhost:8081/akhq/)
+
 If you've set `DOMAIN` environment variable, replace `http://localhost:8081` with `http(s)://$RELEASE-nussknacker.$DOMAIN/` in above links. 
 
 

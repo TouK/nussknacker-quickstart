@@ -41,7 +41,7 @@ while [[ $waitTime -lt $WAIT_LIMIT && $STATUS_CODE != 200 ]]; do
 done
 if [[ $STATUS_CODE != 200 ]]; then
   echo "$MSG_FAIL"
-  ./displayErrors.sh "$CONTAINER_FOR_LOGS"
+  ./displayLogs.sh "$CONTAINER_FOR_LOGS"
   exit 1
 fi
 
