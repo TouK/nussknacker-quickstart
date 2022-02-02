@@ -2,12 +2,12 @@
 
 set -e
 cd "$(dirname $0)"
+source .env
 
 helm repo add --force-update touk https://helm-charts.touk.pl/public
 helm repo add --force-update touk-snapshots https://helm-charts.touk.pl/nexus/repository/helm-snapshots/
 helm repo update
 
-RELEASE=${RELEASE:-nu-quickstart}
 HELM_REPO=${HELM_REPO:-touk/nussknacker}
 
 kubectl get secret "$RELEASE-postgresql" || kubectl create secret generic "$RELEASE-postgresql" --from-literal postgresql-password=`date +%s | sha256sum | base64 | head -c 32`

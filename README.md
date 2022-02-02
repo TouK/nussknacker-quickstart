@@ -8,8 +8,9 @@ If you want to start your own project using Nussknacker, just fork this repo, ad
 register own schemas (similar to those available at `./common/schemas`) and start designing own scenarios!
 
 Available showcases:
-- `docker-compose` based (for Flink runtime)
-- Kubernetes and helm based (for streaming-lite runtime)
+- `docker-compose` based (for Flink runtime), in `docker` directory
+- Kubernetes and helm based (for streaming-lite runtime), in `k8s-helm` directory
+For both cases, there are helper scripts in respective dirs.
 
 ## Running docker mode
 
@@ -34,10 +35,10 @@ Instructions below assume that cluster was created with ingress port mapped to 8
 
 ### Installation
 
-First, set `RELEASE` environment variable, e.g to `nu-quickstart`, which will be used as Helm release name. It's also needed for test data scripts. 
-
 By default, we assume that the quickstart is installed on local k8s installation with port 8081 mapped for ingress (see e.g. k3d setup above).
-If you install quickstart on cluster with public domain available, set `DOMAIN` variable to your domain, see also `k8s-helm/values.yaml` for more ingress configuration (e.g. certificate management).
+If you install quickstart on cluster with public domain available, set `DOMAIN` variable in `.env` file to your domain, see also `k8s-helm/values.yaml` for more ingress configuration (e.g. certificate management).
+
+By default, Helm chart will be installed with release name `nu-quickstart`, you can change it in `.env` file. 
 
 Afterwards, just run:
 ```bash
@@ -49,7 +50,7 @@ After doing it, you can will have available:
 * [Grafana](http://localhost:8081/grafana/)
 * [AKHQ](http://localhost:8081/akhq/)
 
-If you've set `DOMAIN` environment variable, replace `http://localhost:8081` with `http(s)://$RELEASE-nussknacker.$DOMAIN/` in above links. 
+If you've set `DOMAIN` variable, replace `http://localhost:8081` with `http(s)://$RELEASE-nussknacker.$DOMAIN/` in above links. 
 
 
 ## What's next?

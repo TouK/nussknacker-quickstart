@@ -36,7 +36,7 @@ jobs:
     env:
       #FIXME: remove after correct helm publishing
       HELM_REPO: "touk-snapshots/nussknacker"
-      RELEASE: "nu-quickstart-ci"
+      RELEASE: "nu-quickstart"
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.8.0
