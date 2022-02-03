@@ -4,9 +4,13 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch:
 
+env:
+  NUSSKNACKER_VERSION: staging-latest
+  TRANSACTION_COUNT: 10000000
+
 jobs:
-  nussknacker-benchmark:
-    name: Nussknacker benchmark
+  nussknacker-benchmark-flink:
+    name: Nussknacker benchmark Streaming-Flink
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -14,33 +18,46 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Get start time
-        id: start
-        run: echo "::set-output name=startTimestamp::$(date +%s%3N)"
-      - name: Prepare test transactions
-        run: ./testData/benchmark/setupAndSendBenchmarkTransactions.sh transactions 10000000
-      - name: Fetch data prep timestamp
-        id: dataPrep
-        run: echo "::set-output name=dataPrepTimestamp::$(date +%s%3N)"
-      - name: Run scenario
-        run: ./testData/importAndDeploy.sh
-      - name: Fetch deploy timestamp
-        id: deploy
-        run: echo "::set-output name=importAndDeployTimestamp::$(date +%s%3N)"
-      - name: Verify if finished
-        run: ./testData/benchmark/verifyScenarioFinish.sh
-      - name: Record finish time
-        run: |
-          {
-          echo "Preparation of test data in ms:"
-          echo $((${{steps.dataPrep.outputs.dataPrepTimestamp}} - ${{steps.start.outputs.startTimestamp}}))
-          echo "Import and deploy scenario time ms: "
-          echo $((${{steps.deploy.outputs.importAndDeployTimestamp}} - ${{steps.dataPrep.outputs.dataPrepTimestamp}}))
-          echo "Overall benchmark time ms: "
-          echo $(($(date +%s%3N) - ${{steps.start.outputs.startTimestamp}}))
-          } > benchmarkDetails.txt
+      - name: install quickstart
+        shell: bash
+        run: ./start.sh
+        working-directory: ./docker
+      - name: Test
+        run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json 
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: benchmarkDetails
-          path: benchmarkDetails.txt
+          name: benchmarkDetailsFlink
+          path: /tmp/benchmarkResult.csv
+  nussknacker-benchmark-lite:
+    name: Nussknacker benchmark Streaming-Lite
+    runs-on: ubuntu-latest
+    env:
+      #FIXME: remove after correct helm publishing
+      HELM_REPO: "touk-snapshots/nussknacker"
+      RELEASE: "nu-quickstart"
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - uses: AbsaOSS/k3d-action@v2
+        with:
+          cluster-name: "k3s-default"
+          args: >-
+            --config=.k3d/single-cluster.yml
+            --trace
+      - name: install quickstart
+        shell: bash
+        run: ./install.sh --devel --debug 
+        working-directory: ./k8s-helm
+      - name: Test
+        run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkLite.json         
+      - name: Save artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: benchmarkDetailsLite
+          path: /tmp/benchmarkResult.csv
+
+
