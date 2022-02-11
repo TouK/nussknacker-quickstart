@@ -41,7 +41,7 @@ metadata:
 spec:
   containers:
   - name: customer-service
-    image: ghcr.io/touk/nussknacker-quickstart/customerservice:staging-latest
+    image: ghcr.io/touk/nussknacker-quickstart/customerservice:latest
     imagePullPolicy: IfNotPresent
     ports:
     - containerPort: 5000
