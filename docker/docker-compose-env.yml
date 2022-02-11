@@ -86,7 +86,6 @@ services:
 
 
   schemaregistry:
-    platform: linux/x86_64
     container_name: nussknacker_schemaregistry
     image: confluentinc/cp-schema-registry:${SCHEMA_REGISTRY_VERSION-5.5.0}
     environment:
@@ -103,7 +102,6 @@ services:
       retries: 5
 
   jobmanager:
-    platform: linux/x86_64
     container_name: nussknacker_jobmanager
     image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
@@ -129,7 +127,6 @@ services:
       - storage_flink:/opt/flink/data
 
   taskmanager:
-    platform: linux/x86_64
     container_name: nussknacker_taskmanager
     image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
