@@ -12,8 +12,11 @@ on:
       - staging
       - release/*
 
+env:
+  NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
+
 jobs:
-  test:
+  docker-compose-test:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
@@ -21,6 +24,35 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: install quickstart
+        shell: bash
+        run: ./start.sh
+        working-directory: ./docker
       - name: Test quickstart
         shell: bash
-        run: ./testQuickstart.sh
+        run: ./common/tests/testDocker.sh
+  helm-k8s-test:
+    runs-on: ubuntu-latest
+    env:
+      #FIXME: remove after correct helm publishing
+      HELM_REPO: "touk-snapshots/nussknacker"
+      RELEASE: "nu-quickstart"
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - uses: AbsaOSS/k3d-action@v2
+        with:
+          cluster-name: "k3s-default"
+          args: >-
+            --config=.k3d/single-cluster.yml
+            --trace
+      - name: install quickstart
+        shell: bash
+        run: ./install.sh --devel --debug 
+        working-directory: ./k8s-helm
+      - name: Test quickstart
+        shell: bash
+        run: ./common/tests/testK8s.sh 
