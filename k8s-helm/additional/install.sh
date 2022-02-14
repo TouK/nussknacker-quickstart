@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 cd "$(dirname $0)"
+source ../.env
 
 kubectl apply -f custom-services.yaml
 
