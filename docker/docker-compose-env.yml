@@ -71,7 +71,7 @@ services:
             context-path: /akhq
         akhq:
           security:
-            default-group: reader
+            default-group: ${AKHQ_SECURITY_GROUP-admin}
           connections:
             nussknacker:
               properties:
