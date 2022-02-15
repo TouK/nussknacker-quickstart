@@ -16,7 +16,7 @@ configuration:
   micronaut.server.context-path: "/akhq"
   akhq:
     security:
-      default-group: reader
+      default-group: ${AKHQ_SECURITY_GROUP}
     connections:
       nussknacker:
         properties:

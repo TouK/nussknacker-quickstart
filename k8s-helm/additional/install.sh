@@ -2,6 +2,7 @@
 set -e
 cd "$(dirname $0)"
 source ../.env
+export AKHQ_SECURITY_GROUP=admin
 
 kubectl apply -f custom-services.yaml
 
