@@ -49,6 +49,10 @@ jobs:
           args: >-
             --config=.k3d/single-cluster.yml
             --trace
+      - name: install additional components
+        shell: bash
+        run: ./install.sh
+        working-directory: ./k8s-helm/additional
       - name: install quickstart
         shell: bash
         run: ./install.sh --devel --debug 
