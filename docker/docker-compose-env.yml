@@ -71,7 +71,7 @@ services:
             context-path: /akhq
         akhq:
           security:
-            default-group: reader
+            default-group: ${AKHQ_SECURITY_GROUP-admin}
           connections:
             nussknacker:
               properties:
@@ -114,6 +114,7 @@ services:
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
       OPENAPI_SERVICE_URL: http://customerservice:5000
+      TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
     depends_on:
       - zookeeper
       - kafka
