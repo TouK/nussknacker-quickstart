@@ -11,6 +11,9 @@ then
     designer) 
         kubectl logs deploy/$RELEASE-nussknacker
         ;;
+    akhq) 
+        kubectl logs deploy/$RELEASE-akhq
+        ;;
     runtime) 
         kubectl logs -l nussknacker.io/scenarioId
         ;; 
