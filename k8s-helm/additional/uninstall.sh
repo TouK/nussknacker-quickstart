@@ -2,7 +2,7 @@
 
 set -e
 cd "$(dirname $0)"
-source ../.env
+../scripts/setEnv.sh
 
 helm uninstall ${RELEASE}-akhq
 kubectl delete pod,service -l nu-quickstart=sample
