@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  designer:
+    container_name: nussknacker_designer
+    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest}
+    ports:
+      - "3081:8080"
+      - "3181:8181"  
+    environment:
+      #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
+      #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
+      CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
+      JDK_JAVA_OPTIONS: -Xmx256M
+      DEFAULT_SCENARIO_TYPE: "request-response-embedded"
+      INFLUXDB_URL: http://influxdb:8086
+      OPENAPI_SERVICE_URL: http://customerservice:5000
+    volumes:
+      - storage_designer:/opt/nussknacker/storage
+      - ./nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
+
+volumes:
+  storage_designer:
+    name: nussknacker_storage_designer
+
+networks:
+  default:
+    name: nussknacker_network

@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  influxdb:
+    container_name: nussknacker_influxdb
+    hostname: influxdb
+    image: influxdb:${INFLUXDB_VERSION-1.8.10}
+    ports:
+      - "3086:8086"
+    environment:
+      INFLUXDB_DB: esp
+    volumes:
+      - storage_influxdb:/var/lib/influxdb
+
+  grafana:
+    container_name: nussknacker_grafana
+    image: grafana/grafana:${GRAFANA_VERSION-8.4.2}
+    volumes:
+      - ./grafana:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:/grafana
+      - GF_SECURITY_ALLOW_EMBEDDING=true
+    depends_on:
+      - influxdb
+
+  nginx:
+    container_name: nussknacker_nginx
+    image: nginx:${NGINX_VERSION-1.17.6}
+    ports:
+      - "${NGINX_PORT-8081}:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - grafana
+
+volumes:
+  storage_influxdb:
+    name: nussknacker_storage_influxdb
+
+networks:
+  default:
+    name: nussknacker_network
