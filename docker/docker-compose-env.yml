@@ -103,7 +103,7 @@ services:
 
   jobmanager:
     container_name: nussknacker_jobmanager
-    image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.14.4}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3031:8081"
       - "9249:9249"
@@ -127,7 +127,7 @@ services:
 
   taskmanager:
     container_name: nussknacker_taskmanager
-    image: flink:${FLINK_VERSION-1.14.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.14.4}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3063:9069"
       - "9009:9009"
