@@ -1,24 +1,11 @@
 version: '3.8'
 
 services:
-  influxdb:
-    container_name: nussknacker_influxdb
-    hostname: influxdb
-    image: influxdb:${INFLUXDB_VERSION-1.8.10}
-    ports:
-      - "3086:8086"
-    environment:
-      INFLUXDB_DB: esp
-    volumes:
-      - ./influxdb/influxdb.conf:/etc/influxdb/influxdb.conf
-      - storage_influxdb:/var/lib/influxdb
-
   telegraf:
     container_name: nussknacker_telegraf
     image: telegraf:${TELEGRAF_VERSION-1.20.4}
     volumes:
-      - ./telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
-
+      - ${BASE_PATH}/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
 
   zookeeper:
     container_name: nussknacker_zookeeper
@@ -84,7 +71,6 @@ services:
       - kafka
       - schemaregistry
 
-
   schemaregistry:
     container_name: nussknacker_schemaregistry
     image: confluentinc/cp-schema-registry:${SCHEMA_REGISTRY_VERSION-5.5.0}
@@ -120,10 +106,10 @@ services:
       - kafka
       - influxdb
     volumes:
-      - ./flink/flink-conf.yaml:/tmp/flink-conf.yaml
-      - ./flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
       # can be removed unless you use database enricher
-      - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+      - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
       - storage_flink:/opt/flink/data
 
   taskmanager:
@@ -143,44 +129,26 @@ services:
       - jobmanager
       - influxdb
     volumes:
-      - ./flink/flink-conf.yaml:/tmp/flink-conf.yaml
-      - ./flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
       - storage_flink:/opt/flink/data
       # can be removed unless you use database enricher
-      - ./flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+      - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
     ulimits:
       nproc: 70000
       nofile:
         soft: 70000
         hard: 70000
 
-  grafana:
-    container_name: nussknacker_grafana
-    image: grafana/grafana:${GRAFANA_VERSION-8.0.6}
-    volumes:
-      - ./grafana:/etc/grafana/provisioning
-      - ./grafana/dashboards:/var/lib/grafana/dashboards
+  designer:
     environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_SERVER_ROOT_URL=%(protocol)s://%(domain)s:/grafana
-      - GF_SECURITY_ALLOW_EMBEDDING=true
-    depends_on:
-      - influxdb
-
-  nginx:
-    container_name: nussknacker_nginx
-    image: nginx:${NGINX_VERSION-1.17.6}
-    ports:
-      - "${NGINX_PORT-8081}:80"
+      FLINK_REST_URL: http://jobmanager:8081
+      FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
+      KAFKA_ADDRESS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081  
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-    depends_on:
-      - zookeeper
-      - influxdb
-      - kafka
-      - jobmanager
-      - taskmanager
-      - grafana
+      #this is needed to be able to verify savepoints during deployments
+      - storage_flink:/opt/flink/data
 
 volumes:
   storage_zookeeper_datalog:
@@ -191,9 +159,3 @@ volumes:
     name: nussknacker_storage_kafka_data
   storage_flink:
     name: nussknacker_storage_flink
-  storage_influxdb:
-    name: nussknacker_storage_influxdb
-
-networks:
-  default:
-    name: nussknacker_network

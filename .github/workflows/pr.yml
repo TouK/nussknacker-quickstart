@@ -16,7 +16,7 @@ env:
   NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
-  docker-compose-test:
+  docker-compose-streaming-test:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
@@ -27,10 +27,26 @@ jobs:
       - name: install quickstart
         shell: bash
         run: ./start.sh
-        working-directory: ./docker
+        working-directory: ./docker/streaming
       - name: Test quickstart
         shell: bash
-        run: ./common/tests/testDocker.sh
+        run: ./common/tests/testDockerStreaming.sh
+  docker-compose-requestresponse-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: install quickstart
+        shell: bash
+        run: ./start.sh
+        working-directory: ./docker/requestresponse
+      - name: Test quickstart
+        shell: bash
+        run: ./common/tests/testDockerRequestResponse.sh
+
   helm-k8s-test:
     runs-on: ubuntu-latest
     env:

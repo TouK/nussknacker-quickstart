@@ -1,0 +1,360 @@
+{
+  "metaData" : {
+    "id" : "Loan request",
+    "typeSpecificData" : {
+      "path" : "loan",
+      "type" : "RequestResponseMetaData"
+    },
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "inputSchema" : "{  \n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        }, \n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n    \n  }  \n}",
+        "outputSchema" : "{  \n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  }  \n}"
+      }
+    },
+    "subprocessVersions" : {
+      
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "request",
+      "ref" : {
+        "typ" : "request",
+        "parameters" : [
+        ]
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 0
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "id" : "getCustomer",
+      "service" : {
+        "id" : "getCustomer",
+        "parameters" : [
+          {
+            "name" : "customer_id",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.customerId"
+            }
+          }
+        ]
+      },
+      "output" : "customer",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 180
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "defaultNext" : [
+        {
+          "defaultNext" : [
+            {
+              "id" : "unknown",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "0"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'Unknown loan type'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 900,
+                  "y" : 720
+                }
+              },
+              "type" : "Sink"
+            }
+          ],
+          "nexts" : [
+            {
+              "expression" : {
+                "language" : "spel",
+                "expression" : "#type == 'loan'"
+              },
+              "nodes" : [
+                {
+                  "id" : "loan response",
+                  "ref" : {
+                    "typ" : "response",
+                    "parameters" : [
+                      {
+                        "name" : "acceptedAmount",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : "#NUMERIC.min(50, #input.requestedAmount)"
+                        }
+                      },
+                      {
+                        "name" : "message",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : "'only small amount available'"
+                        }
+                      }
+                    ]
+                  },
+                  "endResult" : null,
+                  "isDisabled" : null,
+                  "additionalFields" : {
+                    "description" : null,
+                    "layoutData" : {
+                      "x" : 540,
+                      "y" : 777
+                    }
+                  },
+                  "type" : "Sink"
+                }
+              ]
+            },
+            {
+              "expression" : {
+                "language" : "spel",
+                "expression" : "#type == 'mortgage'"
+              },
+              "nodes" : [
+                {
+                  "id" : "worldData",
+                  "service" : {
+                    "id" : "worldData",
+                    "parameters" : [
+                      {
+                        "name" : "Table",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : "'city'"
+                        }
+                      },
+                      {
+                        "name" : "Cache TTL",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : ""
+                        }
+                      },
+                      {
+                        "name" : "Key column",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : "'name'"
+                        }
+                      },
+                      {
+                        "name" : "Key value",
+                        "expression" : {
+                          "language" : "spel",
+                          "expression" : "#input.location.city"
+                        }
+                      }
+                    ]
+                  },
+                  "output" : "city",
+                  "additionalFields" : {
+                    "description" : null,
+                    "layoutData" : {
+                      "x" : 180,
+                      "y" : 720
+                    }
+                  },
+                  "type" : "Enricher"
+                },
+                {
+                  "defaultNext" : [
+                    {
+                      "id" : "Other city mortgage",
+                      "ref" : {
+                        "typ" : "response",
+                        "parameters" : [
+                          {
+                            "name" : "acceptedAmount",
+                            "expression" : {
+                              "language" : "spel",
+                              "expression" : "#NUMERIC.min(250, #input.requestedAmount)"
+                            }
+                          },
+                          {
+                            "name" : "message",
+                            "expression" : {
+                              "language" : "spel",
+                              "expression" : "'For small city - small amount'"
+                            }
+                          }
+                        ]
+                      },
+                      "endResult" : null,
+                      "isDisabled" : null,
+                      "additionalFields" : {
+                        "description" : null,
+                        "layoutData" : {
+                          "x" : 0,
+                          "y" : 1080
+                        }
+                      },
+                      "type" : "Sink"
+                    }
+                  ],
+                  "nexts" : [
+                    {
+                      "expression" : {
+                        "language" : "spel",
+                        "expression" : "#population > 500000"
+                      },
+                      "nodes" : [
+                        {
+                          "id" : "Large city mortgage",
+                          "ref" : {
+                            "typ" : "response",
+                            "parameters" : [
+                              {
+                                "name" : "acceptedAmount",
+                                "expression" : {
+                                  "language" : "spel",
+                                  "expression" : "1000"
+                                }
+                              },
+                              {
+                                "name" : "message",
+                                "expression" : {
+                                  "language" : "spel",
+                                  "expression" : "'Large sum for large city'"
+                                }
+                              }
+                            ]
+                          },
+                          "endResult" : null,
+                          "isDisabled" : null,
+                          "additionalFields" : {
+                            "description" : null,
+                            "layoutData" : {
+                              "x" : 360,
+                              "y" : 1080
+                            }
+                          },
+                          "type" : "Sink"
+                        }
+                      ]
+                    }
+                  ],
+                  "id" : "switch",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#city.population"
+                  },
+                  "exprVal" : "population",
+                  "additionalFields" : {
+                    "description" : null,
+                    "layoutData" : {
+                      "x" : 180,
+                      "y" : 900
+                    }
+                  },
+                  "type" : "Switch"
+                }
+              ]
+            }
+          ],
+          "id" : "loan type",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.requestType"
+          },
+          "exprVal" : "type",
+          "additionalFields" : {
+            "description" : null,
+            "layoutData" : {
+              "x" : 540,
+              "y" : 540
+            }
+          },
+          "type" : "Switch"
+        }
+      ],
+      "nexts" : [
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "{'GOLD', 'PLATINUM'}.contains(#category)"
+          },
+          "nodes" : [
+            {
+              "id" : "VIP",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "#input.requestedAmount"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'For VIP everything they want'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 900,
+                  "y" : 540
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        }
+      ],
+      "id" : "category",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#customer?.category"
+      },
+      "exprVal" : "category",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 360
+        }
+      },
+      "type" : "Switch"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}

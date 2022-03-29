@@ -22,11 +22,11 @@ AUTHORIZATION_HEADER_VALUE=${AUTHORIZATION_HEADER_VALUE:-"Basic YWRtaW46YWRtaW4=
 AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
 
 function checkCode() {
-  curl -L -s -o /dev/null -w "%{http_code}" -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/$URL_PATH"
+  curl -L -s -o /dev/null -w "%{http_code}" -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/$URL_PATH" || true
 }
 
 waitTime=0
-echo "$MSG_INIT"
+echo "$MSG_INIT: $DESIGNER_URL/$URL_PATH"
 
 STATUS_CODE=$(checkCode)
 

@@ -6,29 +6,22 @@ services:
     image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest}
     ports:
       - "3081:8080"
+      - "3181:8181"  
     environment:
       #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
       CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
       JDK_JAVA_OPTIONS: -Xmx256M
-      FLINK_REST_URL: http://jobmanager:8081
-      FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
-      KAFKA_ADDRESS: kafka:9092
-      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE}
       INFLUXDB_URL: http://influxdb:8086
       OPENAPI_SERVICE_URL: http://customerservice:5000
     volumes:
       - storage_designer:/opt/nussknacker/storage
-      #this is needed to be able to verify savepoints during deployments
-      - storage_flink:/opt/flink/data
-      - ./nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
-    depends_on:
-      - schemaregistry
+      - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
+
 volumes:
   storage_designer:
     name: nussknacker_storage_designer
-  storage_flink:
-    name: nussknacker_storage_flink
 
 networks:
   default:
