@@ -25,6 +25,9 @@ runInKafka kafka-topics.sh --create --topic alerts --bootstrap-server localhost:
 runInKafka kafka-topics.sh --delete --topic "$TOPIC" --bootstrap-server localhost:9092 --if-exists
 runInKafka kafka-topics.sh --create --topic "$TOPIC" --bootstrap-server localhost:9092 --partitions "$PARTITION_COUNT" --replication-factor 1
 
+../../schemas/createSchemas.sh
+
+
 echo "Topics prepared, running console producer..."
 #we do this instead of copy, as we would have to have different scripts for docker and k8s
 cat generateBenchmarkTransactions.sh | runInKafka bash -c "cat > /tmp/bench.sh; chmod +x /tmp/bench.sh"
