@@ -1,7 +1,8 @@
-#!/bin/bash
-if [[ -z "${RELEASE}" ]]
-then
-docker exec -i nussknacker_kafka $@
+#!/bin/sh
+
+if [ -z "${RELEASE}" ]; then
+  CONTAINER_NAME=$(docker ps | grep nussknacker_kafka | awk '{print $1}')
+  docker exec -i $CONTAINER_NAME "$@"
 else
-kubectl exec -i $RELEASE-kafka-0 -- $@
+  kubectl exec -i $RELEASE-kafka-0 -- "$@"
 fi
