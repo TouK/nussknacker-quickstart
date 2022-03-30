@@ -22,5 +22,6 @@ fi
 helm upgrade -i "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
+  --set image.tag="${NUSSKNACKER_VERSION:-latest}" \
   --set postgresql.existingSecret="${RELEASE}-postgresql" \
   -f values.yaml $@ 
