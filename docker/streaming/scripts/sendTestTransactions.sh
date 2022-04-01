@@ -3,4 +3,4 @@ unset RELEASE
 set -e
 
 cd "$(dirname $0)"
-../../common/scripts/sendTestTransactions.sh $@
+../../../common/scripts/sendTestTransactions.sh $@
