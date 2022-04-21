@@ -2,6 +2,6 @@
 set -e
 
 cd "$(dirname $0)"
-./setEnv.sh
+set -a; . ../.env; set +a
 
 ../../common/scripts/continuouslySendTransactions.sh $@
