@@ -19,7 +19,9 @@ else
   ADDITIONAL_VALS="--set ingress.skipHost=false --set ingress.domain=$DOMAIN"
 fi
 
-helm upgrade -i "${RELEASE}" $HELM_REPO \
+COMMAND=${COMMAND:-"upgrade -i"}
+
+helm $COMMAND "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
   --set postgresql.existingSecret="${RELEASE}-postgresql" \

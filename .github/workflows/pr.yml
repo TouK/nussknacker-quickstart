@@ -53,6 +53,10 @@ jobs:
         shell: bash
         run: ./install.sh
         working-directory: ./k8s-helm/additional
+      - name: verify quickstart template
+        shell: bash
+        run: COMMAND=template ./install.sh
+        working-directory: ./k8s-helm
       - name: install quickstart
         shell: bash
         run: ./install.sh --devel --debug 
