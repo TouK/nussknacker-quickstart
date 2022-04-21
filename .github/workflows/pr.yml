@@ -53,6 +53,9 @@ jobs:
         shell: bash
         run: ./install.sh
         working-directory: ./k8s-helm/additional
+      - name: verify quickstart template
+        shell: bash
+        run: helm template touk/nussknacker -f values.yaml
       - name: install quickstart
         shell: bash
         run: ./install.sh --devel --debug 
