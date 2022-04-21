@@ -21,9 +21,8 @@ jobs:
       - name: install quickstart
         shell: bash
         run: ./start.sh
-        working-directory: ./docker
       - name: Test
-        run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json 
+        run: ./docker/common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -50,8 +49,7 @@ jobs:
             --trace
       - name: install quickstart
         shell: bash
-        run: ./install.sh --devel --debug 
-        working-directory: ./k8s-helm
+        run: ./k8s-helm/install.sh --devel --debug
       - name: Test
         run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkLite.json         
       - name: Save artifacts
