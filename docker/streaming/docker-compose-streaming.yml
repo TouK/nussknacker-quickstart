@@ -1,0 +1,161 @@
+version: '3.8'
+
+services:
+  telegraf:
+    container_name: nussknacker_telegraf
+    image: telegraf:${TELEGRAF_VERSION-1.20.4}
+    volumes:
+      - ${BASE_PATH}/telegraf/telegraf.conf:/etc/telegraf/telegraf.conf
+
+  zookeeper:
+    container_name: nussknacker_zookeeper
+    image: zookeeper:${ZOOKEEPER_VERSION-3.5.8}
+    environment:
+      ZOO_MY_ID: 1
+      JVMFLAGS: "-Xms64m -Xmx128m"
+      ZOO_4LW_COMMANDS_WHITELIST: "srvr,ruok"
+    volumes:
+      - storage_zookeeper_datalog:/datalog
+      - storage_zookeeper_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", 'echo "ruok" | nc -w 2 -q 2 localhost 2181 | grep imok']
+      interval: 5s
+      retries: 5
+
+  kafka:
+    container_name: nussknacker_kafka
+    image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.13-2.8.1}
+    ports:
+      - "3032:3032"
+    environment:
+      HOSTNAME_COMMAND: "docker info | grep ^Name: | cut -d' ' -f 2"
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:3032
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:3032
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "processedEvents:1:1"
+      KAFKA_BROKER_ID: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - storage_kafka_data:/kafka
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      interval: 10s
+      retries: 5
+    depends_on:
+      - zookeeper
+
+  akhq:
+    container_name: nussknacker_akhq
+    image: tchiotludo/akhq:${AKHQ_VERSION-0.19.0}
+    environment:
+      AKHQ_CONFIGURATION: |
+        micronaut:
+          server:
+            context-path: /akhq
+        akhq:
+          security:
+            default-group: ${AKHQ_SECURITY_GROUP-admin}
+          connections:
+            nussknacker:
+              properties:
+                bootstrap.servers: "kafka:9092"
+              schema-registry:
+                url: "http://schemaregistry:8081"
+    ports:
+      - 8085:8080
+    links:
+      - kafka
+      - schemaregistry
+
+  schemaregistry:
+    container_name: nussknacker_schemaregistry
+    image: confluentinc/cp-schema-registry:${SCHEMA_REGISTRY_VERSION-5.5.0}
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+      SCHEMA_REGISTRY_HOST_NAME: schemaregistry
+    ports:
+      - "3082:8081"
+    depends_on:
+      - kafka
+
+    healthcheck:
+      test: ["CMD-SHELL", "curl localhost:8081/subjects"]
+      interval: 20s
+      retries: 5
+
+  jobmanager:
+    container_name: nussknacker_jobmanager
+    image: flink:${FLINK_VERSION-1.14.4}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    ports:
+      - "3031:8081"
+      - "9249:9249"
+    entrypoint: /flink-entrypoint.sh
+    command: jobmanager
+    environment:
+      # those environment variables are duplicated here and in designer service, in case of setup with designer run in other network than flink
+      KAFKA_ADDRESS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
+      OPENAPI_SERVICE_URL: http://customerservice:5000
+      TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
+    depends_on:
+      - zookeeper
+      - kafka
+      - influxdb
+    volumes:
+      - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      # can be removed unless you use database enricher
+      - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+      - storage_flink:/opt/flink/data
+
+  taskmanager:
+    container_name: nussknacker_taskmanager
+    image: flink:${FLINK_VERSION-1.14.4}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    ports:
+      - "3063:9069"
+      - "9009:9009"
+      - "9008:9008"
+    entrypoint: /flink-entrypoint.sh
+    command: taskmanager
+    environment:
+      TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
+    depends_on:
+      - zookeeper
+      - kafka
+      - jobmanager
+      - influxdb
+    volumes:
+      - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      - storage_flink:/opt/flink/data
+      # can be removed unless you use database enricher
+      - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
+    ulimits:
+      nproc: 70000
+      nofile:
+        soft: 70000
+        hard: 70000
+
+  designer:
+    environment:
+      FLINK_REST_URL: http://jobmanager:8081
+      FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
+      KAFKA_ADDRESS: kafka:9092
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081  
+    volumes:
+      #this is needed to be able to verify savepoints during deployments
+      - storage_flink:/opt/flink/data
+
+volumes:
+  storage_zookeeper_datalog:
+    name: nussknacker_storage_zookeeper_datalog
+  storage_zookeeper_data:
+    name: nussknacker_storage_zookeeper_data
+  storage_kafka_data:
+    name: nussknacker_storage_kafka_data
+  storage_flink:
+    name: nussknacker_storage_flink
