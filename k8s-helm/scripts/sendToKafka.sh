@@ -1,7 +1,7 @@
 #!/bin/bash
-set -e
 
+set -e
 cd "$(dirname $0)"
-./setEnv.sh
+set -a; . ../.env; set +a
 
 ../../common/scripts/sendToKafka.sh $@
