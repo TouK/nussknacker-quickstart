@@ -26,8 +26,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: install quickstart
         shell: bash
-        run: ./start.sh
-        working-directory: ./docker/streaming
+        run: ./docker/streaming/start.sh
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testDockerStreaming.sh
@@ -52,7 +51,6 @@ jobs:
     env:
       #FIXME: remove after correct helm publishing
       HELM_REPO: "touk-snapshots/nussknacker"
-      RELEASE: "nu-quickstart"
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.8.0
@@ -67,12 +65,13 @@ jobs:
             --trace
       - name: install additional components
         shell: bash
-        run: ./install.sh
-        working-directory: ./k8s-helm/additional
+        run: ./k8s-helm/additional/install.sh
+      - name: verify quickstart template
+        shell: bash
+        run: COMMAND=template ./k8s-helm/install.sh
       - name: install quickstart
         shell: bash
-        run: ./install.sh --devel --debug 
-        working-directory: ./k8s-helm
+        run: ./k8s-helm/install.sh --devel --debug
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testK8s.sh 
