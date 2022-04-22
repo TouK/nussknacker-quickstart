@@ -1,3 +1,8 @@
 {
-  "schema": "{\n  \"type\": \"record\",\n  \"name\": \"transaction\",\n  \"namespace\": \"pl.touk\",\n  \"fields\": [\n    {\n      \"name\": \"message\",\n      \"type\": \"string\"\n    }\n  ]\n}\n"
+  "type": "record",
+  "name": "transaction",
+  "namespace": "pl.touk",
+  "fields": [
+    { "name": "message", "type": "string" }
+  ]
 }
