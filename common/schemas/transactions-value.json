@@ -1,3 +1,10 @@
 {
-  "schema": "{\n  \"type\": \"record\",\n  \"name\": \"transaction\",\n  \"namespace\": \"pl.touk\",\n  \"fields\": [\n    {\n      \"name\": \"clientId\",\n      \"type\": \"string\"\n    },\n      {\n      \"name\": \"amount\",\n      \"type\": \"int\"\n    },\n    {\n      \"name\": \"isLast\",\n      \"type\": \"boolean\"\n,\n      \"default\": false\n    }\n  ]\n}\n"
+  "type": "record",
+  "name": "transaction",
+  "namespace": "pl.touk",
+  "fields": [
+    { "name": "clientId", "type": "string" },
+    { "name": "amount", "type": "int" },
+    { "name": "isLast", "type": "boolean", "default": false }
+  ]
 }
