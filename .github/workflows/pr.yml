@@ -11,6 +11,7 @@ on:
       - main
       - staging
       - release/*
+  workflow_dispatch:
 
 env:
   NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
