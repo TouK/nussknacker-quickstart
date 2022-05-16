@@ -42,7 +42,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - storage_kafka_data:/kafka
     healthcheck:
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe transactions"]
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --topic transactions --describe"]
       interval: 10s
       retries: 5
     depends_on:
