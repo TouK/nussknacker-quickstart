@@ -34,7 +34,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "processedEvents:1:1"
+      KAFKA_CREATE_TOPICS: "transactions:1:1,processedEvents:1:1"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
@@ -42,7 +42,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - storage_kafka_data:/kafka
     healthcheck:
-      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list"]
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe transactions"]
       interval: 10s
       retries: 5
     depends_on:
@@ -81,7 +81,6 @@ services:
       - "3082:8081"
     depends_on:
       - kafka
-
     healthcheck:
       test: ["CMD-SHELL", "curl localhost:8081/subjects"]
       interval: 20s
