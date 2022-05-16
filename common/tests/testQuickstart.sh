@@ -11,6 +11,7 @@ $WAIT_FOR_OK  "metrics" "Checking Grafana response..." "Grafana not started" "gr
 
 echo "Creating topics and schema"
 ../scripts/runInKafka.sh kafka-topics.sh --create --topic alerts --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+../scripts/runInKafka.sh kafka-topics.sh --create --topic transactions --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 ../schemas/createSchemas.sh
 echo "Topic and schemas created"
 ../scripts/importAndDeploy.sh $SCENARIO_PATH 
