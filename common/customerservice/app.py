@@ -5,10 +5,11 @@ from flask_smorest import Api, Blueprint
 import random
 
 class Customer:
-    def __init__(self, id, name, category):
+    def __init__(self, id, name, category, accountBalance):
         self.name = name
         self.id = id
         self.category = category
+        self.accountBalance = accountBalance
 
 app = Flask(__name__, static_folder = '/static')
 
@@ -25,6 +26,7 @@ class CustomerSchema(ma.Schema):
     id = ma.fields.Int(dump_only=True)
     name = ma.fields.String()
     category = ma.fields.String()
+    accountBalance = ma.fields.Float()
 
 class CustomerQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
@@ -46,10 +48,10 @@ class CustomerById(MethodView):
             return "Unexpected failure!", 500
         idstr = str(customer_id)
         customers = {
-            "1": Customer(customer_id, "John Doe", "STANDARD"),
-            "2": Customer(customer_id, "Robert Wright", "GOLD"),
-            "3": Customer(customer_id, "Юрий Шевчук", "PLATINUM"),
-            "4": Customer(customer_id, "Иосиф Кобзон", "STANDARD")
+            "1": Customer(customer_id, "John Doe", "STANDARD", 1653.23),
+            "2": Customer(customer_id, "Robert Wright", "GOLD", 100100.32),
+            "3": Customer(customer_id, "Юрий Шевчук", "PLATINUM",230000.56),
+            "4": Customer(customer_id, "Иосиф Кобзон", "STANDARD",2040.78)
         }
         if idstr in customers:
             return customers[idstr]
