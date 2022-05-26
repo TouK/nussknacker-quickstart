@@ -26,7 +26,7 @@ class CustomerSchema(ma.Schema):
     id = ma.fields.Int(dump_only=True)
     name = ma.fields.String()
     category = ma.fields.String()
-    accountBalance = ma.fields.Float()
+    accountBalance = ma.fields.Number()
 
 class CustomerQueryArgsSchema(ma.Schema):
     name = ma.fields.String()
