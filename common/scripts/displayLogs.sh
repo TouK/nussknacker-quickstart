@@ -10,10 +10,10 @@ then
     echo "Logs for $CONTAINER in docker"
     case $CONTAINER in 
     runtime) 
-        docker logs nussknacker_jobmanager
+        docker logs `docker ps -q -f name=jobmanager`  # if used in swarm, container names have some random stuff appended 
         ;;
     *)
-        docker logs nussknacker_$CONTAINER
+        docker logs `docker ps -q -f name=designer`
         ;;
     esac    
 else
