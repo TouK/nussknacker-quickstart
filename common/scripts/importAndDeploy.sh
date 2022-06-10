@@ -8,7 +8,7 @@ then
   exit 1
 fi
 
-TOOLSPATH"$(dirname $0)"
+TOOLSPATH="$(dirname $0)"
 
 if [[ -z $DOMAIN ]]
 then
