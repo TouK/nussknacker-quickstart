@@ -2,7 +2,13 @@
 
 set -e
 
-cd "$(dirname $0)"
+if [ ! -f "$1" ]
+then  
+  echo "scenario $1 does not exist"
+  exit 1
+fi
+
+TOOLSPATH="$(dirname $0)"
 
 if [[ -z $DOMAIN ]]
 then
@@ -30,7 +36,8 @@ main() {
     echo "Scenario has already exists in db."
   else
     echo "Scenario creation failed with $CODE"
-    ./displayLogs.sh designer
+    echo " ------------------ Designer container logs below this line only -----------------------"
+    $TOOLSPATH/displayLogs.sh designer
     exit 1
   fi
 
@@ -72,7 +79,7 @@ main() {
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
-    ./displayLogs.sh runtime
+    $TOOLSPATH/displayLogs.sh runtime
     exit 1
   fi
 }
