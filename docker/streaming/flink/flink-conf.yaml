@@ -32,6 +32,9 @@ taskmanager.data.port: 6126
 taskmanager.memory.task.heap.size: 256m
 taskmanager.memory.managed.size: 204m
 
+# although below setting is a default, pls leave it here. We will sed-replace this line in the nusssknacker-infrastructure project
+taskmanager.memory.jvm-metaspace.size: 256mb  
+
 env.java.opts: "-Dlog4j2.formatMsgNoLookups=true"
 
 env.java.opts.taskmanager: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.port=9009 -Dcom.sun.management.jmxremote.rmi.port=9008 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
@@ -49,6 +52,9 @@ jobmanager.rpc.port: 6123
 # The heap size for the JobManager JVM
 
 jobmanager.heap.size: 256m
+
+# although below setting is a default, pls leave it here. We will sed-replace this line in the nusssknacker-infrastructure project
+jobmanager.memory.jvm-metaspace.size: 256mb  
 
 # The parallelism used for programs that did not specify and other parallelism.
 
