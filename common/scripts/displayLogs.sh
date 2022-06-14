@@ -7,7 +7,7 @@ CONTAINER=$1
 
 if [ -z "$RELEASE" ]
 then
-    echo "Logs for $CONTAINER in docker"
+    echo "********************* Logs for $CONTAINER in docker **************************"
     case $CONTAINER in 
     runtime) 
         docker logs `docker ps -q -f name=jobmanager`  # if used in swarm, container names have some random stuff appended 
