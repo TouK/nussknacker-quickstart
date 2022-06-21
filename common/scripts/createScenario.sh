@@ -2,6 +2,8 @@
 
 set -e
 
+# This script allows to create and import scenario or fragment
+
 if [ ! -f "$1" ]
 then  
   echo "File $1 does not exist!"

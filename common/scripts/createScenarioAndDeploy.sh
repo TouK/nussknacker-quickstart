@@ -2,6 +2,8 @@
 
 set -e
 
+# This script allows to create and import scenario and at the end to deploy
+
 TOOLSPATH="$(dirname $0)"
 
 if [[ -z $DOMAIN ]]; then
