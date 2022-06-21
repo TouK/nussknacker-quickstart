@@ -4,7 +4,7 @@ set -e
 
 if [ ! -f "$1" ]
 then  
-  echo "File $1 does not exist"
+  echo "File $1 does not exist!"
   exit 1
 fi
 
@@ -35,7 +35,7 @@ main() {
   fi
 
   if [[ "$FORCE_REMOVE" == "true" ]]; then
-    echo "Force removing $PROCESS_TYPE $SCENARIO_PATH"
+    echo "Force removing $PROCESS_TYPE $SCENARIO_PATH.."
 
     if [[ "$IS_FRAGMENT" == "false" ]]; then
        curl -L -X POST -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processManagement/cancel/$SCENARIO_NAME"
@@ -73,10 +73,7 @@ main() {
   curl -s -o /dev/null -L  -H "$AUTHORIZATION_HEADER" -H 'Accept: application/json, text/plain, */*' -H 'Content-Type: application/json;charset=UTF-8' \
     --data-raw "${START}${SCENARIO}${END}" -X PUT "$DESIGNER_URL/api/processes/$SCENARIO_NAME"
 
-  if [[ "$IS_FRAGMENT" == "true" ]]; then
-    echo "Fragment successful created and saved.."
-    exit 0
-  fi
+  echo "$PROCESS_TYPE successful created and saved.."
 }
 
 # With parameter that contains importing scheme file path

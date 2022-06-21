@@ -2,6 +2,8 @@
 
 set -e
 
+TOOLSPATH="$(dirname $0)"
+
 if [[ -z $DOMAIN ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
 else 
@@ -35,10 +37,10 @@ deploy() {
 
     STATUS=$(curl -s -L  -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status" | jq -r .status.name)
     if [[ $STATUS == 'RUNNING' ]]; then
-      echo "Process deployed within $waitTime sec"
+      echo "Scenario deployed within $waitTime sec"
       exit 0
     else
-      echo "Process still not deployed within $waitTime sec with actual status: $STATUS.."
+      echo "Scenario still not deployed within $waitTime sec with actual status: $STATUS.."
     fi
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
@@ -48,7 +50,7 @@ deploy() {
   fi
 }
 
-# Creating and import scenario
+# Create and import scenario
 $TOOLSPATH/createScenario.sh "$1" "$2" "$3" "$4"
 
 # With parameter that contains importing scheme file path
