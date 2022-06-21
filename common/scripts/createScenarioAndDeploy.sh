@@ -49,7 +49,7 @@ deploy() {
 }
 
 # Creating and import scenario
-./createScenario.sh "$1" "$2" "$3" "$4"
+$TOOLSPATH/createScenario.sh "$1" "$2" "$3" "$4"
 
 # With parameter that contains importing scheme file path
 deploy "$1" "$2"
