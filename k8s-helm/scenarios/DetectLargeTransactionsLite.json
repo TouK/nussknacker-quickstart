@@ -26,7 +26,7 @@
     {
       "id" : "transactions",
       "ref" : {
-        "typ" : "kafka-registry-typed-json",
+        "typ" : "kafka",
         "parameters" : [
           {
             "name" : "Topic",
@@ -74,7 +74,7 @@
     {
       "id" : "send for audit",
       "ref" : {
-        "typ" : "kafka-registry-typed-json-raw",
+        "typ" : "kafka",
         "parameters" : [
           {
             "name" : "Topic",
@@ -91,17 +91,24 @@
             }
           },
           {
-            "name" : "Value validation mode",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "'strict'"
-            }
-          },
-          {
             "name" : "Key",
             "expression" : {
               "language" : "spel",
               "expression" : ""
+            }
+          },
+          {
+            "name" : "Raw editor",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "true"
+            }
+          },
+          {
+            "name" : "Value validation mode",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'strict'"
             }
           },
           {
