@@ -32,6 +32,9 @@ taskmanager.data.port: 6126
 taskmanager.memory.task.heap.size: 256m
 taskmanager.memory.managed.size: 204m
 
+# 256mb is a default for metaspace. We need this line to be able to sed-replace it in the dependent projects, so pls do not remove it from the nk-quick project
+taskmanager.memory.jvm-metaspace.size: 256mb  
+
 env.java.opts: "-Dlog4j2.formatMsgNoLookups=true"
 
 env.java.opts.taskmanager: "-Dcom.sun.management.jmxremote -Djava.rmi.server.hostname=localhost -Dcom.sun.management.jmxremote.port=9009 -Dcom.sun.management.jmxremote.rmi.port=9008 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false"
@@ -49,6 +52,9 @@ jobmanager.rpc.port: 6123
 # The heap size for the JobManager JVM
 
 jobmanager.heap.size: 256m
+
+# 256mb is a default for metaspace. We need this line to be able to sed-replace it in the dependent projects, so pls do not remove it from the nk-quick project
+jobmanager.memory.jvm-metaspace.size: 256mb  
 
 # The parallelism used for programs that did not specify and other parallelism.
 

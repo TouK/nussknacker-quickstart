@@ -18,6 +18,6 @@ function measure() {
 }
 
 measure "prepareData" ./sendBenchmarkTransactions.sh transactions $COUNT
-measure "runScenario" ../../scripts/importAndDeploy.sh `realpath $SCENARIO`
+measure "runScenario" ../../scripts/createScenarioAndDeploy.sh `realpath $SCENARIO`
 measure "verifyResult" ./verifyScenarioFinish.sh
 
