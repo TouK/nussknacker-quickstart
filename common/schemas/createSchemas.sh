@@ -2,7 +2,11 @@
 
 set -e
 
-cd "$(dirname $0)"
+# If dir parameter not provided, fallback to script's directory
+dir=${1:-$(dirname $0)}
+resolved_dir=$(readlink -f $dir)
+echo "Registering schemas from $resolved_dir"
+cd $resolved_dir
 
 function wrapWithSchemaRegistryMessage() {
     NAME=$1
@@ -19,6 +23,7 @@ function createSchema() {
     fi
 }
 
-createSchema transactions-value
-createSchema processedEvents-value
-createSchema alerts-value
+for file in $(ls *.json); do
+  subject=$(basename $file .json)
+  createSchema $subject;
+done
