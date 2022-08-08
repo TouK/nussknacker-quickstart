@@ -50,8 +50,8 @@ class CustomerById(MethodView):
         customers = {
             "1": Customer(customer_id, "John Doe", "STANDARD", 1653.23),
             "2": Customer(customer_id, "Robert Wright", "GOLD", 100100.32),
-            "3": Customer(customer_id, "Юрий Шевчук", "PLATINUM",230000.56),
-            "4": Customer(customer_id, "Иосиф Кобзон", "STANDARD",2040.78)
+            "3": Customer(customer_id, "Юрий Шевчук", "PLATINUM", 230000.56),
+            "4": Customer(customer_id, "Иосиф Кобзон", "STANDARD", 2040.78)
         }
         if idstr in customers:
             return customers[idstr]
