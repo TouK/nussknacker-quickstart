@@ -14,7 +14,9 @@ on:
   workflow_dispatch:
 
 env:
+  # for k8s tests purpose - sets correct repo and adds --devel flag
   DEVEL: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
+  NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
   docker-compose-streaming-test:
