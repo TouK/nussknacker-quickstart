@@ -1,5 +1,6 @@
 FROM python:3
-RUN pip install flask-smorest
+# remove after https://github.com/marshmallow-code/flask-smorest/issues/384 fixed
+RUN pip install flask==2.1.3 flask-smorest
 EXPOSE 5000
 ADD app.py /
 RUN mkdir /static && flask openapi print > /static/swagger.json
