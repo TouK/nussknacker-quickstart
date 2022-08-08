@@ -148,7 +148,7 @@
     {
       "id" : "send to alerts",
       "ref" : {
-        "typ" : "kafka",
+        "typ" : "kafka-avro",
         "parameters" : [
           {
             "name" : "Topic",

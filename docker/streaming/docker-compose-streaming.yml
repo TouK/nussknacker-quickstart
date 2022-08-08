@@ -24,8 +24,7 @@ services:
 
   kafka:
     container_name: nussknacker_kafka
-    # go back to wurstmaister when 3.x.x images will be released
-    image: ${KAFKA_REPOSITORY-jimbodock/kafka}:${KAFKA_VERSION-2.13-3.1.1}
+    image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.13-2.8.1}
     ports:
       - "3032:3032"
     environment:
