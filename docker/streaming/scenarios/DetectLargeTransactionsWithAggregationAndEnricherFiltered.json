@@ -8,22 +8,15 @@
       "checkpointIntervalInSeconds" : null,
       "type" : "StreamMetaData"
     },
-    "isSubprocess" : false,
     "additionalFields" : {
       "description" : null,
-      "groups" : [
-      ],
       "properties" : {
-        
+
       }
     },
     "subprocessVersions" : {
-      
+
     }
-  },
-  "exceptionHandlerRef" : {
-    "parameters" : [
-    ]
   },
   "nodes" : [
     {
@@ -216,6 +209,13 @@
                           }
                         },
                         {
+                          "name" : "Raw editor",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "false"
+                          }
+                        },
+                        {
                           "name" : "message",
                           "expression" : {
                             "language" : "spel",
@@ -347,6 +347,13 @@
                   "expression" : {
                     "language" : "spel",
                     "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
                   }
                 },
                 {
