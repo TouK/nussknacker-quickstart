@@ -161,6 +161,13 @@
                             "language" : "spel",
                             "expression" : "'Client: ' + #input.clientId + ' has exceeded limit for single transaction, value: ' + #input.amount"
                           }
+                        },
+                        {
+                          "name" : "eventDate",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : ""
+                          }
                         }
                       ]
                     },
@@ -369,6 +376,13 @@
                   "expression" : {
                     "language" : "spel",
                     "expression" : "'Client: ' + #input.clientId + ' has exceeded limit, total amount: ' + #aggregated"
+                  }
+                },
+                {
+                  "name" : "eventDate",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : ""
                   }
                 }
               ]
