@@ -8,11 +8,8 @@
       "checkpointIntervalInSeconds" : null,
       "type" : "StreamMetaData"
     },
-    "isSubprocess" : false,
     "additionalFields" : {
       "description" : null,
-      "groups" : [
-      ],
       "properties" : {
 
       }
@@ -20,10 +17,6 @@
     "subprocessVersions" : {
 
     }
-  },
-  "exceptionHandlerRef" : {
-    "parameters" : [
-    ]
   },
   "nodes" : [
     {
@@ -231,6 +224,13 @@
                   "expression" : {
                     "language" : "spel",
                     "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
                   }
                 },
                 {

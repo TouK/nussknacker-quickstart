@@ -8,22 +8,15 @@
       "checkpointIntervalInSeconds" : null,
       "type" : "StreamMetaData"
     },
-    "isSubprocess" : false,
     "additionalFields" : {
       "description" : null,
-      "groups" : [
-      ],
       "properties" : {
-        
+
       }
     },
     "subprocessVersions" : {
-      
+
     }
-  },
-  "exceptionHandlerRef" : {
-    "parameters" : [
-    ]
   },
   "nodes" : [
     {
@@ -121,72 +114,12 @@
           },
           {
             "defaultNext" : [
-              {
-                "id" : "send for audit",
-                "ref" : {
-                  "typ" : "kafka",
-                  "parameters" : [
-                    {
-                      "name" : "Topic",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'processedEvents'"
-                      }
-                    },
-                    {
-                      "name" : "Schema version",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'latest'"
-                      }
-                    },
-                    {
-                      "name" : "Key",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : ""
-                      }
-                    },
-                    {
-                      "name" : "Raw editor",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "true"
-                      }
-                    },
-                    {
-                      "name" : "Value validation mode",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'strict'"
-                      }
-                    },
-                    {
-                      "name" : "Value",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "#input"
-                      }
-                    }
-                  ]
-                },
-                "endResult" : null,
-                "isDisabled" : null,
-                "additionalFields" : {
-                  "description" : null,
-                  "layoutData" : {
-                    "x" : 540,
-                    "y" : 1080
-                  }
-                },
-                "type" : "Sink"
-              }
             ],
             "nexts" : [
               {
                 "expression" : {
                   "language" : "spel",
-                  "expression" : "#category == \"STANDARD\""
+                  "expression" : "#customerData.category == \"STANDARD\""
                 },
                 "nodes" : [
                   {
@@ -216,6 +149,13 @@
                           }
                         },
                         {
+                          "name" : "Raw editor",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "false"
+                          }
+                        },
+                        {
                           "name" : "message",
                           "expression" : {
                             "language" : "spel",
@@ -236,14 +176,82 @@
                     "type" : "Sink"
                   }
                 ]
+              },
+              {
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "true"
+                },
+                "nodes" : [
+                  {
+                    "id" : "send for audit",
+                    "ref" : {
+                      "typ" : "kafka",
+                      "parameters" : [
+                        {
+                          "name" : "Topic",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'processedEvents'"
+                          }
+                        },
+                        {
+                          "name" : "Schema version",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'latest'"
+                          }
+                        },
+                        {
+                          "name" : "Key",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : ""
+                          }
+                        },
+                        {
+                          "name" : "Raw editor",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "true"
+                          }
+                        },
+                        {
+                          "name" : "Value validation mode",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'strict'"
+                          }
+                        },
+                        {
+                          "name" : "Value",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "#input"
+                          }
+                        }
+                      ]
+                    },
+                    "endResult" : null,
+                    "isDisabled" : null,
+                    "additionalFields" : {
+                      "description" : null,
+                      "layoutData" : {
+                        "x" : 540,
+                        "y" : 1080
+                      }
+                    },
+                    "type" : "Sink"
+                  }
+                ]
               }
             ],
             "id" : "category",
             "expression" : {
               "language" : "spel",
-              "expression" : "#customerData.category"
+              "expression" : ""
             },
-            "exprVal" : "category",
+            "exprVal" : "",
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
@@ -347,6 +355,13 @@
                   "expression" : {
                     "language" : "spel",
                     "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
                   }
                 },
                 {
