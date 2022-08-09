@@ -43,7 +43,7 @@
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : 180,
+          "x" : 360,
           "y" : 0
         }
       },
@@ -64,7 +64,7 @@
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 360,
+                "x" : 180,
                 "y" : 360
               }
             },
@@ -88,7 +88,7 @@
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 360,
+                "x" : 180,
                 "y" : 540
               }
             },
@@ -96,72 +96,12 @@
           },
           {
             "defaultNext" : [
-              {
-                "id" : "send for audit",
-                "ref" : {
-                  "typ" : "kafka",
-                  "parameters" : [
-                    {
-                      "name" : "Topic",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'processedEvents'"
-                      }
-                    },
-                    {
-                      "name" : "Schema version",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'latest'"
-                      }
-                    },
-                    {
-                      "name" : "Key",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : ""
-                      }
-                    },
-                    {
-                      "name" : "Raw editor",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "true"
-                      }
-                    },
-                    {
-                      "name" : "Value validation mode",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "'strict'"
-                      }
-                    },
-                    {
-                      "name" : "Value",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "#input"
-                      }
-                    }
-                  ]
-                },
-                "endResult" : null,
-                "isDisabled" : null,
-                "additionalFields" : {
-                  "description" : null,
-                  "layoutData" : {
-                    "x" : 180,
-                    "y" : 900
-                  }
-                },
-                "type" : "Sink"
-              }
             ],
             "nexts" : [
               {
                 "expression" : {
                   "language" : "spel",
-                  "expression" : "#category == \"STANDARD\""
+                  "expression" : "#customerData.category == \"STANDARD\""
                 },
                 "nodes" : [
                   {
@@ -211,7 +151,75 @@
                     "additionalFields" : {
                       "description" : null,
                       "layoutData" : {
-                        "x" : 540,
+                        "x" : 0,
+                        "y" : 900
+                      }
+                    },
+                    "type" : "Sink"
+                  }
+                ]
+              },
+              {
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "true"
+                },
+                "nodes" : [
+                  {
+                    "id" : "send for audit",
+                    "ref" : {
+                      "typ" : "kafka",
+                      "parameters" : [
+                        {
+                          "name" : "Topic",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'processedEvents'"
+                          }
+                        },
+                        {
+                          "name" : "Schema version",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'latest'"
+                          }
+                        },
+                        {
+                          "name" : "Key",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : ""
+                          }
+                        },
+                        {
+                          "name" : "Raw editor",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "true"
+                          }
+                        },
+                        {
+                          "name" : "Value validation mode",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "'strict'"
+                          }
+                        },
+                        {
+                          "name" : "Value",
+                          "expression" : {
+                            "language" : "spel",
+                            "expression" : "#input"
+                          }
+                        }
+                      ]
+                    },
+                    "endResult" : null,
+                    "isDisabled" : null,
+                    "additionalFields" : {
+                      "description" : null,
+                      "layoutData" : {
+                        "x" : 360,
                         "y" : 900
                       }
                     },
@@ -223,13 +231,13 @@
             "id" : "category",
             "expression" : {
               "language" : "spel",
-              "expression" : "#customerData.category"
+              "expression" : ""
             },
-            "exprVal" : "category",
+            "exprVal" : "",
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 360,
+                "x" : 180,
                 "y" : 720
               }
             },
@@ -281,7 +289,7 @@
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 0,
+                "x" : 540,
                 "y" : 360
               }
             },
@@ -299,7 +307,7 @@
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 0,
+                "x" : 540,
                 "y" : 540
               }
             },
@@ -352,7 +360,7 @@
             "additionalFields" : {
               "description" : null,
               "layoutData" : {
-                "x" : 0,
+                "x" : 540,
                 "y" : 720
               }
             },
@@ -364,7 +372,7 @@
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : 180,
+          "x" : 360,
           "y" : 180
         }
       },
