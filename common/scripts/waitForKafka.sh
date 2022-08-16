@@ -10,7 +10,7 @@ SLEEP=${3-10}
 WAIT_LIMIT=${4-120}
 
 calcOffsetSumInTopic() {
-  ./runInKafka.sh  kafka-run-class.sh kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
+  ./runInKafka.sh  kafka-run-class.sh kafka.tools.GetOffsetShell --bootstrap-server localhost:9092 --topic $TOPIC |
   grep -e ':[[:digit:]]*:' | awk -F ":" '{sum += $3} END {print sum}'
 }
 

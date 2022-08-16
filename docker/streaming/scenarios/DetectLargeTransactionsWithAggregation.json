@@ -8,11 +8,8 @@
       "checkpointIntervalInSeconds" : null,
       "type" : "StreamMetaData"
     },
-    "isSubprocess" : false,
     "additionalFields" : {
       "description" : null,
-      "groups" : [
-      ],
       "properties" : {
 
       }
@@ -21,15 +18,11 @@
 
     }
   },
-  "exceptionHandlerRef" : {
-    "parameters" : [
-    ]
-  },
   "nodes" : [
     {
       "id" : "bank-transactions",
       "ref" : {
-        "typ" : "kafka-registry-typed-json",
+        "typ" : "kafka",
         "parameters" : [
           {
             "name" : "Topic",
@@ -80,7 +73,7 @@
           {
             "id" : "send for audit",
             "ref" : {
-              "typ" : "kafka-registry-typed-json-raw",
+              "typ" : "kafka",
               "parameters" : [
                 {
                   "name" : "Topic",
@@ -97,17 +90,24 @@
                   }
                 },
                 {
-                  "name" : "Value validation mode",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'strict'"
-                  }
-                },
-                {
                   "name" : "Key",
                   "expression" : {
                     "language" : "spel",
                     "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "true"
+                  }
+                },
+                {
+                  "name" : "Value validation mode",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "'strict'"
                   }
                 },
                 {
@@ -203,7 +203,7 @@
           {
             "id" : "alert",
             "ref" : {
-              "typ" : "kafka-registry-typed-json",
+              "typ" : "kafka",
               "parameters" : [
                 {
                   "name" : "Topic",
@@ -227,10 +227,24 @@
                   }
                 },
                 {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
+                  }
+                },
+                {
                   "name" : "message",
                   "expression" : {
                     "language" : "spel",
                     "expression" : "'Client: ' + #input.clientId + ' has exceeded limit, total amount: ' + #aggregated"
+                  }
+                },
+                {
+                  "name" : "eventDate",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : ""
                   }
                 }
               ]
@@ -241,7 +255,7 @@
               "description" : null,
               "layoutData" : {
                 "x" : 360,
-                "y" : 721
+                "y" : 720
               }
             },
             "type" : "Sink"
