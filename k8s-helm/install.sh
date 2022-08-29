@@ -33,5 +33,5 @@ helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
   --set image.tag="${NUSSKNACKER_VERSION}" \
-  --set postgresql.existingSecret="${RELEASE}-postgresql" \
+  --set postgresql.auth.existingSecret="${RELEASE}-postgresql" \
   -f values.yaml $@ 
