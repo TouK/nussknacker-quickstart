@@ -16,7 +16,7 @@ For both cases, there are helper scripts in respective dirs.
 
 Just run:
 ```bash
-./docker/start.sh
+./docker/streaming/start.sh
 ``` 
 
 After doing it, you can will have available:

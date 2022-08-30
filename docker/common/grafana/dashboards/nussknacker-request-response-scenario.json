@@ -3,7 +3,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -21,13 +24,12 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 2,
-  "iteration": 1647462165520,
   "links": [],
   "liveNow": false,
   "panels": [
     {
       "collapsed": false,
+      "datasource": "influx",
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -36,6 +38,12 @@
       },
       "id": 26,
       "panels": [],
+      "targets": [
+        {
+          "datasource": "influx",
+          "refId": "A"
+        }
+      ],
       "title": "Basics",
       "type": "row"
     },
@@ -44,6 +52,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "influx",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -81,7 +90,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -92,10 +101,7 @@
       "targets": [
         {
           "alias": "[[tag_scenario]] - [[tag_nodeId]]",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
+          "datasource": "influx",
           "dsType": "influxdb",
           "orderByTime": "ASC",
           "policy": "default",
@@ -107,7 +113,7 @@
       ],
       "thresholds": [],
       "timeRegions": [],
-      "title": "Source throughput",
+      "title": "Response 2xx - throughput",
       "tooltip": {
         "msResolution": false,
         "shared": true,
@@ -142,6 +148,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
+      "datasource": "influx",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -181,7 +188,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -192,10 +199,7 @@
       "targets": [
         {
           "alias": "[[tag_scenario]] - [[tag_nodeId]]",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
+          "datasource": "influx",
           "dsType": "influxdb",
           "hide": false,
           "policy": "default",
@@ -206,10 +210,7 @@
         },
         {
           "alias": "[[tag_scenario]] - [[tag_nodeId]]",
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
+          "datasource": "influx",
           "hide": false,
           "query": "SELECT sum(value)\nFROM (\n  SELECT non_negative_derivative(last(\"count\"), 1s) AS value\n  FROM \"dead_end.count\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, nodeId, instanceId\n)\nGROUP BY time($__interval), scenario, nodeId\n",
           "rawQuery": true,
@@ -254,10 +255,7 @@
       "bars": false,
       "dashLength": 10,
       "dashes": false,
-      "datasource": {
-        "type": "influxdb",
-        "uid": "PBDC07BC01591819D"
-      },
+      "datasource": "influx",
       "editable": true,
       "error": false,
       "fieldConfig": {
@@ -297,7 +295,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "8.4.2",
+      "pluginVersion": "9.0.5",
       "pointradius": 5,
       "points": false,
       "renderer": "flot",
@@ -308,6 +306,7 @@
       "targets": [
         {
           "alias": "[[tag_scenario]] - [[tag_nodeId]]",
+          "datasource": "influx",
           "dsType": "influxdb",
           "orderByTime": "ASC",
           "policy": "default",
@@ -350,843 +349,1825 @@
       }
     },
     {
-      "collapsed": true,
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 27,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.OK.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"p50\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p50"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"p50\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 2xx - median",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 28,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.OK.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"p99\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"p99\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 2xx - median - 99th percentile",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 15
+      },
+      "hiddenSeries": false,
+      "id": 31,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.OK.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"max\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"max\") FROM \"invocation.success.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 2xx - max",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 22
+      },
+      "hiddenSeries": false,
+      "id": 29,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.FAIL.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"p50\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p50"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"p50\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 4/5xx - median",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 22
+      },
+      "hiddenSeries": false,
+      "id": 30,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.FAIL.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"p99\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"p99\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 4/5xx - 99th percentile",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 22
+      },
+      "hiddenSeries": false,
+      "id": 32,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - (all)",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.FAIL.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT max(\"max\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\" fill(null)",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        },
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "hide": false,
+          "query": "SELECT max(\"max\") FROM \"invocation.failure.histogram\" WHERE (\"env\" =~ /^$env$/ AND \"scenario\" =~ /^$scenarioName$/) AND $timeFilter GROUP BY time($interval), \"scenario\", \"serviceName\", \"instanceId\" fill(null)",
+          "rawQuery": true,
+          "refId": "B",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Response 4/5xx - max",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "collapsed": false,
+      "datasource": "influx",
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 15
+        "y": 29
       },
       "id": 24,
-      "panels": [
+      "panels": [],
+      "targets": [
         {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 0,
-            "y": 30
-          },
-          "hiddenSeries": false,
-          "id": 10,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "scenario"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "serviceName"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "instanceId"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "service.OK.histogram",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "rawQuery": false,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "p50"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "max"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - median OK",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ns",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 8,
-            "y": 30
-          },
-          "hiddenSeries": false,
-          "id": 11,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "scenario"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "serviceName"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "instanceId"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "service.OK.histogram",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "rawQuery": false,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "p99"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "max"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - 99th percentile OK",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ns",
-              "label": "",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 30
-          },
-          "hiddenSeries": false,
-          "id": 12,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]]",
-              "dsType": "influxdb",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.OK.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, instanceId\n)\nGROUP BY time($__interval), scenario, serviceName",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - throughput OK",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "rps",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 0,
-            "y": 37
-          },
-          "hiddenSeries": false,
-          "id": 15,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "scenario"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "serviceName"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "instanceId"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "service.FAIL.histogram",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "rawQuery": false,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "p50"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "max"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - median FAIL",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ns",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 8,
-            "y": 37
-          },
-          "hiddenSeries": false,
-          "id": 16,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
-              "dsType": "influxdb",
-              "groupBy": [
-                {
-                  "params": [
-                    "$interval"
-                  ],
-                  "type": "time"
-                },
-                {
-                  "params": [
-                    "scenario"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "serviceName"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "instanceId"
-                  ],
-                  "type": "tag"
-                },
-                {
-                  "params": [
-                    "null"
-                  ],
-                  "type": "fill"
-                }
-              ],
-              "measurement": "service.FAIL.histogram",
-              "orderByTime": "ASC",
-              "policy": "default",
-              "rawQuery": false,
-              "refId": "A",
-              "resultFormat": "time_series",
-              "select": [
-                [
-                  {
-                    "params": [
-                      "p99"
-                    ],
-                    "type": "field"
-                  },
-                  {
-                    "params": [],
-                    "type": "max"
-                  }
-                ]
-              ],
-              "tags": [
-                {
-                  "key": "env",
-                  "operator": "=~",
-                  "value": "/^$env$/"
-                },
-                {
-                  "condition": "AND",
-                  "key": "scenario",
-                  "operator": "=~",
-                  "value": "/^$scenarioName$/"
-                }
-              ]
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - 99th percentile FAIL",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "ns",
-              "label": "",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
-        },
-        {
-          "aliasColors": {},
-          "bars": false,
-          "dashLength": 10,
-          "dashes": false,
-          "datasource": {
-            "type": "influxdb",
-            "uid": "PBDC07BC01591819D"
-          },
-          "editable": true,
-          "error": false,
-          "fieldConfig": {
-            "defaults": {
-              "links": []
-            },
-            "overrides": []
-          },
-          "fill": 1,
-          "fillGradient": 0,
-          "gridPos": {
-            "h": 7,
-            "w": 8,
-            "x": 16,
-            "y": 37
-          },
-          "hiddenSeries": false,
-          "id": 17,
-          "interval": "$interval",
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "options": {
-            "alertThreshold": true
-          },
-          "percentage": false,
-          "pluginVersion": "8.0.6",
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "spaceLength": 10,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
-            {
-              "alias": "$tag_scenario - $tag_serviceName",
-              "dsType": "influxdb",
-              "hide": false,
-              "orderByTime": "ASC",
-              "policy": "default",
-              "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.FAIL.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, instanceId\n)\nGROUP BY time($__interval), scenario, serviceName",
-              "rawQuery": true,
-              "refId": "A",
-              "resultFormat": "time_series"
-            }
-          ],
-          "thresholds": [],
-          "timeRegions": [],
-          "title": "Services - throughput FAIL",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "individual"
-          },
-          "type": "graph",
-          "xaxis": {
-            "mode": "time",
-            "show": true,
-            "values": []
-          },
-          "yaxes": [
-            {
-              "format": "rps",
-              "logBase": 1,
-              "min": "0",
-              "show": true
-            },
-            {
-              "format": "short",
-              "logBase": 1,
-              "show": true
-            }
-          ],
-          "yaxis": {
-            "align": false
-          }
+          "datasource": "influx",
+          "refId": "A"
         }
       ],
       "title": "External services",
       "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 30
+      },
+      "hiddenSeries": false,
+      "id": 10,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.OK.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p50"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - median OK",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 30
+      },
+      "hiddenSeries": false,
+      "id": 11,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.OK.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - 99th percentile OK",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 30
+      },
+      "hiddenSeries": false,
+      "id": 12,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]]",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.OK.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, instanceId\n)\nGROUP BY time($__interval), scenario, serviceName",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - throughput OK",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "rps",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 0,
+        "y": 37
+      },
+      "hiddenSeries": false,
+      "id": 15,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.FAIL.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p50"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - median FAIL",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 8,
+        "y": 37
+      },
+      "hiddenSeries": false,
+      "id": 16,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "[[tag_scenario]] - [[tag_serviceName]] (instanceId [[tag_instanceId]])",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "groupBy": [
+            {
+              "params": [
+                "$interval"
+              ],
+              "type": "time"
+            },
+            {
+              "params": [
+                "scenario"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "serviceName"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "instanceId"
+              ],
+              "type": "tag"
+            },
+            {
+              "params": [
+                "null"
+              ],
+              "type": "fill"
+            }
+          ],
+          "measurement": "service.FAIL.histogram",
+          "orderByTime": "ASC",
+          "policy": "default",
+          "rawQuery": false,
+          "refId": "A",
+          "resultFormat": "time_series",
+          "select": [
+            [
+              {
+                "params": [
+                  "p99"
+                ],
+                "type": "field"
+              },
+              {
+                "params": [],
+                "type": "max"
+              }
+            ]
+          ],
+          "tags": [
+            {
+              "key": "env",
+              "operator": "=~",
+              "value": "/^$env$/"
+            },
+            {
+              "condition": "AND",
+              "key": "scenario",
+              "operator": "=~",
+              "value": "/^$scenarioName$/"
+            }
+          ]
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - 99th percentile FAIL",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "ns",
+          "label": "",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "datasource": "influx",
+      "editable": true,
+      "error": false,
+      "fieldConfig": {
+        "defaults": {
+          "links": []
+        },
+        "overrides": []
+      },
+      "fill": 1,
+      "fillGradient": 0,
+      "gridPos": {
+        "h": 7,
+        "w": 8,
+        "x": 16,
+        "y": 37
+      },
+      "hiddenSeries": false,
+      "id": 17,
+      "interval": "$interval",
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {
+        "alertThreshold": true
+      },
+      "percentage": false,
+      "pluginVersion": "9.0.5",
+      "pointradius": 5,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "alias": "$tag_scenario - $tag_serviceName",
+          "datasource": "influx",
+          "dsType": "influxdb",
+          "hide": false,
+          "orderByTime": "ASC",
+          "policy": "default",
+          "query": "SELECT sum(mean)\nFROM (\n  SELECT mean(value)\n  FROM \"service.FAIL.instantRate\"\n  WHERE scenario =~ /^$scenarioName$/ AND env = '$env' AND $timeFilter\n  GROUP BY time($__interval), scenario, serviceName, instanceId\n)\nGROUP BY time($__interval), scenario, serviceName",
+          "rawQuery": true,
+          "refId": "A",
+          "resultFormat": "time_series"
+        }
+      ],
+      "thresholds": [],
+      "timeRegions": [],
+      "title": "Services - throughput FAIL",
+      "tooltip": {
+        "msResolution": false,
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "mode": "time",
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "rps",
+          "logBase": 1,
+          "min": "0",
+          "show": true
+        },
+        {
+          "format": "short",
+          "logBase": 1,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false
+      }
     }
   ],
   "refresh": false,
-  "schemaVersion": 35,
+  "schemaVersion": 36,
   "style": "dark",
   "tags": [],
   "templating": {
@@ -1194,26 +2175,23 @@
       {
         "allFormat": "regex wildcard",
         "current": {
-          "selected": false,
+          "selected": true,
           "text": [
-            "Loan request"
+            "test proxy process for rr"
           ],
           "value": [
-            "Loan request"
+            "test proxy process for rr"
           ]
         },
-        "datasource": {
-          "type": "influxdb",
-          "uid": "PBDC07BC01591819D"
-        },
-        "definition": "",
+        "datasource": "influx",
+        "definition": "SHOW TAG VALUES FROM \"invocation.success.histogram\" WITH KEY = \"scenario\"",
         "hide": 0,
         "includeAll": true,
         "multi": true,
         "multiFormat": "pipe",
         "name": "scenarioName",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"source.instantRate\" WITH KEY = \"scenario\"",
+        "query": "SHOW TAG VALUES FROM \"invocation.success.histogram\" WITH KEY = \"scenario\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1226,20 +2204,17 @@
       {
         "current": {
           "selected": false,
-          "text": "local",
-          "value": "local"
+          "text": "default",
+          "value": "default"
         },
-        "datasource": {
-          "type": "influxdb",
-          "uid": "PBDC07BC01591819D"
-        },
-        "definition": "",
+        "datasource": "influx",
+        "definition": "SHOW TAG VALUES FROM \"invocation.success.histogram\" WITH KEY = \"env\"",
         "hide": 0,
         "includeAll": false,
         "multi": false,
         "name": "env",
         "options": [],
-        "query": "SHOW TAG VALUES FROM \"source.instantRate\" WITH KEY = \"env\"",
+        "query": "SHOW TAG VALUES FROM \"invocation.success.histogram\" WITH KEY = \"env\"",
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
@@ -1366,6 +2341,6 @@
   "timezone": "browser",
   "title": "RequestResponse scenario",
   "uid": "nussknacker-request-response-scenario",
-  "version": 4,
+  "version": 1,
   "weekStart": ""
 }
