@@ -2,7 +2,7 @@
   "metaData" : {
     "id" : "Loan request",
     "typeSpecificData" : {
-      "path" : "loan",
+      "slug" : "loan",
       "type" : "RequestResponseMetaData"
     },
     "additionalFields" : {
