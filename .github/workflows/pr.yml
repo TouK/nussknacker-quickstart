@@ -12,11 +12,16 @@ on:
       - staging
       - release/*
   workflow_dispatch:
+    inputs:
+      nussknacker_version:
+        description: "Nussknacker version"
+        required: false
+        type: string
 
 env:
   # for k8s tests purpose - sets correct repo and adds --devel flag
   DEVEL: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
-  NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
+  NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
   docker-compose-streaming-test:
@@ -27,6 +32,9 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
       - name: install quickstart
         shell: bash
         run: ./docker/streaming/start.sh
@@ -41,6 +49,9 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
       - name: install quickstart
         shell: bash
         run: ./start.sh
@@ -57,6 +68,9 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
       - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"
