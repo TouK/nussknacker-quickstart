@@ -12,7 +12,16 @@ Available showcases:
 - Kubernetes and helm based (for streaming-lite runtime), in `k8s-helm` directory
 For both cases, there are helper scripts in respective dirs.
 
+## Prerequisites
+
+MacOS: Scripts in this repository use some GNU utils like `realpath`. To install them run:
+```shell
+brew install coreutils
+```
+
 ## Running docker mode
+
+We assume that you have installed `docker` and `docker-compose`.
 
 Just run:
 ```bash
