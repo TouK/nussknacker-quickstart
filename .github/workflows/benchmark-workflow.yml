@@ -22,7 +22,7 @@ jobs:
         shell: bash
         run: ./docker/streaming/start.sh
       - name: Test
-        run: ./docker/common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json
+        run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json
       - name: Save artifacts
         uses: actions/upload-artifact@v2
         with:
