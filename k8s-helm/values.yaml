@@ -22,7 +22,7 @@ nussknacker:
       id: "data"
       url: "/akhq/ui/nussknacker/topic"
       type: "IFrame"
-  modelConfig: 
+  modelConfig:
     components:
       openAPI:
         url: "http://customer-service/swagger"

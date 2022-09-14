@@ -1,0 +1,6 @@
+#It's not easily possible to pass entry with dots via --set in helm...
+nussknacker:
+  modelConfig:
+    kafka:
+      kafkaProperties:
+        auto.offset.reset: "earliest"
