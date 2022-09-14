@@ -20,7 +20,7 @@ jobs:
         uses: actions/checkout@v2
       - name: install quickstart
         shell: bash
-        run: ./start.sh
+        run: ./docker/streaming/start.sh
       - name: Test
         run: ./docker/common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkFlink.json
       - name: Save artifacts
