@@ -113,7 +113,11 @@ services:
 
   taskmanager:
     container_name: nussknacker_taskmanager
+<<<<<<< HEAD
     image: apache/flink:${FLINK_VERSION-1.15.2}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+=======
+    image: flink:${FLINK_VERSION-1.15.2}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+>>>>>>> b3765f6 (Flink version...)
     ports:
       - "3063:9069"
       - "9009:9009"
