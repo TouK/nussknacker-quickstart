@@ -17,7 +17,7 @@ function measure() {
     echo "$NAME,$(cat /tmp/res | bc)" >> /tmp/benchmarkResult.csv
 }
 
-measure "prepareData" ./sendBenchmarkTransactions.sh transactions $COUNT
-measure "runScenario" ../../scripts/createScenarioAndDeploy.sh `realpath $SCENARIO`
+#measure "prepareData" ./sendBenchmarkTransactions.sh transactions $COUNT
+#measure "runScenario" ../../scripts/createScenarioAndDeploy.sh `realpath $SCENARIO`
 measure "verifyResult" ./verifyScenarioFinish.sh
 
