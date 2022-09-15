@@ -21,22 +21,6 @@ nussknacker:
       openAPI:
         url: "http://customer-service/swagger"
         rootUrl: "http://customer-service"
-      databaseEnricher:
-        config:
-          databaseQueryEnricher:
-            name: "worldDataQuery"
-            dbPool:
-              driverClassName: "org.postgresql.Driver"
-              url: "jdbc:postgresql://world-db:5432/world-db"
-              username: "world"
-              password: "world123"
-          databaseLookupEnricher:
-            name: "worldData"
-            dbPool:
-              driverClassName: "org.postgresql.Driver"
-              url: "jdbc:postgresql://world-db:5432/world-db"
-              username: "world"
-              password: "world123"
 
 persistence: 
   enabled: false      
