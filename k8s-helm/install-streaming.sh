@@ -3,4 +3,4 @@
 set -e
 cd "$(dirname $0)"
 
-./install-common.sh values-streaming.yaml
+./install-common.sh -f values-streaming.yaml

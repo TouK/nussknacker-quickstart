@@ -143,7 +143,7 @@
                       "additionalFields" : {
                         "description" : null,
                         "layoutData" : {
-                          "x" : 0,
+                          "x" : 720,
                           "y" : 720
                         }
                       },
@@ -158,149 +158,43 @@
                   },
                   "nodes" : [
                     {
-                      "id" : "worldData",
-                      "service" : {
-                        "id" : "worldData",
+                      "id" : "mortgage response",
+                      "ref" : {
+                        "typ" : "response",
                         "parameters" : [
                           {
-                            "name" : "Table",
+                            "name" : "Raw editor",
                             "expression" : {
                               "language" : "spel",
-                              "expression" : "'city'"
+                              "expression" : "false"
                             }
                           },
                           {
-                            "name" : "Cache TTL",
+                            "name" : "acceptedAmount",
                             "expression" : {
                               "language" : "spel",
-                              "expression" : ""
+                              "expression" : "1000"
                             }
                           },
                           {
-                            "name" : "Key column",
+                            "name" : "message",
                             "expression" : {
                               "language" : "spel",
-                              "expression" : "'name'"
-                            }
-                          },
-                          {
-                            "name" : "Key value",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "#input.location.city"
+                              "expression" : "'Large sum for mortgage'"
                             }
                           }
                         ]
                       },
-                      "output" : "city",
+                      "endResult" : null,
+                      "isDisabled" : null,
                       "additionalFields" : {
                         "description" : null,
                         "layoutData" : {
-                          "x" : 360,
+                          "x" : 0,
                           "y" : 720
                         }
                       },
-                      "type" : "Enricher"
-                    },
-                    {
-                      "defaultNext" : [
-                      ],
-                      "nexts" : [
-                        {
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "#population > 500000"
-                          },
-                          "nodes" : [
-                            {
-                              "id" : "Large city mortgage",
-                              "ref" : {
-                                "typ" : "response",
-                                "parameters" : [
-                                  {
-                                    "name" : "acceptedAmount",
-                                    "expression" : {
-                                      "language" : "spel",
-                                      "expression" : "1000"
-                                    }
-                                  },
-                                  {
-                                    "name" : "message",
-                                    "expression" : {
-                                      "language" : "spel",
-                                      "expression" : "'Large sum for large city'"
-                                    }
-                                  }
-                                ]
-                              },
-                              "endResult" : null,
-                              "isDisabled" : null,
-                              "additionalFields" : {
-                                "description" : null,
-                                "layoutData" : {
-                                  "x" : 540,
-                                  "y" : 1080
-                                }
-                              },
-                              "type" : "Sink"
-                            }
-                          ]
-                        },
-                        {
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "true"
-                          },
-                          "nodes" : [
-                            {
-                              "id" : "Other city mortgage",
-                              "ref" : {
-                                "typ" : "response",
-                                "parameters" : [
-                                  {
-                                    "name" : "acceptedAmount",
-                                    "expression" : {
-                                      "language" : "spel",
-                                      "expression" : "#NUMERIC.min(250, #input.requestedAmount)"
-                                    }
-                                  },
-                                  {
-                                    "name" : "message",
-                                    "expression" : {
-                                      "language" : "spel",
-                                      "expression" : "'For small city - small amount'"
-                                    }
-                                  }
-                                ]
-                              },
-                              "endResult" : null,
-                              "isDisabled" : null,
-                              "additionalFields" : {
-                                "description" : null,
-                                "layoutData" : {
-                                  "x" : 180,
-                                  "y" : 1080
-                                }
-                              },
-                              "type" : "Sink"
-                            }
-                          ]
-                        }
-                      ],
-                      "id" : "switch",
-                      "expression" : {
-                        "language" : "spel",
-                        "expression" : "#city.population"
-                      },
-                      "exprVal" : "population",
-                      "additionalFields" : {
-                        "description" : null,
-                        "layoutData" : {
-                          "x" : 360,
-                          "y" : 900
-                        }
-                      },
-                      "type" : "Switch"
+                      "type" : "Sink"
                     }
                   ]
                 },
@@ -336,7 +230,7 @@
                       "additionalFields" : {
                         "description" : null,
                         "layoutData" : {
-                          "x" : 720,
+                          "x" : 360,
                           "y" : 720
                         }
                       },
