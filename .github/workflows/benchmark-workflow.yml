@@ -49,7 +49,7 @@ jobs:
             --trace
       - name: install quickstart
         shell: bash
-        run: ./k8s-helm/install.sh --devel --debug
+        run: ./k8s-helm/install-streaming.sh --devel --debug
       - name: Test
         run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkLite.json         
       - name: Save artifacts

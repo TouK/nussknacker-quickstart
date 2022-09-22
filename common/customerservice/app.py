@@ -4,12 +4,23 @@ from flask.views import MethodView
 from flask_smorest import Api, Blueprint
 import random
 
+import json
+
 class Customer:
     def __init__(self, id, name, category, accountBalance):
         self.name = name
         self.id = id
         self.category = category
         self.accountBalance = accountBalance
+
+class ErrorResponse:
+    def __init__(self, code, message):
+        self.code = code
+        self.message = message
+
+    def toJSON(self):
+        return json.dumps(self, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=None)
 
 app = Flask(__name__, static_folder = '/static')
 
@@ -28,8 +39,9 @@ class CustomerSchema(ma.Schema):
     category = ma.fields.String()
     accountBalance = ma.fields.Number()
 
-class CustomerQueryArgsSchema(ma.Schema):
-    name = ma.fields.String()
+class ErrorResponseSchema(ma.Schema):
+    code = ma.fields.String()
+    message = ma.fields.String()
 
 blp = Blueprint(
     'customers', 'customers', url_prefix='/customers',
@@ -39,13 +51,16 @@ blp = Blueprint(
 class CustomerById(MethodView):
 
     @blp.response(200, CustomerSchema)
-    @blp.alt_response(404, 'NotFoundErrorResponse')
-    @blp.alt_response(500, 'SomethingIsWrong')
+    @blp.alt_response(404, schema=ErrorResponseSchema)
+    @blp.alt_response(500, schema=ErrorResponseSchema)
     @blp.doc(operationId='getCustomer')
     def get(self, customer_id):
         #Well, python is not very reliable language :P
         if random.randrange(10) == 0:
-            return "Unexpected failure!", 500
+            return app.response_class(
+                response=ErrorResponse("simulated_error", "Simulated, randomly returned error - don't worry, everything works as expected").toJSON(),
+                mimetype='application/json',
+                status=500)
         idstr = str(customer_id)
         customers = {
             "1": Customer(customer_id, "John Doe", "STANDARD", 1653.23),
@@ -56,7 +71,10 @@ class CustomerById(MethodView):
         if idstr in customers:
             return customers[idstr]
         else:
-            return "Not found", 404
+            return app.response_class(
+                response=ErrorResponse("customer_not_found", "Customer not found").toJSON(),
+                mimetype='application/json',
+                status=404)
 
 api.register_blueprint(blp)
 
