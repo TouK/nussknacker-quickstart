@@ -69,10 +69,10 @@ jobs:
         run: ./k8s-helm/additional/install.sh
       - name: verify quickstart template
         shell: bash
-        run: COMMAND=template ./k8s-helm/install.sh
+        run: COMMAND=template ./k8s-helm/install-streaming.sh
       - name: install quickstart
         shell: bash
-        run: ./k8s-helm/install.sh --debug
+        run: ./k8s-helm/install-streaming.sh --debug
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testK8s.sh 

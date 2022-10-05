@@ -18,6 +18,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: staging
       - name: install quickstart
         shell: bash
         run: ./start.sh
@@ -41,6 +43,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          ref: staging
       - uses: AbsaOSS/k3d-action@v2
         with:
           cluster-name: "k3s-default"
