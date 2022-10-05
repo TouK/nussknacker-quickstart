@@ -1,0 +1,41 @@
+image:
+  pullPolicy: Always
+
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    memory: 256Mi
+
+ingress:
+  enabled: true
+  skipHost: true
+  #Change for other certs 
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+
+nussknacker:
+  mode: "request-response"
+  modelConfig:
+    components:
+      openAPI:
+        url: "http://customer-service/swagger"
+        rootUrl: "http://customer-service"
+
+persistence: 
+  enabled: false      
+
+#These are needed only for flink         
+telegraf:
+  enabled: false
+flink:
+  enabled: false
+
+#These are needed only for Streaming
+kafka:
+  enabled: false
+zookeeper:
+  enabled: false
+apicurio-registry:
+  enabled: false
+
