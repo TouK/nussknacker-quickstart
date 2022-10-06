@@ -1,0 +1,16 @@
+name: Nussknacker benchmark - schedule
+on:
+  schedule:
+    - cron: '0 2 * * *'
+  workflow_dispatch:
+
+jobs:
+  trigger-benchmark:
+    name: Trigger benchmarks on staging branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Invoke benchmarks
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Nussknacker benchmark
+          token: ${{ secrets.ORG_TRIGGER_PAT_TOKEN }}
