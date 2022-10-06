@@ -1,6 +1,35 @@
+image:
+  pullPolicy: Always
+
+resources:
+  limits:
+    memory: 512Mi
+  requests:
+    memory: 256Mi
+
+ingress:
+  enabled: true
+
 #It's not easily possible to pass entry with dots via --set in helm...
 nussknacker:
+  mode: "streaming-lite"
   modelConfig:
     kafka:
       kafkaProperties:
         auto.offset.reset: "earliest"
+
+persistence:
+  enabled: false
+
+#These are needed only for flink
+telegraf:
+  enabled: false
+flink:
+  enabled: false
+
+kafka:
+  replicas: 1
+  deleteTopicEnable: true
+
+zookeeper:
+  replicaCount: 1

@@ -1,16 +1,18 @@
 name: Nussknacker benchmark
 on:
-  schedule:
-    - cron: '0 2 * * *'
   workflow_dispatch:
     inputs:
+      nussknacker_version:
+        description: "Nussknacker version"
+        required: false
+        type: string
       transaction_count:
         description: "Number of transactions"
         required: false
         type: string
 
 env:
-  NUSSKNACKER_VERSION: staging-latest
+  NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || 'staging-latest' }}
   TRANSACTION_COUNT: ${{ inputs.transaction_count != '' && inputs.transaction_count || '10000000' }}
 
 jobs:
@@ -47,15 +49,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - uses: AbsaOSS/k3d-action@v2
+      - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"
+          k3d-version: "v5.4.1" # default version - change with caution, there was some problem after upgrade
           args: >-
             --config=.k3d/single-cluster.yml
             --trace
       - name: install quickstart
         shell: bash
-        run: ./k8s-helm/install.sh -f ../common/tests/benchmark/k8sAutoOffsetEarliest.yml
+        run: ./k8s-helm/install-common.sh -f ../common/tests/benchmark/k8sAutoOffsetEarliest.yml
       - name: Test
         run: ./common/tests/benchmark/runBenchmark.sh $TRANSACTION_COUNT benchmarkLite.json         
       - name: Save artifacts
@@ -63,5 +66,3 @@ jobs:
         with:
           name: benchmarkDetailsLite
           path: /tmp/benchmarkResult.csv
-
-
