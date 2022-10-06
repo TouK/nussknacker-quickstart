@@ -14,3 +14,4 @@ jobs:
         with:
           workflow: Nussknacker benchmark
           token: ${{ secrets.ORG_TRIGGER_PAT_TOKEN }}
+          ref: staging
