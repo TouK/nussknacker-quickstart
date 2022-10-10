@@ -22,7 +22,6 @@ env:
   # for k8s tests purpose - sets correct repo and adds --devel flag
   DEVEL: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
   NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
-  USAGE_REPORTS_FINGERPRINT: development
 
 jobs:
   docker-compose-streaming-test:
