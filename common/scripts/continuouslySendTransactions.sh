@@ -15,5 +15,7 @@ while [ true ]; do
   AMOUNT=$((1 + `random_number` % 30))
   NOW=`date +%s%3N`
   TIME=$((NOW - `random_number` % 20))
-  echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $TIME}"
-done | ./sendToKafka.sh transactions
+  echo "{ \"clientId\": \"$ID\", \"amount\": $AMOUNT, \"eventDate\": $TIME}" | ./sendToKafka.sh transactions
+  echo -n "."
+done
+echo ""
