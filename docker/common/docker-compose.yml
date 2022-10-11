@@ -16,6 +16,7 @@ services:
       INFLUXDB_URL: http://influxdb:8086
       OPENAPI_SERVICE_URL: http://customerservice:5000
       AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
+      USAGE_REPORTS_FINGERPRINT: ${USAGE_REPORTS_FINGERPRINT-quickstart-docker-`echo $RANDOM | md5sum | head -c 10`}
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
