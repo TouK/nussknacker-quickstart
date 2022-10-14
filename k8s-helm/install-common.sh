@@ -33,6 +33,5 @@ COMMAND=${COMMAND:-"upgrade -i"}
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
-  --set-json 'extraEnv=[{"name":"USAGE_REPORTS_FINGERPRINT", "value": "'${USAGE_REPORTS_FINGERPRINT-quickstart-helm-`echo $RANDOM | md5sum | head -c 10`}'"}]' \
   --set image.tag="${NUSSKNACKER_VERSION}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" $@
