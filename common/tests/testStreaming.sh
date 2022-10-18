@@ -15,7 +15,7 @@ echo "Schemas created"
 ../scripts/createScenarioAndDeploy.sh $SCENARIO_PATH
 $WAIT_FOR_OK  "api/processes/status" "Checking status..." "Scenario not running" "designer"
 $WAIT_FOR_OK  "api/processCounts/DetectLargeTransactions?dateFrom=2021-08-04T00:00:00%2B02:00&dateTo=2021-08-04T23:59:59%2B02:00" "Checking counts" "Counts not working" "designer"
-$WAIT_FOR_OK  "akhq/api/nussknacker/topic" "AKHQ not working" "akhq"
+$WAIT_FOR_OK  "akhq/api/nussknacker/topic" "Checking AKHQ" "AKHQ not working" "akhq"
 
 #TODO:
 #check test with test data

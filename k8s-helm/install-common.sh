@@ -1,6 +1,7 @@
 #!/bin/bash
 
-set -e
+set -ex
+
 cd "$(dirname $0)"
 source .env
 
@@ -33,5 +34,4 @@ helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
   --set image.tag="${NUSSKNACKER_VERSION}" \
-  --set postgresql.auth.existingSecret="${RELEASE}-postgresql" \
-  -f values.yaml $@ 
+  --set postgresql.auth.existingSecret="${RELEASE}-postgresql" $@

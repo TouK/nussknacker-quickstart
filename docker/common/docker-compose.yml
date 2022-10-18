@@ -15,6 +15,7 @@ services:
       DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE}
       INFLUXDB_URL: http://influxdb:8086
       OPENAPI_SERVICE_URL: http://customerservice:5000
+      AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf

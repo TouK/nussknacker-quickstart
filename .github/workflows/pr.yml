@@ -12,11 +12,16 @@ on:
       - staging
       - release/*
   workflow_dispatch:
+    inputs:
+      nussknacker_version:
+        description: "Nussknacker version"
+        required: false
+        type: string
 
 env:
   # for k8s tests purpose - sets correct repo and adds --devel flag
   DEVEL: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
-  NUSSKNACKER_VERSION: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
+  NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
   docker-compose-streaming-test:
@@ -27,13 +32,16 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
       - name: install quickstart
         shell: bash
         run: ./docker/streaming/start.sh
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testDockerStreaming.sh
-  docker-compose-requestresponse-test:
+  helm-k8s-requestresponse-test:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
@@ -41,22 +49,9 @@ jobs:
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
-      - name: install quickstart
-        shell: bash
-        run: ./start.sh
-        working-directory: ./docker/requestresponse
-      - name: Test quickstart
-        shell: bash
-        run: ./common/tests/testDockerRequestResponse.sh
-
-  helm-k8s-test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
       - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"
@@ -66,13 +61,44 @@ jobs:
             --trace
       - name: install additional components
         shell: bash
-        run: ./k8s-helm/additional/install.sh
+        run: ./k8s-helm/additional/install-request-response.sh
       - name: verify quickstart template
         shell: bash
-        run: COMMAND=template ./k8s-helm/install.sh
+        run: COMMAND=template ./k8s-helm/install-request-response.sh
       - name: install quickstart
         shell: bash
-        run: ./k8s-helm/install.sh --debug
+        run: ./k8s-helm/install-request-response.sh --debug
       - name: Test quickstart
         shell: bash
-        run: ./common/tests/testK8s.sh 
+        run: ./common/tests/testK8sRequestResponse.sh
+
+  helm-k8s-streaming-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION"
+      - uses: AbsaOSS/k3d-action@v2.3.0
+        with:
+          cluster-name: "k3s-default"
+          k3d-version: "v5.4.1" # default version - change with caution, there was some problem after upgrade
+          args: >-
+            --config=.k3d/single-cluster.yml
+            --trace
+      - name: install additional components
+        shell: bash
+        run: ./k8s-helm/additional/install-streaming.sh
+      - name: verify quickstart template
+        shell: bash
+        run: COMMAND=template ./k8s-helm/install-streaming.sh
+      - name: install quickstart
+        shell: bash
+        run: ./k8s-helm/install-streaming.sh --debug
+      - name: Test quickstart
+        shell: bash
+        run: ./common/tests/testK8sStreaming.sh

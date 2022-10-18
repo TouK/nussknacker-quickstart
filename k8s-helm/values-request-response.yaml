@@ -15,14 +15,8 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 nussknacker:
-  mode: "streaming-lite"
-  #additional AKHQ tab
-  customTabs: 
-    - title: "Data"
-      id: "data"
-      url: "/akhq/ui/nussknacker/topic"
-      type: "IFrame"
-  modelConfig: 
+  mode: "request-response"
+  modelConfig:
     components:
       openAPI:
         url: "http://customer-service/swagger"
@@ -37,10 +31,11 @@ telegraf:
 flink:
   enabled: false
 
+#These are needed only for Streaming
 kafka:
-  replicas: 1
-  deleteTopicEnable: true
-
+  enabled: false
 zookeeper:
-  replicaCount: 1
+  enabled: false
+apicurio-registry:
+  enabled: false
 

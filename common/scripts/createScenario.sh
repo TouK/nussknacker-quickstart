@@ -12,7 +12,7 @@ fi
 
 TOOLSPATH="$(dirname $0)"
 
-if [[ -z $DOMAIN ]]; then
+if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
 else 
   DESIGNER_URL=http://$RELEASE-nussknacker.$DOMAIN

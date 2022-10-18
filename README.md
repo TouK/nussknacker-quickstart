@@ -25,7 +25,7 @@ We assume that you have installed `docker` and `docker-compose`.
 
 Just run:
 ```bash
-./docker/start.sh
+./docker/streaming/start.sh
 ``` 
 
 After doing it, you can will have available:
@@ -51,13 +51,18 @@ By default, Helm chart will be installed with release name `nu-quickstart`, you 
 
 Afterwards, just run:
 ```bash
-./k8s-helm/install.sh
+./k8s-helm/install-streaming.sh
 ``` 
+or:
+```bash
+./k8s-helm/install-request-response.sh
+``` 
+Depends on in which processing mode you want to have Nussknacker installed. 
 
 After doing it, you can will have available:
 * [Nussknacker](http://localhost:8081/) - user/password: admin/admin
 * [Grafana](http://localhost:8081/grafana/)
-* [AKHQ](http://localhost:8081/akhq/)
+* [AKHQ](http://localhost:8081/akhq/) (streaming only)
 
 If you've set `DOMAIN` variable, replace `http://localhost:8081` with `http(s)://$RELEASE-nussknacker.$DOMAIN/` in above links. 
 

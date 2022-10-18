@@ -1,15 +1,15 @@
 {
   "metaData" : {
-    "id" : "Loan request",
+    "id" : "LoanRequest",
     "typeSpecificData" : {
-      "path" : "loan",
+      "slug" : "loan",
       "type" : "RequestResponseMetaData"
     },
     "additionalFields" : {
       "description" : null,
       "properties" : {
-        "inputSchema" : "{  \n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        }, \n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n    \n  }  \n}",
-        "outputSchema" : "{  \n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  }  \n}"
+        "inputSchema" : "{\n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n  },\n  \"required\": [\"customerId\", \"location\", \"requestType\", \"requestedAmount\"],\n  \"additionalProperties\": false\n}",
+        "outputSchema" : "{\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}"
       }
     },
     "subprocessVersions" : {
@@ -27,7 +27,7 @@
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : 360,
+          "x" : 540,
           "y" : 0
         }
       },
@@ -35,38 +35,6 @@
     },
     {
       "defaultNext" : [
-        {
-          "id" : "unknown",
-          "ref" : {
-            "typ" : "response",
-            "parameters" : [
-              {
-                "name" : "acceptedAmount",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "0"
-                }
-              },
-              {
-                "name" : "message",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "'Unknown loan type'"
-                }
-              }
-            ]
-          },
-          "endResult" : null,
-          "isDisabled" : null,
-          "additionalFields" : {
-            "description" : null,
-            "layoutData" : {
-              "x" : 360,
-              "y" : 360
-            }
-          },
-          "type" : "Sink"
-        }
       ],
       "nexts" : [
         {
@@ -101,7 +69,7 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 0,
+                  "x" : 900,
                   "y" : 360
                 }
               },
@@ -117,38 +85,6 @@
           "nodes" : [
             {
               "defaultNext" : [
-                {
-                  "id" : "Other city mortgage",
-                  "ref" : {
-                    "typ" : "response",
-                    "parameters" : [
-                      {
-                        "name" : "acceptedAmount",
-                        "expression" : {
-                          "language" : "spel",
-                          "expression" : "100"
-                        }
-                      },
-                      {
-                        "name" : "message",
-                        "expression" : {
-                          "language" : "spel",
-                          "expression" : "'Large sum for Warszawa'"
-                        }
-                      }
-                    ]
-                  },
-                  "endResult" : null,
-                  "isDisabled" : null,
-                  "additionalFields" : {
-                    "description" : null,
-                    "layoutData" : {
-                      "x" : 900,
-                      "y" : 540
-                    }
-                  },
-                  "type" : "Sink"
-                }
               ],
               "nexts" : [
                 {
@@ -183,7 +119,54 @@
                       "additionalFields" : {
                         "description" : null,
                         "layoutData" : {
-                          "x" : 540,
+                          "x" : 360,
+                          "y" : 540
+                        }
+                      },
+                      "type" : "Sink"
+                    }
+                  ]
+                },
+                {
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "true"
+                  },
+                  "nodes" : [
+                    {
+                      "id" : "Other city mortgage",
+                      "ref" : {
+                        "typ" : "response",
+                        "parameters" : [
+                          {
+                            "name" : "Raw editor",
+                            "expression" : {
+                              "language" : "spel",
+                              "expression" : "false"
+                            }
+                          },
+                          {
+                            "name" : "acceptedAmount",
+                            "expression" : {
+                              "language" : "spel",
+                              "expression" : "100"
+                            }
+                          },
+                          {
+                            "name" : "message",
+                            "expression" : {
+                              "language" : "spel",
+                              "expression" : "'Large sum for other city'"
+                            }
+                          }
+                        ]
+                      },
+                      "endResult" : null,
+                      "isDisabled" : null,
+                      "additionalFields" : {
+                        "description" : null,
+                        "layoutData" : {
+                          "x" : 0,
                           "y" : 540
                         }
                       },
@@ -201,11 +184,51 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 720,
+                  "x" : 180,
                   "y" : 360
                 }
               },
               "type" : "Switch"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "true"
+          },
+          "nodes" : [
+            {
+              "id" : "unknown",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "0"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'Unknown loan type'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 540,
+                  "y" : 360
+                }
+              },
+              "type" : "Sink"
             }
           ]
         }
@@ -219,7 +242,7 @@
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : 360,
+          "x" : 540,
           "y" : 180
         }
       },
