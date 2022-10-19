@@ -24,6 +24,8 @@ services:
 
   kafka:
     container_name: nussknacker_kafka
+    # It is used for kafka logs.dir - can't be randomly changed
+    hostname: kafka
     image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.13-2.8.1}
     ports:
       - "3032:3032"
