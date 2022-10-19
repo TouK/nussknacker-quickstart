@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3-alpine
 # remove after https://github.com/marshmallow-code/flask-smorest/issues/384 fixed
 RUN pip install flask==2.1.3 flask-smorest
 EXPOSE 5000
