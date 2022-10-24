@@ -117,3 +117,5 @@ queryable-state.server.ports: 6125
 blob.server.port: 6124
 
 queryable-state.enable: true
+
+rest.flamegraph.enabled: true
