@@ -108,6 +108,7 @@ services:
       - influxdb
     volumes:
       - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/log4j-console.properties:/opt/flink/conf/log4j-console.properties
       - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
       # can be removed unless you use database enricher
       - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
@@ -132,6 +133,7 @@ services:
     volumes:
       - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
       - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      - ${BASE_PATH}/flink/log4j-console.properties:/opt/flink/conf/log4j-console.properties
       - storage_flink:/opt/flink/data
       # can be removed unless you use database enricher
       - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
