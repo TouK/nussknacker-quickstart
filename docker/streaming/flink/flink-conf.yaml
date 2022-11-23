@@ -96,7 +96,7 @@ state.backend.rocksdb.writebuffer.size: 256m
 
 metrics.reporters: influxdb_reporter
 
-metrics.reporter.influxdb_reporter.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+metrics.reporter.influxdb_reporter.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
 metrics.reporter.influxdb_reporter.host: telegraf
 metrics.reporter.influxdb_reporter.port: 8087
 metrics.reporter.influxdb_reporter.db: esp
