@@ -1,8 +1,8 @@
+import random
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
-import random
 
 app = FastAPI(title="Customers", description="Customers", version="v1", openapi_url="/swagger")
 
