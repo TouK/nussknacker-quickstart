@@ -26,7 +26,7 @@ services:
     container_name: nussknacker_kafka
     # It is used for kafka logs.dir - can't be randomly changed
     hostname: kafka
-    image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.13-2.8.1}
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.2.2}
     ports:
       - "3032:3032"
     environment:
@@ -36,7 +36,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "transactions:1:1,alerts:1:1,processedEvents:1:1"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
@@ -49,6 +48,14 @@ services:
       retries: 5
     depends_on:
       - zookeeper
+
+  kafkasetup:
+    container_name: nussknacker_kafkasetup
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.2.2}
+    depends_on:
+      - kafka
+    restart: "no"
+    entrypoint: [ "bash", "-c", "for value in transactions alerts processedEvents; do /bin/kafka-topics --create --bootstrap-server kafka:9092 --topic $$value ; done" ]
 
   akhq:
     container_name: nussknacker_akhq
