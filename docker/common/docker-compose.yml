@@ -12,10 +12,12 @@ services:
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
       CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
       JDK_JAVA_OPTIONS: -Xmx256M
-      DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE}
+      DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE-}
       INFLUXDB_URL: http://influxdb:8086
       OPENAPI_SERVICE_URL: http://customerservice:5000
       AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
+      USAGE_REPORTS_FINGERPRINT: ${USAGE_REPORTS_FINGERPRINT-}
+      USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
