@@ -26,7 +26,7 @@ services:
     container_name: nussknacker_kafka
     # It is used for kafka logs.dir - can't be randomly changed
     hostname: kafka
-    image: ${KAFKA_REPOSITORY-wurstmeister/kafka}:${KAFKA_VERSION-2.13-2.8.1}
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.3.0}
     ports:
       - "3032:3032"
     environment:
@@ -36,7 +36,6 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_CREATE_TOPICS: "transactions:1:1,alerts:1:1,processedEvents:1:1"
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
@@ -50,9 +49,17 @@ services:
     depends_on:
       - zookeeper
 
+  kafkasetup:
+    container_name: nussknacker_kafkasetup
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.3.0}
+    depends_on:
+      - kafka
+    restart: "no"
+    entrypoint: [ "bash", "-c", "for value in transactions alerts processedEvents; do /bin/kafka-topics --create --bootstrap-server kafka:9092 --topic $$value ; done" ]
+
   akhq:
     container_name: nussknacker_akhq
-    image: tchiotludo/akhq:${AKHQ_VERSION-0.21.0}
+    image: tchiotludo/akhq:${AKHQ_VERSION-0.23.0}
     environment:
       AKHQ_CONFIGURATION: |
         micronaut:
@@ -75,7 +82,7 @@ services:
 
   schemaregistry:
     container_name: nussknacker_schemaregistry
-    image: confluentinc/cp-schema-registry:${SCHEMA_REGISTRY_VERSION-7.2.1}
+    image: confluentinc/cp-schema-registry:${SCHEMA_REGISTRY_VERSION-7.3.0}
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
       SCHEMA_REGISTRY_HOST_NAME: schemaregistry
@@ -90,7 +97,7 @@ services:
 
   jobmanager:
     container_name: nussknacker_jobmanager
-    image: apache/flink:${FLINK_VERSION-1.15.2}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3031:8081"
       - "9249:9249"
@@ -108,6 +115,7 @@ services:
       - influxdb
     volumes:
       - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
+      - ${BASE_PATH}/flink/log4j-console.properties:/opt/flink/conf/log4j-console.properties
       - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
       # can be removed unless you use database enricher
       - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar
@@ -115,7 +123,7 @@ services:
 
   taskmanager:
     container_name: nussknacker_taskmanager
-    image: apache/flink:${FLINK_VERSION-1.15.2}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     ports:
       - "3063:9069"
       - "9009:9009"
@@ -132,6 +140,7 @@ services:
     volumes:
       - ${BASE_PATH}/flink/flink-conf.yaml:/tmp/flink-conf.yaml
       - ${BASE_PATH}/flink/flink-entrypoint.sh:/flink-entrypoint.sh
+      - ${BASE_PATH}/flink/log4j-console.properties:/opt/flink/conf/log4j-console.properties
       - storage_flink:/opt/flink/data
       # can be removed unless you use database enricher
       - ${BASE_PATH}/flink/postgresql-42.2.19.jar:/opt/flink/lib/postgresql-42.2.19.jar

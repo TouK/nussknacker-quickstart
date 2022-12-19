@@ -34,4 +34,5 @@ helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
   --set image.tag="${NUSSKNACKER_VERSION}" \
+  --set nussknacker.usageStatisticsReportsFingerprint="${USAGE_REPORTS_FINGERPRINT}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" $@

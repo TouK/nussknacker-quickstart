@@ -96,7 +96,7 @@ state.backend.rocksdb.writebuffer.size: 256m
 
 metrics.reporters: influxdb_reporter
 
-metrics.reporter.influxdb_reporter.class: org.apache.flink.metrics.influxdb.InfluxdbReporter
+metrics.reporter.influxdb_reporter.factory.class: org.apache.flink.metrics.influxdb.InfluxdbReporterFactory
 metrics.reporter.influxdb_reporter.host: telegraf
 metrics.reporter.influxdb_reporter.port: 8087
 metrics.reporter.influxdb_reporter.db: esp
@@ -117,3 +117,5 @@ queryable-state.server.ports: 6125
 blob.server.port: 6124
 
 queryable-state.enable: true
+
+rest.flamegraph.enabled: true

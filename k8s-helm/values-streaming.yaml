@@ -27,6 +27,7 @@ nussknacker:
       openAPI:
         url: "http://customer-service/swagger"
         rootUrl: "http://customer-service"
+  usageStatisticsReportsSource: "quickstart-helmchart"
 
 persistence: 
   enabled: false      
