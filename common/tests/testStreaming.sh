@@ -8,6 +8,7 @@ SCENARIO_PATH=$1
 
 $WAIT_FOR_OK "api/processes" "Checking Nussknacker API response..." "Nussknacker not started" "designer"
 $WAIT_FOR_OK  "metrics" "Checking Grafana response..." "Grafana not started" "grafana"
+$WAIT_FOR_OK "akhq/api/nussknacker/schema?&search=&page=1" "Checking Schemas via AKHQ" "Cannot fetch schemas" "akhq"
 
 echo "Creating schemas"
 ../schemas/createSchemas.sh
