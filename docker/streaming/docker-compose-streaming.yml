@@ -76,7 +76,7 @@ services:
                 url: "http://schemaregistry:8081"
     # We need to override built-in healthcheck because it doesn't respect context-path setting
     healthcheck:
-      test: ["CMD-SHELL", "curl --fail http://localhost:3333/akhq/health || exit 1"]
+      test: ["CMD-SHELL", "curl --fail http://localhost:28081/akhq/health || exit 1"]
       interval: 10s
       retries: 5
     ports:
