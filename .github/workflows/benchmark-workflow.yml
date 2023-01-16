@@ -48,7 +48,7 @@ jobs:
         shell: bash
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"

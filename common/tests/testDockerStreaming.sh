@@ -5,4 +5,4 @@ cd "$(dirname $0)"
 
 ./testStreaming.sh `realpath ../../docker/streaming/scenarios/DetectLargeTransactions.json`
 
-../../docker/streaming/waitForDockerHealthChecks.sh
+../../docker/streaming/waitForDockerHealthchecks.sh
