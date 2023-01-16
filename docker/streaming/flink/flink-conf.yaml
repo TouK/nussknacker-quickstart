@@ -113,9 +113,6 @@ metrics.scope.operator: local.<host>.taskmanagerTask.<tm_id>.<job_name>.<operato
 #classloader.resolve-order: parent-first
 akka.framesize: 209715200b
 
-queryable-state.server.ports: 6125
 blob.server.port: 6124
-
-queryable-state.enable: true
 
 rest.flamegraph.enabled: true
