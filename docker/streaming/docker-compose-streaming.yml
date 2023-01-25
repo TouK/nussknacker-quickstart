@@ -55,7 +55,12 @@ services:
     image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.3.0}
     depends_on:
       - kafka
-    restart: "no"
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
     entrypoint: [ "bash", "-c", "for value in transactions alerts processedEvents; do /bin/kafka-topics --create --bootstrap-server kafka:9092 --topic $$value ; done" ]
 
   akhq:
