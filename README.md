@@ -15,7 +15,7 @@ Quickstart documentation can be found at Nussknacker's [documentation site](http
 &nbsp;
 ## What's next?
 
-[Installation guide](https://docs.nussknacker.io/docs/next/installation_configuration_guide/Installation) contains detailed information on how to adapt Nussknacker configuration to your particular needs. 
+[Installation guide](https://docs.nussknacker.io/documentation/docs/installation_configuration_guide/Installation) contains detailed information on how to adapt Nussknacker configuration to your particular needs. 
 
 &nbsp;
 ### Contributing
