@@ -13,7 +13,7 @@ This repo contains quick start showcases for [Nussknacker](https://nussknacker.i
 Quickstart documentation can be found at Nussknacker's documentation site:
  * [Streaming | Lite Engine](https://nussknacker.io/documentation/quickstart/lite-streaming/)
  * [Streaming | Flink Engine](https://nussknacker.io/documentation/quickstart/flink/)
- * [Request Response | Lite Engine](https://nussknacker.io/documentation/quickstart/lite-request-response/)
+ * [Request-Response | Lite Engine](https://nussknacker.io/documentation/quickstart/lite-request-response/)
 
 &nbsp;
 ## What's next?
