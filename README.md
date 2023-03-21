@@ -10,12 +10,15 @@ This repo contains quick start showcases for [Nussknacker](https://nussknacker.i
 &nbsp;
 ## Quickstart documentation
 
-Quickstart documentation can be found at Nussknacker's [documentation site](https://nussknacker.io/documentation/quickstart/docker/). 
+Quickstart documentation can be found at Nussknacker's documentation site:
+ * [Streaming | Lite Engine](https://nussknacker.io/documentation/quickstart/lite-streaming/)
+ * [Streaming | Flink Engine](https://nussknacker.io/documentation/quickstart/flink/)
+ * [Request-Response | Lite Engine](https://nussknacker.io/documentation/quickstart/lite-request-response/)
 
 &nbsp;
 ## What's next?
 
-[Installation guide](https://docs.nussknacker.io/docs/next/installation_configuration_guide/Installation) contains detailed information on how to adapt Nussknacker configuration to your particular needs. 
+[Installation guide](https://nussknacker.io/documentation/docs/installation_configuration_guide/Installation/) contains detailed information on how to adapt Nussknacker configuration to your particular needs. 
 
 &nbsp;
 ### Contributing
