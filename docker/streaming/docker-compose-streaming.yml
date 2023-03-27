@@ -38,6 +38,8 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_BROKER_ID: 1
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_HEAP_OPTS: -Xms128m -Xmx512m
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -119,6 +121,7 @@ services:
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081
       OPENAPI_SERVICE_URL: http://customerservice:5000
+      SQL_ENRICHER_URL: localhost:5432
       TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
     depends_on:
       - zookeeper
