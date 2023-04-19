@@ -48,6 +48,8 @@ deploy() {
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
     $TOOLSPATH/displayLogs.sh runtime
+    $TOOLSPATH/displayLogs.sh designer
+    $TOOLSPATH/displayLogs.sh jobmanager
     exit 1
   fi
 }
