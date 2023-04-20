@@ -11,6 +11,8 @@
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n  },\n  \"required\": [\"customerId\", \"location\", \"requestType\", \"requestedAmount\"],\n  \"additionalProperties\": false\n}",
         "outputSchema": "{\n    \"type\": \"object\",\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}"
       }
+    },
+    "subprocessVersions": {
     }
   },
   "nodes": [
