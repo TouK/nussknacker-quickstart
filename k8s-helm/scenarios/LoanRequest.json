@@ -1,254 +1,249 @@
 {
-  "metaData" : {
-    "id" : "LoanRequest",
-    "typeSpecificData" : {
-      "slug" : "loan",
-      "type" : "RequestResponseMetaData"
+  "metaData": {
+    "id": "LoanRequest",
+    "typeSpecificData": {
+      "slug": "loan",
+      "type": "RequestResponseMetaData"
     },
-    "additionalFields" : {
-      "description" : null,
-      "properties" : {
-        "inputSchema" : "{\n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n  },\n  \"required\": [\"customerId\", \"location\", \"requestType\", \"requestedAmount\"],\n  \"additionalProperties\": false\n}",
-        "outputSchema" : "{\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}"
+    "additionalFields": {
+      "description": null,
+      "properties": {
+        "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n  },\n  \"required\": [\"customerId\", \"location\", \"requestType\", \"requestedAmount\"],\n  \"additionalProperties\": false\n}",
+        "outputSchema": "{\n    \"type\": \"object\",\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}"
       }
     },
-    "subprocessVersions" : {
-      
+    "subprocessVersions": {
     }
   },
-  "nodes" : [
+  "nodes": [
     {
-      "id" : "request",
-      "ref" : {
-        "typ" : "request",
-        "parameters" : [
-        ]
+      "id": "request",
+      "ref": {
+        "typ": "request",
+        "parameters": []
       },
-      "additionalFields" : {
-        "description" : null,
-        "layoutData" : {
-          "x" : 540,
-          "y" : 0
+      "additionalFields": {
+        "description": null,
+        "layoutData": {
+          "x": 540,
+          "y": 0
         }
       },
-      "type" : "Source"
+      "type": "Source"
     },
     {
-      "defaultNext" : [
-      ],
-      "nexts" : [
+      "defaultNext": [],
+      "nexts": [
         {
-          "expression" : {
-            "language" : "spel",
-            "expression" : "#type == 'loan'"
+          "expression": {
+            "language": "spel",
+            "expression": "#type == 'loan'"
           },
-          "nodes" : [
+          "nodes": [
             {
-              "id" : "loan response",
-              "ref" : {
-                "typ" : "response",
-                "parameters" : [
+              "id": "loan response",
+              "ref": {
+                "typ": "response",
+                "parameters": [
                   {
-                    "name" : "acceptedAmount",
-                    "expression" : {
-                      "language" : "spel",
-                      "expression" : "50"
+                    "name": "acceptedAmount",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "50"
                     }
                   },
                   {
-                    "name" : "message",
-                    "expression" : {
-                      "language" : "spel",
-                      "expression" : "'only small amount available'"
+                    "name": "message",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "'only small amount available'"
                     }
                   }
                 ]
               },
-              "endResult" : null,
-              "isDisabled" : null,
-              "additionalFields" : {
-                "description" : null,
-                "layoutData" : {
-                  "x" : 900,
-                  "y" : 360
+              "endResult": null,
+              "isDisabled": null,
+              "additionalFields": {
+                "description": null,
+                "layoutData": {
+                  "x": 900,
+                  "y": 360
                 }
               },
-              "type" : "Sink"
+              "type": "Sink"
             }
           ]
         },
         {
-          "expression" : {
-            "language" : "spel",
-            "expression" : "#type == 'mortgage'"
+          "expression": {
+            "language": "spel",
+            "expression": "#type == 'mortgage'"
           },
-          "nodes" : [
+          "nodes": [
             {
-              "defaultNext" : [
-              ],
-              "nexts" : [
+              "defaultNext": [],
+              "nexts": [
                 {
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "#city == 'Warszawa'"
+                  "expression": {
+                    "language": "spel",
+                    "expression": "#city == 'Warszawa'"
                   },
-                  "nodes" : [
+                  "nodes": [
                     {
-                      "id" : "Warsaw mortgage",
-                      "ref" : {
-                        "typ" : "response",
-                        "parameters" : [
+                      "id": "Warsaw mortgage",
+                      "ref": {
+                        "typ": "response",
+                        "parameters": [
                           {
-                            "name" : "acceptedAmount",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "1000"
+                            "name": "acceptedAmount",
+                            "expression": {
+                              "language": "spel",
+                              "expression": "1000"
                             }
                           },
                           {
-                            "name" : "message",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "'Large sum for Warszawa'"
+                            "name": "message",
+                            "expression": {
+                              "language": "spel",
+                              "expression": "'Large sum for Warszawa'"
                             }
                           }
                         ]
                       },
-                      "endResult" : null,
-                      "isDisabled" : null,
-                      "additionalFields" : {
-                        "description" : null,
-                        "layoutData" : {
-                          "x" : 360,
-                          "y" : 540
+                      "endResult": null,
+                      "isDisabled": null,
+                      "additionalFields": {
+                        "description": null,
+                        "layoutData": {
+                          "x": 360,
+                          "y": 540
                         }
                       },
-                      "type" : "Sink"
+                      "type": "Sink"
                     }
                   ]
                 },
                 {
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "true"
+                  "expression": {
+                    "language": "spel",
+                    "expression": "true"
                   },
-                  "nodes" : [
+                  "nodes": [
                     {
-                      "id" : "Other city mortgage",
-                      "ref" : {
-                        "typ" : "response",
-                        "parameters" : [
+                      "id": "Other city mortgage",
+                      "ref": {
+                        "typ": "response",
+                        "parameters": [
                           {
-                            "name" : "Raw editor",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "false"
+                            "name": "Raw editor",
+                            "expression": {
+                              "language": "spel",
+                              "expression": "false"
                             }
                           },
                           {
-                            "name" : "acceptedAmount",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "100"
+                            "name": "acceptedAmount",
+                            "expression": {
+                              "language": "spel",
+                              "expression": "100"
                             }
                           },
                           {
-                            "name" : "message",
-                            "expression" : {
-                              "language" : "spel",
-                              "expression" : "'Large sum for other city'"
+                            "name": "message",
+                            "expression": {
+                              "language": "spel",
+                              "expression": "'Large sum for other city'"
                             }
                           }
                         ]
                       },
-                      "endResult" : null,
-                      "isDisabled" : null,
-                      "additionalFields" : {
-                        "description" : null,
-                        "layoutData" : {
-                          "x" : 0,
-                          "y" : 540
+                      "endResult": null,
+                      "isDisabled": null,
+                      "additionalFields": {
+                        "description": null,
+                        "layoutData": {
+                          "x": 0,
+                          "y": 540
                         }
                       },
-                      "type" : "Sink"
+                      "type": "Sink"
                     }
                   ]
                 }
               ],
-              "id" : "switch",
-              "expression" : {
-                "language" : "spel",
-                "expression" : "#input.location.city"
+              "id": "switch",
+              "expression": {
+                "language": "spel",
+                "expression": "#input.location.city"
               },
-              "exprVal" : "city",
-              "additionalFields" : {
-                "description" : null,
-                "layoutData" : {
-                  "x" : 180,
-                  "y" : 360
+              "exprVal": "city",
+              "additionalFields": {
+                "description": null,
+                "layoutData": {
+                  "x": 180,
+                  "y": 360
                 }
               },
-              "type" : "Switch"
+              "type": "Switch"
             }
           ]
         },
         {
-          "expression" : {
-            "language" : "spel",
-            "expression" : "true"
+          "expression": {
+            "language": "spel",
+            "expression": "true"
           },
-          "nodes" : [
+          "nodes": [
             {
-              "id" : "unknown",
-              "ref" : {
-                "typ" : "response",
-                "parameters" : [
+              "id": "unknown",
+              "ref": {
+                "typ": "response",
+                "parameters": [
                   {
-                    "name" : "acceptedAmount",
-                    "expression" : {
-                      "language" : "spel",
-                      "expression" : "0"
+                    "name": "acceptedAmount",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "0"
                     }
                   },
                   {
-                    "name" : "message",
-                    "expression" : {
-                      "language" : "spel",
-                      "expression" : "'Unknown loan type'"
+                    "name": "message",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "'Unknown loan type'"
                     }
                   }
                 ]
               },
-              "endResult" : null,
-              "isDisabled" : null,
-              "additionalFields" : {
-                "description" : null,
-                "layoutData" : {
-                  "x" : 540,
-                  "y" : 360
+              "endResult": null,
+              "isDisabled": null,
+              "additionalFields": {
+                "description": null,
+                "layoutData": {
+                  "x": 540,
+                  "y": 360
                 }
               },
-              "type" : "Sink"
+              "type": "Sink"
             }
           ]
         }
       ],
-      "id" : "loan type",
-      "expression" : {
-        "language" : "spel",
-        "expression" : "#input.requestType"
+      "id": "loan type",
+      "expression": {
+        "language": "spel",
+        "expression": "#input.requestType"
       },
-      "exprVal" : "type",
-      "additionalFields" : {
-        "description" : null,
-        "layoutData" : {
-          "x" : 540,
-          "y" : 180
+      "exprVal": "type",
+      "additionalFields": {
+        "description": null,
+        "layoutData": {
+          "x": 540,
+          "y": 180
         }
       },
-      "type" : "Switch"
+      "type": "Switch"
     }
   ],
-  "additionalBranches" : [
-  ]
+  "additionalBranches": []
 }
