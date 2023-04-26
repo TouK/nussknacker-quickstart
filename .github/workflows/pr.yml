@@ -31,10 +31,10 @@ jobs:
       NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' || 'latest_scala-2.12' }}
     steps:
       - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.8.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Print Nussknacker version
         run: |
           echo "Nussknacker version: $NUSSKNACKER_VERSION"
@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.8.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.8.0
+        uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v2
