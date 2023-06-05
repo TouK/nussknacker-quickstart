@@ -26,7 +26,7 @@ services:
     container_name: nussknacker_kafka
     # It is used for kafka logs.dir - can't be randomly changed
     hostname: kafka
-    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.3.0}
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.4.0}
     ports:
       - "3032:3032"
     environment:
@@ -54,7 +54,7 @@ services:
   kafkasetup:
     # this name has to have different prefix that `nussknacker_kafka` becouse we relay on `nussknacker_kafka` in runInKafka.sh
     container_name: nussknacker_setup_kafka
-    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.3.0}
+    image: ${KAFKA_REPOSITORY-confluentinc/cp-kafka}:${KAFKA_VERSION-7.4.0}
     depends_on:
       - kafka
     deploy:
