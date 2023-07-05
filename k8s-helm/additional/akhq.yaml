@@ -11,7 +11,10 @@ labels:
   nu-quickstart: "sample"
 
 readinessProbe:
-  prefix: "/akhq"  
+  prefix: "/akhq"
+livenessProbe:
+  prefix: "/akhq"
+
 configuration:
   micronaut.server.context-path: "/akhq"
   akhq:
