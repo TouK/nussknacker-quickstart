@@ -25,4 +25,4 @@ configuration:
         properties:
           bootstrap.servers: "${RELEASE}-kafka:9092"
         schema-registry:
-          url: "http://${RELEASE}-apicurio-registry:8081/apis/ccompat/v6/"
+          url: "http://${RELEASE}-apicurio-registry/apis/ccompat/v6/"
