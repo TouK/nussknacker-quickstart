@@ -24,6 +24,7 @@ env:
   NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
+
   docker-compose-streaming-test:
     runs-on: ubuntu-latest
     env:
@@ -44,8 +45,10 @@ jobs:
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testDockerStreaming.sh
+
   helm-k8s-requestresponse-test:
     runs-on: ubuntu-latest
+    needs: docker-compose-streaming-test
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
@@ -77,6 +80,7 @@ jobs:
 
   helm-k8s-streaming-test:
     runs-on: ubuntu-latest
+    needs: helm-k8s-requestresponse-test
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
