@@ -1,18 +1,14 @@
 {
   "metaData": {
     "id": "LoanRequest",
-    "typeSpecificData": {
-      "slug": "loan",
-      "type": "RequestResponseMetaData"
-    },
     "additionalFields": {
       "description": null,
       "properties": {
         "inputSchema": "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"customerId\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"street\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    }\n  },\n  \"required\": [\"customerId\", \"location\", \"requestType\", \"requestedAmount\"],\n  \"additionalProperties\": false\n}",
-        "outputSchema": "{\n    \"type\": \"object\",\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}"
-      }
-    },
-    "subprocessVersions": {
+        "outputSchema": "{\n    \"type\": \"object\",\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}",
+        "slug": "loan"
+      },
+      "metaDataType": "RequestResponseMetaData"
     }
   },
   "nodes": [
@@ -20,24 +16,26 @@
       "id": "request",
       "ref": {
         "typ": "request",
-        "parameters": []
+        "parameters": [
+        ]
       },
       "additionalFields": {
         "description": null,
         "layoutData": {
-          "x": 540,
+          "x": 360,
           "y": 0
         }
       },
       "type": "Source"
     },
     {
-      "defaultNext": [],
+      "defaultNext": [
+      ],
       "nexts": [
         {
           "expression": {
             "language": "spel",
-            "expression": "#type == 'loan'"
+            "expression": "#input.requestType == 'loan'"
           },
           "nodes": [
             {
@@ -66,7 +64,7 @@
               "additionalFields": {
                 "description": null,
                 "layoutData": {
-                  "x": 900,
+                  "x": 0,
                   "y": 360
                 }
               },
@@ -77,16 +75,17 @@
         {
           "expression": {
             "language": "spel",
-            "expression": "#type == 'mortgage'"
+            "expression": "#input.requestType == 'mortgage'"
           },
           "nodes": [
             {
-              "defaultNext": [],
+              "defaultNext": [
+              ],
               "nexts": [
                 {
                   "expression": {
                     "language": "spel",
-                    "expression": "#city == 'Warszawa'"
+                    "expression": "#input.location.city == 'Warszawa'"
                   },
                   "nodes": [
                     {
@@ -115,7 +114,7 @@
                       "additionalFields": {
                         "description": null,
                         "layoutData": {
-                          "x": 360,
+                          "x": 180,
                           "y": 540
                         }
                       },
@@ -162,7 +161,7 @@
                       "additionalFields": {
                         "description": null,
                         "layoutData": {
-                          "x": 0,
+                          "x": 540,
                           "y": 540
                         }
                       },
@@ -172,15 +171,10 @@
                 }
               ],
               "id": "switch",
-              "expression": {
-                "language": "spel",
-                "expression": "#input.location.city"
-              },
-              "exprVal": "city",
               "additionalFields": {
                 "description": null,
                 "layoutData": {
-                  "x": 180,
+                  "x": 360,
                   "y": 360
                 }
               },
@@ -220,7 +214,7 @@
               "additionalFields": {
                 "description": null,
                 "layoutData": {
-                  "x": 540,
+                  "x": 720,
                   "y": 360
                 }
               },
@@ -230,20 +224,16 @@
         }
       ],
       "id": "loan type",
-      "expression": {
-        "language": "spel",
-        "expression": "#input.requestType"
-      },
-      "exprVal": "type",
       "additionalFields": {
         "description": null,
         "layoutData": {
-          "x": 540,
+          "x": 360,
           "y": 180
         }
       },
       "type": "Switch"
     }
   ],
-  "additionalBranches": []
+  "additionalBranches": [
+  ]
 }
