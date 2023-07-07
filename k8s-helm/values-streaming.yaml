@@ -4,7 +4,6 @@ image:
 resources:
   limits:
     memory: 700Mi
-    cpu: 2
   requests:
     memory: 256Mi
 
