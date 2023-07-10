@@ -1,398 +1,390 @@
 {
-  "metaData" : {
-    "id" : "DetectLargeTransactions",
-    "typeSpecificData" : {
-      "parallelism" : 2,
-      "spillStateToDisk" : true,
-      "useAsyncInterpretation" : null,
-      "checkpointIntervalInSeconds" : null,
-      "type" : "StreamMetaData"
-    },
-    "additionalFields" : {
-      "description" : null,
-      "properties" : {
-
-      }
-    },
-    "subprocessVersions" : {
-
+  "metaData": {
+    "id": "DetectLargeTransactions",
+    "additionalFields": {
+      "description": null,
+      "properties": {
+        "parallelism": "2",
+        "spillStateToDisk": "true"
+      },
+      "metaDataType": "StreamMetaData"
     }
   },
-  "nodes" : [
+  "nodes": [
     {
-      "id" : "bank-transactions",
-      "ref" : {
-        "typ" : "kafka",
-        "parameters" : [
+      "id": "bank-transactions",
+      "ref": {
+        "typ": "kafka",
+        "parameters": [
           {
-            "name" : "Topic",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "'transactions'"
+            "name": "Topic",
+            "expression": {
+              "language": "spel",
+              "expression": "'transactions'"
             }
           },
           {
-            "name" : "Schema version",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "'latest'"
+            "name": "Schema version",
+            "expression": {
+              "language": "spel",
+              "expression": "'latest'"
             }
           }
         ]
       },
-      "additionalFields" : {
-        "description" : null,
-        "layoutData" : {
-          "x" : 360,
-          "y" : 0
+      "additionalFields": {
+        "description": null,
+        "layoutData": {
+          "x": 360,
+          "y": 0
         }
       },
-      "type" : "Source"
+      "type": "Source"
     },
     {
-      "nexts" : [
+      "nexts": [
         [
           {
-            "nextFalse" : [
+            "nextFalse": [
             ],
-            "id" : "only large ones",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "#input.amount > 20"
+            "id": "only large ones",
+            "expression": {
+              "language": "spel",
+              "expression": "#input.amount > 20"
             },
-            "isDisabled" : null,
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 180,
-                "y" : 360
+            "isDisabled": null,
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 180,
+                "y": 360
               }
             },
-            "type" : "Filter"
+            "type": "Filter"
           },
           {
-            "id" : "customer data",
-            "service" : {
-              "id" : "getCustomer",
-              "parameters" : [
+            "id": "customer data",
+            "service": {
+              "id": "getCustomer",
+              "parameters": [
                 {
-                  "name" : "customer_id",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "#CONV.toNumber(#input.clientId).longValue"
+                  "name": "customer_id",
+                  "expression": {
+                    "language": "spel",
+                    "expression": "#CONV.toNumber(#input.clientId).longValue"
                   }
                 }
               ]
             },
-            "output" : "customerData",
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 180,
-                "y" : 540
+            "output": "customerData",
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 180,
+                "y": 540
               }
             },
-            "type" : "Enricher"
+            "type": "Enricher"
           },
           {
-            "defaultNext" : [
+            "defaultNext": [
             ],
-            "nexts" : [
+            "nexts": [
               {
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "#customerData.category == \"STANDARD\""
+                "expression": {
+                  "language": "spel",
+                  "expression": "#customerData.category == \"STANDARD\""
                 },
-                "nodes" : [
+                "nodes": [
                   {
-                    "id" : "alert large transaction",
-                    "ref" : {
-                      "typ" : "kafka",
-                      "parameters" : [
+                    "id": "alert large transaction",
+                    "ref": {
+                      "typ": "kafka",
+                      "parameters": [
                         {
-                          "name" : "Topic",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'alerts'"
+                          "name": "Topic",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'alerts'"
                           }
                         },
                         {
-                          "name" : "Schema version",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'latest'"
+                          "name": "Schema version",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'latest'"
                           }
                         },
                         {
-                          "name" : "Key",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : ""
+                          "name": "Key",
+                          "expression": {
+                            "language": "spel",
+                            "expression": ""
                           }
                         },
                         {
-                          "name" : "Raw editor",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "false"
+                          "name": "Raw editor",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "false"
                           }
                         },
                         {
-                          "name" : "message",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'Client: ' + #input.clientId + ' has exceeded limit for single transaction, value: ' + #input.amount"
+                          "name": "message",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'Client: ' + #input.clientId + ' has exceeded limit for single transaction, value: ' + #input.amount"
                           }
                         },
                         {
-                          "name" : "eventDate",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : ""
+                          "name": "eventDate",
+                          "expression": {
+                            "language": "spel",
+                            "expression": ""
                           }
                         }
                       ]
                     },
-                    "endResult" : null,
-                    "isDisabled" : null,
-                    "additionalFields" : {
-                      "description" : null,
-                      "layoutData" : {
-                        "x" : 0,
-                        "y" : 900
+                    "endResult": null,
+                    "isDisabled": null,
+                    "additionalFields": {
+                      "description": null,
+                      "layoutData": {
+                        "x": 0,
+                        "y": 900
                       }
                     },
-                    "type" : "Sink"
+                    "type": "Sink"
                   }
                 ]
               },
               {
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "true"
+                "expression": {
+                  "language": "spel",
+                  "expression": "true"
                 },
-                "nodes" : [
+                "nodes": [
                   {
-                    "id" : "send for audit",
-                    "ref" : {
-                      "typ" : "kafka",
-                      "parameters" : [
+                    "id": "send for audit",
+                    "ref": {
+                      "typ": "kafka",
+                      "parameters": [
                         {
-                          "name" : "Topic",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'processedEvents'"
+                          "name": "Topic",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'processedEvents'"
                           }
                         },
                         {
-                          "name" : "Schema version",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'latest'"
+                          "name": "Schema version",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'latest'"
                           }
                         },
                         {
-                          "name" : "Key",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : ""
+                          "name": "Key",
+                          "expression": {
+                            "language": "spel",
+                            "expression": ""
                           }
                         },
                         {
-                          "name" : "Raw editor",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "true"
+                          "name": "Raw editor",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "true"
                           }
                         },
                         {
-                          "name" : "Value validation mode",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "'strict'"
+                          "name": "Value validation mode",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "'strict'"
                           }
                         },
                         {
-                          "name" : "Value",
-                          "expression" : {
-                            "language" : "spel",
-                            "expression" : "#input"
+                          "name": "Value",
+                          "expression": {
+                            "language": "spel",
+                            "expression": "#input"
                           }
                         }
                       ]
                     },
-                    "endResult" : null,
-                    "isDisabled" : null,
-                    "additionalFields" : {
-                      "description" : null,
-                      "layoutData" : {
-                        "x" : 360,
-                        "y" : 900
+                    "endResult": null,
+                    "isDisabled": null,
+                    "additionalFields": {
+                      "description": null,
+                      "layoutData": {
+                        "x": 360,
+                        "y": 900
                       }
                     },
-                    "type" : "Sink"
+                    "type": "Sink"
                   }
                 ]
               }
             ],
-            "id" : "category",
-            "expression" : {
-              "language" : "spel",
-              "expression" : ""
+            "id": "category",
+            "expression": {
+              "language": "spel",
+              "expression": ""
             },
-            "exprVal" : "",
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 180,
-                "y" : 720
+            "exprVal": "",
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 180,
+                "y": 720
               }
             },
-            "type" : "Switch"
+            "type": "Switch"
           }
         ],
         [
           {
-            "id" : "aggregate-sliding",
-            "outputVar" : "aggregated",
-            "nodeType" : "aggregate-sliding",
-            "parameters" : [
+            "id": "aggregate-sliding",
+            "outputVar": "aggregated",
+            "nodeType": "aggregate-sliding",
+            "parameters": [
               {
-                "name" : "groupBy",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "#input.clientId"
+                "name": "groupBy",
+                "expression": {
+                  "language": "spel",
+                  "expression": "#input.clientId"
                 }
               },
               {
-                "name" : "aggregator",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "#AGG.sum"
+                "name": "aggregator",
+                "expression": {
+                  "language": "spel",
+                  "expression": "#AGG.sum"
                 }
               },
               {
-                "name" : "aggregateBy",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "#input.amount"
+                "name": "aggregateBy",
+                "expression": {
+                  "language": "spel",
+                  "expression": "#input.amount"
                 }
               },
               {
-                "name" : "windowLength",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "T(java.time.Duration).parse('P1D')"
+                "name": "windowLength",
+                "expression": {
+                  "language": "spel",
+                  "expression": "T(java.time.Duration).parse('P1D')"
                 }
               },
               {
-                "name" : "emitWhenEventLeft",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "false"
+                "name": "emitWhenEventLeft",
+                "expression": {
+                  "language": "spel",
+                  "expression": "false"
                 }
               }
             ],
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 540,
-                "y" : 360
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 540,
+                "y": 360
               }
             },
-            "type" : "CustomNode"
+            "type": "CustomNode"
           },
           {
-            "nextFalse" : [
+            "nextFalse": [
             ],
-            "id" : "filter large amount",
-            "expression" : {
-              "language" : "spel",
-              "expression" : "#aggregated > 30"
+            "id": "filter large amount",
+            "expression": {
+              "language": "spel",
+              "expression": "#aggregated > 30"
             },
-            "isDisabled" : null,
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 540,
-                "y" : 540
+            "isDisabled": null,
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 540,
+                "y": 540
               }
             },
-            "type" : "Filter"
+            "type": "Filter"
           },
           {
-            "id" : "alert",
-            "ref" : {
-              "typ" : "kafka",
-              "parameters" : [
+            "id": "alert",
+            "ref": {
+              "typ": "kafka",
+              "parameters": [
                 {
-                  "name" : "Topic",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'alerts'"
+                  "name": "Topic",
+                  "expression": {
+                    "language": "spel",
+                    "expression": "'alerts'"
                   }
                 },
                 {
-                  "name" : "Schema version",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'latest'"
+                  "name": "Schema version",
+                  "expression": {
+                    "language": "spel",
+                    "expression": "'latest'"
                   }
                 },
                 {
-                  "name" : "Key",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : ""
+                  "name": "Key",
+                  "expression": {
+                    "language": "spel",
+                    "expression": ""
                   }
                 },
                 {
-                  "name" : "Raw editor",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "false"
+                  "name": "Raw editor",
+                  "expression": {
+                    "language": "spel",
+                    "expression": "false"
                   }
                 },
                 {
-                  "name" : "message",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : "'Client: ' + #input.clientId + ' has exceeded limit, total amount: ' + #aggregated"
+                  "name": "message",
+                  "expression": {
+                    "language": "spel",
+                    "expression": "'Client: ' + #input.clientId + ' has exceeded limit, total amount: ' + #aggregated"
                   }
                 },
                 {
-                  "name" : "eventDate",
-                  "expression" : {
-                    "language" : "spel",
-                    "expression" : ""
+                  "name": "eventDate",
+                  "expression": {
+                    "language": "spel",
+                    "expression": ""
                   }
                 }
               ]
             },
-            "endResult" : null,
-            "isDisabled" : null,
-            "additionalFields" : {
-              "description" : null,
-              "layoutData" : {
-                "x" : 540,
-                "y" : 720
+            "endResult": null,
+            "isDisabled": null,
+            "additionalFields": {
+              "description": null,
+              "layoutData": {
+                "x": 540,
+                "y": 720
               }
             },
-            "type" : "Sink"
+            "type": "Sink"
           }
         ]
       ],
-      "id" : "split",
-      "additionalFields" : {
-        "description" : null,
-        "layoutData" : {
-          "x" : 360,
-          "y" : 180
+      "id": "split",
+      "additionalFields": {
+        "description": null,
+        "layoutData": {
+          "x": 360,
+          "y": 180
         }
       },
-      "type" : "Split"
+      "type": "Split"
     }
   ],
-  "additionalBranches" : [
+  "additionalBranches": [
   ]
 }
