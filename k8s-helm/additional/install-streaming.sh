@@ -4,6 +4,8 @@ set -e
 cd "$(dirname $0)"
 set -a; . ../.env; set +a
 
+./waitForServiceAccount.sh
+
 export AKHQ_SECURITY_GROUP=admin
 
 kubectl apply -f custom-services.yaml
