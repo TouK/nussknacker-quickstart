@@ -24,6 +24,7 @@ env:
   NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 'latest' }}
 
 jobs:
+
   docker-compose-streaming-test:
     runs-on: ubuntu-latest
     env:
@@ -44,6 +45,7 @@ jobs:
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testDockerStreaming.sh
+
   helm-k8s-requestresponse-test:
     runs-on: ubuntu-latest
     steps:

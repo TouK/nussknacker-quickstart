@@ -1,20 +1,13 @@
 {
   "metaData": {
     "id": "DetectLargeTransactions",
-    "typeSpecificData": {
-      "parallelism": 2,
-      "type": "LiteStreamMetaData"
-    },
-    "isSubprocess": false,
     "additionalFields": {
       "description": null,
-      "groups": [],
-      "properties": {}
-    },
-    "subprocessVersions": {}
-  },
-  "exceptionHandlerRef": {
-    "parameters": []
+      "properties": {
+        "parallelism": "2"
+      },
+      "metaDataType": "LiteStreamMetaData"
+    }
   },
   "nodes": [
     {
@@ -48,7 +41,8 @@
       "type": "Source"
     },
     {
-      "nextFalse": [],
+      "nextFalse": [
+      ],
       "id": "only large ones",
       "expression": {
         "language": "spel",
@@ -58,8 +52,8 @@
       "additionalFields": {
         "description": null,
         "layoutData": {
-          "x": 360,
-          "y": 360
+          "x": 180,
+          "y": 180
         }
       },
       "type": "Filter"
@@ -82,80 +76,20 @@
       "additionalFields": {
         "description": null,
         "layoutData": {
-          "x": 360,
-          "y": 540
+          "x": 180,
+          "y": 360
         }
       },
       "type": "Enricher"
     },
     {
       "defaultNext": [
-        {
-          "id": "send for audit",
-          "ref": {
-            "typ": "kafka",
-            "parameters": [
-              {
-                "name": "Topic",
-                "expression": {
-                  "language": "spel",
-                  "expression": "'processedEvents'"
-                }
-              },
-              {
-                "name": "Schema version",
-                "expression": {
-                  "language": "spel",
-                  "expression": "'latest'"
-                }
-              },
-              {
-                "name": "Key",
-                "expression": {
-                  "language": "spel",
-                  "expression": ""
-                }
-              },
-              {
-                "name" : "Raw editor",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "true"
-                }
-              },
-              {
-                "name" : "Value validation mode",
-                "expression" : {
-                  "language" : "spel",
-                  "expression" : "'strict'"
-                }
-              },
-              {
-                "name": "Value",
-                "expression": {
-                  "language": "spel",
-                  "expression": "#input"
-                }
-              }
-            ]
-          },
-          "endResult": null,
-          "isDisabled": null,
-          "additionalFields": {
-            "description": null,
-            "layoutData": {
-              "x": 180,
-              "y": 900
-            }
-          },
-          "type": "Sink"
-        }
       ],
       "nexts": [
         {
           "expression": {
             "language": "spel",
-            "expression": "#category == \"STANDARD\""
+            "expression": "#customerData.category == \"STANDARD\""
           },
           "nodes": [
             {
@@ -198,8 +132,76 @@
               "additionalFields": {
                 "description": null,
                 "layoutData": {
-                  "x": 540,
-                  "y": 900
+                  "x": 0,
+                  "y": 720
+                }
+              },
+              "type": "Sink"
+            }
+          ]
+        },
+        {
+          "expression": {
+            "language": "spel",
+            "expression": "true"
+          },
+          "nodes": [
+            {
+              "id": "send for audit",
+              "ref": {
+                "typ": "kafka",
+                "parameters": [
+                  {
+                    "name": "Topic",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "'processedEvents'"
+                    }
+                  },
+                  {
+                    "name": "Schema version",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "'latest'"
+                    }
+                  },
+                  {
+                    "name": "Key",
+                    "expression": {
+                      "language": "spel",
+                      "expression": ""
+                    }
+                  },
+                  {
+                    "name": "Raw editor",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "true"
+                    }
+                  },
+                  {
+                    "name": "Value validation mode",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "'strict'"
+                    }
+                  },
+                  {
+                    "name": "Value",
+                    "expression": {
+                      "language": "spel",
+                      "expression": "#input"
+                    }
+                  }
+                ]
+              },
+              "endResult": null,
+              "isDisabled": null,
+              "additionalFields": {
+                "description": null,
+                "layoutData": {
+                  "x": 360,
+                  "y": 720
                 }
               },
               "type": "Sink"
@@ -208,20 +210,16 @@
         }
       ],
       "id": "category",
-      "expression": {
-        "language": "spel",
-        "expression": "#customerData.category"
-      },
-      "exprVal": "category",
       "additionalFields": {
         "description": null,
         "layoutData": {
-          "x": 360,
-          "y": 720
+          "x": 180,
+          "y": 540
         }
       },
       "type": "Switch"
     }
   ],
-  "additionalBranches": []
+  "additionalBranches": [
+  ]
 }
