@@ -3,7 +3,7 @@ version: '3.8'
 services:
   designer:
     container_name: nussknacker_designer
-    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest_scala-2.12}
+    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-staging-latest}
     ports:
       - "3081:8080"
       - "3181:8181"  
@@ -18,9 +18,13 @@ services:
       AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
       USAGE_REPORTS_FINGERPRINT: ${USAGE_REPORTS_FINGERPRINT-}
       USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
+      AUTH_CLIENT_ID: ${AUTH_CLIENT_ID}
+      AUTH_CLIENT_SECRET: ${AUTH_CLIENT_SECRET}
+      AUTH_ISSUER: ${AUTH_ISSUER}
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
+      - ${BASE_PATH}/nussknacker/users.conf:/opt/nussknacker/conf/users.conf
 
 volumes:
   storage_designer:
