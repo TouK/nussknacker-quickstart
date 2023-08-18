@@ -32,7 +32,7 @@ echo "Topics prepared, running console producer..."
 #we do this instead of copy, as we would have to have different scripts for docker and k8s
 cat generateBenchmarkTransactions.sh | runInKafka bash -c "cat > /tmp/bench.sh; chmod +x /tmp/bench.sh"
 #we want to generate events inside container, as piping large amount of data through kubectl exec is really costly (at least in k8s) 
-runInKafka bash -c "/tmp/bench.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MINUTES | kafka-console-producer --topic $TOPIC --bootstrap-server localhost:9092"
+runInKafka bash -c "/tmp/bench.sh $TRANSACTION_COUNT $CLIENT_COUNT $TIME_SPREAD_MINUTES | kafka-console-producer.sh --topic $TOPIC --bootstrap-server localhost:9092"
 
 #transaction_count + 1 is because of mark record at the end
 sleep=10
