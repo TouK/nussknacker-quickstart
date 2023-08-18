@@ -19,7 +19,7 @@ function createSchema() {
     then
         wrapWithSchemaRegistryMessage $NAME | curl -d @- -H "Content-Type: application/vnd.schemaregistry.v1+json" http://localhost:3082/subjects/$NAME/versions -v
     else
-        wrapWithSchemaRegistryMessage $NAME | kubectl exec -i deploy/$RELEASE-apicurio-registry -- curl -d @- -H "Content-type: application/json" http://localhost:8080/apis/ccompat/v6/subjects/$NAME/versions -v
+        wrapWithSchemaRegistryMessage $NAME | kubectl exec -i deploy/$RELEASE-apicurio-registry -- pwd && echo @
     fi
 }
 
