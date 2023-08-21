@@ -9,7 +9,7 @@ if ../../scripts/runInKafka.sh kafka-console-consumer \
 then
   echo "Last request has been processed"
   exit 0
-else1
+else
   echo "Last request hasn't been found"
   exit 1
 fi
