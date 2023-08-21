@@ -4,9 +4,11 @@ set -e
 cd "$(dirname $0)"
 echo "debug x1"
 
-../../scripts/runInKafka.sh kafka-console-consumer \
-    --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
-    grep "Last request"
+function runInKafka() {
+    ../../scripts/runInKafka.sh "$@"
+}
+
+runInKafka kafka-console-consumer --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | grep "Last request"
 
 if ../../scripts/runInKafka.sh kafka-console-consumer \
               --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
