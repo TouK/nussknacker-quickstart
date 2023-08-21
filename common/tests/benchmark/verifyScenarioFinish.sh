@@ -3,6 +3,12 @@
 set -e
 cd "$(dirname $0)"
 
+output=$(../../scripts/runInKafka.sh kafka-console-consumer \
+                   --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
+                   grep "Last request")
+
+echo $output
+
 if ../../scripts/runInKafka.sh kafka-console-consumer \
               --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1 | \
               grep -q "Last request"
