@@ -21,7 +21,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       # temporarily force NU built with scala 2.12, cause default build (2.13) does not work with Flink out of the box now.
-      NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version != '' && inputs.nussknacker_version || 'staging-latest_scala-2.12' }}
+      NUSSKNACKER_VERSION: ${{
+        endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
+        inputs.nussknacker_version != '' && inputs.nussknacker_version ||
+        'staging-latest_scala-2.12' }}
     defaults:
       run:
         shell: bash
