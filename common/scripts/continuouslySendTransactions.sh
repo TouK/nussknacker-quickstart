@@ -12,7 +12,7 @@ random_3digit_number() {
   random_4digit_number | head -c 3
 }
 
-while [ true ]; do
+while true; do
   sleep 0.1
   ID=$((1 + $(random_4digit_number) % 5))
   AMOUNT=$((1 + $(random_4digit_number) % 30))

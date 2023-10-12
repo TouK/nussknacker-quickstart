@@ -4,7 +4,7 @@ set -e
 
 # This script allows to create and import scenario and at the end to deploy
 
-TOOLSPATH="$(dirname $0)"
+TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
@@ -14,8 +14,8 @@ fi
 
 deploy() {
   SCENARIO_PATH=$1
-  SCENARIO_NAME=`cat $SCENARIO_PATH | jq -r .metaData.id`
-  TYPE_SPECIFIC_DATA=`cat $SCENARIO_PATH | jq -r .metaData.typeSpecificData.type`
+  SCENARIO_NAME=$(cat "$SCENARIO_PATH" | jq -r .metaData.id)
+  TYPE_SPECIFIC_DATA=$(cat "$SCENARIO_PATH" | jq -r .metaData.typeSpecificData.type)
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
@@ -47,13 +47,13 @@ deploy() {
   done
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
-    $TOOLSPATH/displayLogs.sh runtime
+    "$TOOLSPATH/displayLogs.sh" runtime
     exit 1
   fi
 }
 
 # Create and import scenario
-$TOOLSPATH/createScenario.sh "$1" "$2" "$3" "$4"
+"$TOOLSPATH/createScenario.sh" "$1" "$2" "$3" "$4"
 
 # With parameter that contains importing scheme file path
 deploy "$1" "$2"
