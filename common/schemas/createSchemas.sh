@@ -10,7 +10,7 @@ cd $resolved_dir
 
 function wrapWithSchemaRegistryMessage() {
     NAME=$1
-    echo "{\"schema\": \"$(cat $NAME.json | sed -z -e 's/\n/\\n/g' -e 's/"/\\"/g')\", \"schemaType\": \"JSON\"}"
+    echo "{\"schema\": \"$(cat $NAME.json | awk '{gsub(/\n/, "\\n"); gsub(/"/, "\\\""); print}')\", \"schemaType\": \"JSON\"}"
 }
 
 function createSchema() {

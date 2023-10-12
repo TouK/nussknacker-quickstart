@@ -11,7 +11,7 @@ spec:
     image: ghcr.io/touk/nussknacker-quickstart/customerservice:latest
     imagePullPolicy: IfNotPresent
     ports:
-    - containerPort: 5000
+    - containerPort: 5001
     resources:
       limits:
         cpu: 100m
@@ -29,5 +29,5 @@ spec:
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 5000        
+      targetPort: 5001        
 
