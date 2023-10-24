@@ -19,6 +19,8 @@ services:
       NUSSKNACKER_LOG_LEVEL: INFO
     ports:
       - 5005:5005
+      - 3081:8080
+      - 3181:8181
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf
