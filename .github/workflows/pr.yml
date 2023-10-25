@@ -28,6 +28,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     env:
       # temporarily force NU built with scala 2.12, cause default build (2.13) does not work with Flink out of the box now.
       NUSSKNACKER_VERSION: ${{
