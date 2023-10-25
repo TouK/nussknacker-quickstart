@@ -1,8 +1,8 @@
 #!/bin/bash
 
 set -e
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
-./testStreaming.sh `realpath ../../docker/streaming/scenarios/DetectLargeTransactions.json`
+./testStreaming.sh "$(realpath ../../docker/streaming/scenarios/DetectLargeTransactions.json)"
 
 ../../docker/streaming/waitForDockerHealthchecks.sh
