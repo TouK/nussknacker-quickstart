@@ -40,7 +40,7 @@ jobs:
       - name: Install docker in macos
         if: matrix.os == 'macos-latest'
         run: |
-          brew cask install docker
+          brew install docker --cask
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
