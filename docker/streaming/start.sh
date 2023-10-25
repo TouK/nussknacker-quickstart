@@ -3,6 +3,10 @@
 set -e
 
 cd "$(dirname "$0")"
+
+ls -la
+echo "READLINK: $(readlink -f ./docker-compose-streaming.yml)"
+
 export BASE_PATH=$(pwd)
 export ADDITIONAL_COMPOSE_FILE="-f $(readlink -f ./docker-compose-streaming.yml)"
 
