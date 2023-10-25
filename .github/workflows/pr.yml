@@ -37,6 +37,10 @@ jobs:
         (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
         'latest_scala-2.12' }}
     steps:
+      - name: Install docker in macos
+        if: matrix.os == 'macos-latest'
+        run: |
+          brew cask install docker
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
