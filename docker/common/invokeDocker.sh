@@ -8,4 +8,4 @@ ls -la "/home/runner/work/nussknacker-quickstart/nussknacker-quickstart/docker/s
 ls -la "/home/runner/work/nussknacker-quickstart"
 pwd
 
-docker compose -f docker-compose.yml -f docker-compose-env.yml -f docker-compose-custom.yml --env-file="$BASE_PATH/.env" "$ADDITIONAL_COMPOSE_FILE" "$@" 
+docker compose -f docker-compose.yml -f docker-compose-env.yml -f docker-compose-custom.yml --env-file="$BASE_PATH/.env" $ADDITIONAL_COMPOSE_FILE "$@" 
