@@ -43,6 +43,7 @@ jobs:
         if: contains(matrix.os, 'macos')
         run: |
           brew install docker
+          # https://github.com/abiosoft/colima/issues/705#issuecomment-1535320270
           colima delete
           colima start --arch x86_64
       - name: Cancel previous runs
