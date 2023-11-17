@@ -41,7 +41,7 @@ jobs:
         if: contains(matrix.os, 'macos')
         timeout-minutes: 10
         run: |
-          brew install docker colima
+          brew install colima docker
           colima start -f
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
