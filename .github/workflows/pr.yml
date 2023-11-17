@@ -41,7 +41,7 @@ jobs:
         if: contains(matrix.os, 'macos')
         run: |
           brew install docker colima
-          /usr/local/opt/colima/bin/colima start -f
+          colima start -f
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
