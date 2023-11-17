@@ -40,6 +40,8 @@ jobs:
       - name: Install docker in macos
         if: contains(matrix.os, 'macos')
         timeout-minutes: 10
+        with:
+          swap-size-gb: 10
         run: |
           brew install docker
           colima delete
