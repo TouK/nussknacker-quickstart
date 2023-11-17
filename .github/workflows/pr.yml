@@ -42,8 +42,8 @@ jobs:
         timeout-minutes: 10
         run: |
           brew install colima docker
-          brew services start colima
-          export DOCKER_HOST="unix://$HOME/.colima/docker.sock"
+          colima delete
+          colima start
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
