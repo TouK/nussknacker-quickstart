@@ -39,6 +39,7 @@ jobs:
     steps:
       - name: Install docker in macos
         if: contains(matrix.os, 'macos')
+        timeout-minutes: 10
         run: |
           brew install docker colima
           colima start -f
