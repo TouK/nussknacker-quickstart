@@ -41,7 +41,7 @@ jobs:
         if: contains(matrix.os, 'macos')
         timeout-minutes: 10
         run: |
-          # brew install colima docker
+          brew install docker
           colima delete
           colima start --arch x86_64
       - name: Cancel previous runs
