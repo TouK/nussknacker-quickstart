@@ -47,7 +47,6 @@ jobs:
           # https://github.com/abiosoft/colima/issues/705#issuecomment-1535320270
           colima delete
           colima start --arch x86_64
-          docker-compose version
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
