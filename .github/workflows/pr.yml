@@ -27,7 +27,7 @@ jobs:
   docker-compose-streaming-test:
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-13]
     runs-on: ${{ matrix.os }}
     env:
       # temporarily force NU built with scala 2.12, cause default build (2.13) does not work with Flink out of the box now.
@@ -38,7 +38,7 @@ jobs:
         'latest_scala-2.12' }}
     steps:
       - name: Install docker in macos
-        if: matrix.os == 'macos-latest'
+        if: contains(matrix.os, 'macos')
         run: |
           brew install docker docker-compose
           colima start --ssh-agent
