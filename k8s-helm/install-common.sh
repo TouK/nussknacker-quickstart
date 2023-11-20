@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -ex
 
-set -ex
-
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 source .env
 
 helm repo add --force-update touk https://helm-charts.touk.pl/public
@@ -19,7 +17,7 @@ else
   DEVEL_ARG=""
 fi
 
-kubectl get secret "$RELEASE-postgresql" || cat postgres-secret.yaml | POSTGRES_PASSWORD=`date +%s | sha256sum | base64 | head -c 32` RELEASE=$RELEASE MAYBE_NAMESPACE=`kubectl config view --minify -o jsonpath='{..namespace}'` NAMESPACE=${MAYBE_NAMESPACE:-default} envsubst | kubectl apply -f -
+kubectl get secret "$RELEASE-postgresql" || cat postgres-secret.yaml | POSTGRES_PASSWORD=$(date +%s | sha256sum | base64 | head -c 32) RELEASE=$RELEASE MAYBE_NAMESPACE=$(kubectl config view --minify -o jsonpath='{..namespace}') NAMESPACE=${MAYBE_NAMESPACE:-default} envsubst | kubectl apply -f -
 
 if [[ -z $DOMAIN ]]
 then

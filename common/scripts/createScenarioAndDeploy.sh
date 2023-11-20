@@ -30,9 +30,12 @@ deploy() {
 
   echo "Waiting for status running"
 
+  # todo: to remove
+  docker ps
+
   waitTime=0
   sleep=5
-  waitLimit=360
+  waitLimit=120
   while [[ $waitTime -lt $waitLimit && $STATUS != 'RUNNING' ]]; do
     sleep "$sleep"
     waitTime=$((waitTime + sleep))
