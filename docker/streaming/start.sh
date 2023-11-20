@@ -1,6 +1,4 @@
-#!/usr/bin/env bash 
-
-set -ex
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 

@@ -32,10 +32,10 @@ deploy() {
 
   waitTime=0
   sleep=5
-  waitLimit=120
+  waitLimit=360
   while [[ $waitTime -lt $waitLimit && $STATUS != 'RUNNING' ]]; do
     sleep "$sleep"
-    waitTime=$((waitTime + sleep))
+    waitTime=$((waitTime + sleep))displayLogs
 
     STATUS=$(curl -s -L  -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status" | jq -r .status.name)
     if [[ $STATUS == 'RUNNING' ]]; then

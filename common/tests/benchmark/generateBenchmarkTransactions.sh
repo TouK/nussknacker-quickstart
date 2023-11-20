@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -ex
 
-set -e
-
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 TRANSACTION_COUNT=${1:-1000}
 CLIENT_COUNT=${2:-10}

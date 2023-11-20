@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -ex
 
-set -e
-
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 echo "Restarting docker containers"
 
