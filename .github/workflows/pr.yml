@@ -43,7 +43,7 @@ jobs:
         if: contains(matrix.os, 'macos')
         run: |
           brew update
-          brew install docker docker-compose
+          brew install docker docker-compose colima
           # https://github.com/abiosoft/colima/issues/705#issuecomment-1535320270
           colima delete
           colima start --arch x86_64
