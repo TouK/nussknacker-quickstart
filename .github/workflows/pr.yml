@@ -45,7 +45,7 @@ jobs:
           brew update
           brew install docker docker-compose
           # https://github.com/abiosoft/colima/issues/705#issuecomment-1535320270
-          colima delete
+          # colima delete
           colima start
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
