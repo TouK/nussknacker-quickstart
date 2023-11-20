@@ -1,10 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
+cd "$(dirname "$0")"
 
-cd "$(dirname $0)"
-export BASE_PATH=`pwd`
-export ADDITIONAL_COMPOSE_FILE="-f $(realpath ./docker-compose-streaming.yml)"
+source ../../common/scripts/utils.sh
+
+export BASE_PATH=$(pwd)
+export ADDITIONAL_COMPOSE_FILE="-f $(fullPath ./docker-compose-streaming.yml)"
 
 SLEEP=${1-10}
 WAIT_LIMIT=${2-120}
@@ -13,12 +14,12 @@ UNHEALTHY="x"
 waitTime=0
 
 while [[ $waitTime -lt $WAIT_LIMIT && "x$UNHEALTHY" != "x" ]]; do
-  waitTime=$((waitTime + $SLEEP))
+  waitTime=$((waitTime + "$SLEEP"))
   STATUSES=$(docker inspect --format='{{.Name}}:{{if .State.Health }}{{.State.Health.Status}}{{ else }}healthy{{ end }}' $(../common/invokeDocker.sh ps -q))
-  UNHEALTHY=$(echo $STATUSES | sed 's/\///g' | tr ' ' '\n' | grep -v ':healthy' | tr '\n' ' ')
+  UNHEALTHY=$(echo "$STATUSES" | sed 's/\///g' | tr ' ' '\n' | grep -v ':healthy' | tr '\n' ' ')
   if [[ "x$UNHEALTHY" != "x" ]]; then
     echo "Some services still not healthy: $UNHEALTHY"
-    sleep $SLEEP
+    sleep "$SLEEP"
   fi
 done
 

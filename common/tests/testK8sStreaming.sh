@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-cd "$(dirname $0)"
-set -a; . ../../k8s-helm/.env; set +a
+cd "$(dirname "$0")"
+set -a; source ../../k8s-helm/.env; set +a
 
-./testStreaming.sh `realpath ../../k8s-helm/scenarios/DetectLargeTransactionsLite.json`
+source ../scripts/utils.sh
+
+./testStreaming.sh "$(fullPath "../../k8s-helm/scenarios/DetectLargeTransactionsLite.json")"

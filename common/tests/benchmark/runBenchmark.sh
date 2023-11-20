@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
+cd "$(dirname "$0")"
 
-cd "$(dirname $0)"
+source ../../scripts/utils.sh
 
 COUNT=$1
 SCENARIO=$2
@@ -17,7 +17,7 @@ function measure() {
     echo "$NAME,$(cat /tmp/res | bc)" >> /tmp/benchmarkResult.csv
 }
 
-measure "prepareData" ./sendBenchmarkTransactions.sh transactions $COUNT
-measure "runScenario" ../../scripts/createScenarioAndDeploy.sh `realpath $SCENARIO`
+measure "prepareData" ./sendBenchmarkTransactions.sh transactions "$COUNT"
+measure "runScenario" ../../scripts/createScenarioAndDeploy.sh "$(fullPath "$SCENARIO")"
 measure "verifyResult" ./verifyScenarioFinish.sh
 
