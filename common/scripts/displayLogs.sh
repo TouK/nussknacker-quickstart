@@ -11,13 +11,12 @@ then
     echo "********************* Logs for $CONTAINER in docker **************************"
     case $CONTAINER in 
     runtime)
-        docker logs $(docker ps -q -f name=jobmanager)  # if used in swarm, container names have some random stuff appended
+        docker logs $(docker ps -qa -f name=jobmanager)  # if used in swarm, container names have some random stuff appended
         echo "\n\n\n"
-        docker logs $(docker ps -q -f name=taskmanager)  # if used in swarm, container names have some random stuff appended
+        docker logs $(docker ps -qa -f name=taskmanager)  # if used in swarm, container names have some random stuff appended
         ;;
     *)
-        docker ps -q -f name=designer
-        docker logs "$(docker ps -q -f name=designer)"
+        docker logs "$(docker ps -qa -f name=designer)"
         ;;
     esac    
 else
