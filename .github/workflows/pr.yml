@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macOS]
+        os: [ubuntu-latest, macos-13-arm64]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     env:
