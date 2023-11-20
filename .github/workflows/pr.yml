@@ -27,8 +27,8 @@ jobs:
   docker-compose-streaming-test:
     strategy:
       fail-fast: false
-      matrix:
-        os: [ubuntu-latest, self-hosted]
+      # matrix:
+      #   os: [ubuntu-latest, self-hosted]
     runs-on: self-hosted
     timeout-minutes: 30
     env:
