@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+set -ex
 
 # This script allows to create and import scenario and at the end to deploy
 
