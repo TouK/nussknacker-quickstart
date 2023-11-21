@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+cd "$(dirname "$0")"
+
 source ../scripts/utils.sh
 
 # If dir parameter not provided, fallback to script's directory
