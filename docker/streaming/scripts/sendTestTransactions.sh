@@ -1,6 +1,6 @@
-#!/bin/bash
-unset RELEASE
-set -e
+#!/bin/bash -e
 
-cd "$(dirname $0)"
+unset RELEASE || true
+
+cd "$(dirname "$0")"
 ../../../common/scripts/sendTestTransactions.sh $@
