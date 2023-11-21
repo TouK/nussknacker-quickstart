@@ -26,7 +26,10 @@ deploy() {
   fi
 
   echo "Deploying scenario $SCENARIO_NAME"
-  curl -H "$AUTHORIZATION_HEADER" -L -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
+  curl -v -H "$AUTHORIZATION_HEADER" -L -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
+
+  # todo: remove
+  kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
 
   echo "Waiting for status running"
 
