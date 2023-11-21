@@ -20,4 +20,4 @@ $WAIT_FOR_OK  "akhq/api/nussknacker/topic" "Checking AKHQ" "AKHQ not working" "a
 #TODO:
 #check test with test data
 
-echo "Everything seems fine :)"
+echo "Everything seems to be fine :)"

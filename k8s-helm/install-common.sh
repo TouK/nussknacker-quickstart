@@ -1,5 +1,15 @@
 #!/bin/bash -ex
 
+if ! command -v "helm" &> /dev/null; then
+    echo "heml does not exist. Please install it first https://helm.sh/docs/helm/helm_install/"
+    exit 1
+fi
+
+if ! command -v "kubectl" &> /dev/null; then
+    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 2
+fi
+
 cd "$(dirname "$0")"
 source .env
 

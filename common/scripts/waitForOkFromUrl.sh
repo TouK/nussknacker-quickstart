@@ -37,9 +37,6 @@ while [[ $waitTime -lt $WAIT_LIMIT && $STATUS_CODE != 200 ]]; do
 
   if [[ $STATUS_CODE != 200 ]]; then
     echo "Service still not started within $waitTime sec and response code: $STATUS_CODE.."
-
-    # todo: remove
-    docker ps -a
   fi
 done
 if [[ $STATUS_CODE != 200 ]]; then

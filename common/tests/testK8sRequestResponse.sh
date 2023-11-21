@@ -1,5 +1,10 @@
 #!/bin/bash -ex
 
+if ! command -v "kubectl" &> /dev/null; then
+    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 1
+fi
+
 cd "$(dirname "$0")"
 set -a; source ../../k8s-helm/.env; set +a
 
@@ -20,4 +25,4 @@ trap "jobs -p | xargs -r kill" SIGINT SIGTERM EXIT
 ../scripts/waitForPortAvailable.sh localhost 3181 10
 curl -d '{customerId: "4", requestedAmount: 2000, requestType: "mortgage", location: { city: "Lublin", street: "Lipowa" }}' -HContent-Type:application/json -i -f http://localhost:3181
 
-echo -e "\nEverything seems fine :)"
+echo -e "\nEverything seems to be fine :)"

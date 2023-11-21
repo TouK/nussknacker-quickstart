@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -e
+#!/bin/bash -e
 
 # This script allows to create and import scenario or fragment
 
@@ -56,7 +54,7 @@ main() {
     echo "$PROCESS_TYPE creation failed with $CODE"
     echo " ------------------ Designer container logs below this line only -----------------------"
     "$TOOLSPATH/displayLogs.sh" designer
-    exit 1
+    exit 2
   fi
 
   echo "Importing $PROCESS_TYPE $SCENARIO_NAME"

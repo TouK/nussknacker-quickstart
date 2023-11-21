@@ -20,4 +20,3 @@ function measure() {
 measure "prepareData" ./sendBenchmarkTransactions.sh transactions "$COUNT"
 measure "runScenario" ../../scripts/createScenarioAndDeploy.sh "$(fullPath "$SCENARIO")"
 measure "verifyResult" ./verifyScenarioFinish.sh
-

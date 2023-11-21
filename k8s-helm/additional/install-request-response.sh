@@ -1,7 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-cd "$(dirname $0)"
+if ! command -v "kubectl" &> /dev/null; then
+    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 1
+fi
+
+cd "$(dirname "$0")"
 set -a; . ../.env; set +a
 
 ./waitForServiceAccount.sh

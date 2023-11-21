@@ -30,9 +30,6 @@ deploy() {
 
   echo "Waiting for status running"
 
-  # todo: to remove
-  docker ps
-
   waitTime=0
   sleep=5
   waitLimit=120

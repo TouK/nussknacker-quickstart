@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
+if ! command -v "kubectl" &> /dev/null; then
+    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 1
+fi
 
 SLEEP=5
 WAIT_LIMIT=60
@@ -21,5 +24,5 @@ done
 
 if [[ $SERVICE_ACCOUNT_AVAILABLE == "false" ]]; then
   echo "Timeout after $WAIT_LIMIT seconds. Service account $SERVICE_ACCOUNT_NAME not available."
-  exit 1
+  exit 2
 fi
