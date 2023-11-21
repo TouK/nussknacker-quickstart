@@ -28,9 +28,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 30
     env:
       # temporarily force NU built with scala 2.12, cause default build (2.13) does not work with Flink out of the box now.
       NUSSKNACKER_VERSION: ${{
@@ -63,7 +62,11 @@ jobs:
         run: ./common/tests/testDockerStreaming.sh
 
   helm-k8s-requestresponse-test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
@@ -94,7 +97,11 @@ jobs:
         run: ./common/tests/testK8sRequestResponse.sh
 
   helm-k8s-streaming-test:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0

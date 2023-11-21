@@ -26,7 +26,7 @@ deploy() {
   fi
 
   echo "Deploying scenario $SCENARIO_NAME"
-  curl -H "$AUTHORIZATION_HEADER" -L -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME" &
+  curl -H "$AUTHORIZATION_HEADER" -L -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
 
   echo "Waiting for status running"
 
