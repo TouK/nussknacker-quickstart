@@ -23,6 +23,9 @@ deploy() {
      exit 1
   fi
 
+  # todo: remove
+  kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
+
   echo "Deploying scenario $SCENARIO_NAME"
   curl -Lv -H "$AUTHORIZATION_HEADER" -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
 
