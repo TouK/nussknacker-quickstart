@@ -14,7 +14,7 @@ source ../scripts/utils.sh
 
 SCENARIO_PATH=$(fullPath "../../k8s-helm/scenarios/LoanRequest.json")
 
-$WAIT_FOR_OK "api/processes" "Checking Nussknacker API response..." "Nussknacker not started" "designer"
+$WAIT_FOR_OK "api/app/healthCheck" "Checking Nussknacker Health Check API response.." "Nussknacker not started" "designer"
 $WAIT_FOR_OK  "metrics" "Checking Grafana response..." "Grafana not started" "grafana"
 ../scripts/createScenarioAndDeploy.sh "$SCENARIO_PATH"
 $WAIT_FOR_OK  "api/processes/status" "Checking status..." "Scenario not running" "designer"
