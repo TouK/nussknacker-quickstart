@@ -31,6 +31,7 @@ deploy() {
 
   # todo: remove
   kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
+  kubectl get pods,services
 
   echo "Waiting for status running"
 
