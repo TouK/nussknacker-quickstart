@@ -16,7 +16,7 @@ services:
       AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
       USAGE_REPORTS_FINGERPRINT: ${USAGE_REPORTS_FINGERPRINT-}
       USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
-      NUSSKNACKER_LOG_LEVEL: INFO
+      NUSSKNACKER_LOG_LEVEL: DEBUG
     ports:
       - 5005:5005
     volumes:
