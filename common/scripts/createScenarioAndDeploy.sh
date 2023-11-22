@@ -27,7 +27,7 @@ deploy() {
   # kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
   # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
   kubectl exec $(kubectl get pods -l app.kubernetes.io/name=nussknacker --no-headers -o custom-columns=":metadata.name") -- sh -c 'curl -v http://$NU_QUICKSTART_APICURIO_REGISTRY_SERVICE_HOST:$NU_QUICKSTART_APICURIO_REGISTRY_SERVICE_PORT/apis/ccompat/v6/subjects'
-  sleep 10
+  sleep 3
 
   echo "Deploying scenario $SCENARIO_NAME"
   curl -Lv -H "$AUTHORIZATION_HEADER" -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
