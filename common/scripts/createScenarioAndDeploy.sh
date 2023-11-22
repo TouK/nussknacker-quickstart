@@ -24,6 +24,7 @@ deploy() {
   fi
 
   # todo: remove
+  kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
   # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
   sleep 30
 
@@ -31,8 +32,8 @@ deploy() {
   curl -Lv -H "$AUTHORIZATION_HEADER" -X POST "$DESIGNER_URL/api/processManagement/deploy/$SCENARIO_NAME"
 
   # todo: remove
-  kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
-  kubectl logs nu-quickstart-kafka-0 --tail -1
+  # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
+  kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
 
   echo "Waiting for status running"
 
