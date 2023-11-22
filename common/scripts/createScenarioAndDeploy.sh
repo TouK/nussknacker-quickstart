@@ -33,6 +33,7 @@ deploy() {
   kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
   kubectl get pods,services
   kubectl logs -l app.kubernetes.io/name=nussknacker --previous --tail -1
+  sleep 30
 
   echo "Waiting for status running"
 
