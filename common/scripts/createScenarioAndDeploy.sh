@@ -24,8 +24,9 @@ deploy() {
   fi
 
   # todo: remove
-  kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
+  # kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
   # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
+  kubectl exec (kubectl get pods -l app.kubernetes.io/name=apicurio-registry --no-headers -o custom-columns=":metadata.name") -- curl -v http://localhost:8080/apis/registry/v2/search/artifacts
   sleep 30
 
   echo "Deploying scenario $SCENARIO_NAME"
@@ -33,7 +34,8 @@ deploy() {
 
   # todo: remove
   # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
-  kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
+  # kubectl logs -l app.kubernetes.io/name=apicurio-registry --tail -1
+  kubectl exec (kubectl get pods -l app.kubernetes.io/name=apicurio-registry --no-headers -o custom-columns=":metadata.name") -- curl -v http://localhost:8080/apis/registry/v2/search/artifacts
 
   echo "Waiting for status running"
 
