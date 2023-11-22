@@ -45,3 +45,6 @@ kafka:
 zookeeper:
   replicaCount: 1
 
+extraEnv:
+  - name: NUSSKNACKER_LOG_LEVEL
+    value: DEBUG
