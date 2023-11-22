@@ -34,7 +34,7 @@ deploy() {
   # kubectl logs -l app.kubernetes.io/name=nussknacker --tail -1
   # kubectl get pods,services
   # kubectl logs -l app.kubernetes.io/name=nussknacker --previous --tail -1
-  kubectl logs -l nu-quickstart-kafka-0 --tail -1
+  kubectl logs nu-quickstart-kafka-0 --tail -1
 
   echo "Waiting for status running"
 
