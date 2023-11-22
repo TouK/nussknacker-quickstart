@@ -1,7 +1,7 @@
 #!/bin/bash -ex
 
 if ! command -v "helm" &> /dev/null; then
-    echo "heml does not exist. Please install it first https://helm.sh/docs/helm/helm_install/"
+    echo "heml does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
     exit 1
 fi
 
