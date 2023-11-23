@@ -29,7 +29,7 @@ nussknacker:
         rootUrl: "http://customer-service"
     kafka:
       schemaRegistryCacheConfig:
-        availableSchemasExpirationTime: 100 ms
+        availableSchemasExpirationTime: 100 s
   usageStatisticsReportsSource: "quickstart-helmchart"
 
 persistence: 
