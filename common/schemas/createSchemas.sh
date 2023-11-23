@@ -17,8 +17,7 @@ function wrapWithSchemaRegistryMessage() {
 
 function createSchema() {
     NAME=$1
-    if [[ -z "${RELEASE}" ]]
-    then
+    if [[ -z "${RELEASE}" ]]; then
         wrapWithSchemaRegistryMessage "$NAME" | curl -d @- -H "Content-Type: application/vnd.schemaregistry.v1+json" "http://localhost:3082/subjects/$NAME/versions" -v
     else
         if ! command -v "kubectl" &> /dev/null; then
