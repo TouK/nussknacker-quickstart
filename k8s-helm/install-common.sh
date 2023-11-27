@@ -41,6 +41,7 @@ COMMAND=${COMMAND:-"upgrade -i"}
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   $ADDITIONAL_VALS \
+  --set schemas_cache_entry_ttl="0s" \
   --set image.tag="${NUSSKNACKER_VERSION}" \
   --set nussknacker.usageStatisticsReportsFingerprint="${USAGE_REPORTS_FINGERPRINT}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" $@
