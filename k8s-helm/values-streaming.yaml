@@ -27,10 +27,9 @@ nussknacker:
       openAPI:
         url: "http://customer-service/swagger"
         rootUrl: "http://customer-service"
-    modelConfig:
-      kafka:
-        schemaRegistryCacheConfig:
-          availableSchemasExpirationTime: "{{ .Values.schemas_cache_entry_ttl }}"
+    kafka:
+      schemaRegistryCacheConfig:
+        availableSchemasExpirationTime: "{{ .Values.schemas_cache_entry_ttl }}"
   usageStatisticsReportsSource: "quickstart-helmchart"
 
 persistence: 
