@@ -50,4 +50,4 @@ zookeeper:
 
 extraEnv:
   - name: NUSSKNACKER_LOG_LEVEL
-    value: TRACE
+    value: INFO

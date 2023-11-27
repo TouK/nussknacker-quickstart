@@ -126,7 +126,7 @@ jobs:
         run: COMMAND=template ./k8s-helm/install-streaming.sh
       - name: install quickstart
         shell: bash
-        run: ./k8s-helm/install-streaming.sh --debug
+        run: NUSSKNACKER_SCHEMAS_CACHE_TTL=0s ./k8s-helm/install-streaming.sh --debug
       - name: Test quickstart
         shell: bash
         run: ./common/tests/testK8sStreaming.sh
