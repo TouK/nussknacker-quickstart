@@ -26,4 +26,4 @@ else
     export AKHQ_HOST="$RELEASE-nussknacker.$DOMAIN"
 fi
 
-envsubst < akhq.yaml | helm upgrade -i $RELEASE-akhq akhq/akhq --debug --wait --values -
+envsubst < akhq.yaml | helm upgrade -i "$RELEASE-akhq" akhq/akhq --debug --wait --values -

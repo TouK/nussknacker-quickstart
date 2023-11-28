@@ -5,14 +5,10 @@ if ! command -v "helm" &> /dev/null; then
     exit 1
 fi
 
-if ! command -v "kubectl" &> /dev/null; then
-    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
-    exit 2
-fi
+cd "$(dirname "$0")"
+set -a; source .env; set +a
 
-cd "$(dirname $0)"
-set -a; . ../.env; set +a
-
-helm uninstall "$RELEASE-akhq"
 kubectl delete deployment -l nussknacker.io/nussknackerInstanceName=nu-quickstart
+helm uninstall "$RELEASE-akhq"
+kubectl delete -f additional/custom-services.yaml
 helm uninstall nu-quickstart
