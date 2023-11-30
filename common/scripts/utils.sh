@@ -17,12 +17,9 @@ sha256() {
 }
 
 local_jq() {
-    set -x
     local UTILS_DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}")" && pwd)"
   
     if ! command -v "$UTILS_DIR/jq" &> /dev/null; then
-        echo "jq is not installed. Downloading and installing jq..."
-
         # Determine the system type (Linux or macOS)
         if [[ "$(uname)" == "Linux" ]]; then
             JQ_URL=$JQ_LINUX_URL
