@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 # This script allows to create and import scenario and at the end to deploy
 
@@ -53,7 +53,7 @@ deploy() {
       echo "Cannot check status code in this iteration. HTTP status: $HTTP_CODE"
     fi
   done
-  
+
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
     "$TOOLSPATH/displayLogs.sh" runtime

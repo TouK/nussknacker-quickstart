@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 if ! command -v "helm" &> /dev/null; then
     echo "heml does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
