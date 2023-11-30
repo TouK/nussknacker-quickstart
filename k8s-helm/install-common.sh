@@ -40,8 +40,9 @@ COMMAND=${COMMAND:-"upgrade -i"}
 
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
+  --timeout=10m \
   $ADDITIONAL_VALS \
   --set image.tag="${NUSSKNACKER_VERSION}" \
   --set nussknacker.usageStatisticsReportsFingerprint="${USAGE_REPORTS_FINGERPRINT}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" \
-  --set kafka.schemaRegistryCacheConfig.availableSchemasExpirationTime="${NUSSKNACKER_SCHEMAS_CACHE_TTL:-10s}" $@
+  --set kafka.schemaRegistryCacheConfig.availableSchemasExpirationTime="${NUSSKNACKER_SCHEMAS_CACHE_TTL:-0s}" $@

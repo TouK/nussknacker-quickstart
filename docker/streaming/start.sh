@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+./clean.sh || true
+
 source ../../common/scripts/utils.sh
 
 export BASE_PATH=$(pwd)
