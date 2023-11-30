@@ -6,7 +6,7 @@ services:
     hostname: customerservice
     image: ghcr.io/touk/nussknacker-quickstart/customerservice:latest
     ports:
-      - "5000:5000"
+      - "5001:5000"
 
   postgres:
     container_name: nussknacker_postgres

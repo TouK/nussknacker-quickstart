@@ -1,6 +1,5 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 ./install-common.sh -f values-request-response.yaml

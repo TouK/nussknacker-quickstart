@@ -3,21 +3,23 @@ version: '3.8'
 services:
   designer:
     container_name: nussknacker_designer
-    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest_scala-2.12}
-    ports:
-      - "3081:8080"
-      - "3181:8181"  
+    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-latest_scala-2.12}  
     environment:
       #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
       CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
-      JDK_JAVA_OPTIONS: -Xmx256M
+      JDK_JAVA_OPTIONS: -Xmx512M
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE-}
       INFLUXDB_URL: http://influxdb:8086
-      OPENAPI_SERVICE_URL: http://customerservice:5000
+      OPENAPI_SERVICE_URL: http://customerservice:5001
       AUTO_OFFSET_RESET: ${AUTO_OFFSET_RESET-latest}
       USAGE_REPORTS_FINGERPRINT: ${USAGE_REPORTS_FINGERPRINT-}
       USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
+      NUSSKNACKER_LOG_LEVEL: DEBUG
+      AVAILABLE_SCHEMAS_EXPIRATION_TIME: ${AVAILABLE_SCHEMAS_EXPIRATION_TIME:-0s}
+    ports:
+      - 5005:5005
     volumes:
       - storage_designer:/opt/nussknacker/storage
       - ${BASE_PATH}/nussknacker/nussknacker.conf:/opt/nussknacker/conf/nussknacker.conf

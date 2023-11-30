@@ -1,7 +1,5 @@
-#!/bin/sh
+#!/bin/sh -e
 
-set -e
+cd "$(dirname "$0")"
 
-cd "$(dirname $0)"
-
-./runInKafka.sh kafka-console-producer --topic $1 --bootstrap-server localhost:9092
+./runInKafka.sh kafka-console-producer --topic "$1" --bootstrap-server localhost:9092

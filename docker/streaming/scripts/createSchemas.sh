@@ -1,6 +1,5 @@
-#!/bin/bash
-unset RELEASE
-set -e
+#!/bin/bash -e
+unset RELEASE || true
 
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 ../../../common/schemas/createSchemas.sh $@

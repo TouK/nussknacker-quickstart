@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 TOPIC=${1-transactions}
 TRANSACTION_COUNT=${2-1000}

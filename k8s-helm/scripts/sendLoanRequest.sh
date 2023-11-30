@@ -1,7 +1,6 @@
-#!/usr/bin/bash
+#!/bin/bash -e
 
-set -e
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 MAX_SAMPLE_POSITION=$(cat sampleLoanRequests.txt | wc -l)
 

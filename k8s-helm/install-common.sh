@@ -1,8 +1,16 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -ex
+if ! command -v "helm" &> /dev/null; then
+    echo "heml does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 1
+fi
 
-cd "$(dirname $0)"
+if ! command -v "kubectl" &> /dev/null; then
+    echo "kubectl does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    exit 2
+fi
+
+cd "$(dirname "$0")"
 source .env
 
 helm repo add --force-update touk https://helm-charts.touk.pl/public
@@ -19,7 +27,7 @@ else
   DEVEL_ARG=""
 fi
 
-kubectl get secret "$RELEASE-postgresql" || cat postgres-secret.yaml | POSTGRES_PASSWORD=`date +%s | sha256sum | base64 | head -c 32` RELEASE=$RELEASE MAYBE_NAMESPACE=`kubectl config view --minify -o jsonpath='{..namespace}'` NAMESPACE=${MAYBE_NAMESPACE:-default} envsubst | kubectl apply -f -
+kubectl get secret "$RELEASE-postgresql" || cat postgres-secret.yaml | POSTGRES_PASSWORD=$(source ../common/scripts/utils.sh && date +%s | sha256 | base64 | head -c 32) RELEASE=$RELEASE MAYBE_NAMESPACE=$(kubectl config view --minify -o jsonpath='{..namespace}') NAMESPACE=${MAYBE_NAMESPACE:-default} envsubst | kubectl apply -f -
 
 if [[ -z $DOMAIN ]]
 then
@@ -32,8 +40,9 @@ COMMAND=${COMMAND:-"upgrade -i"}
 
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
+  --timeout=10m \
   $ADDITIONAL_VALS \
   --set image.tag="${NUSSKNACKER_VERSION}" \
   --set nussknacker.usageStatisticsReportsFingerprint="${USAGE_REPORTS_FINGERPRINT}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" \
-  --set kafka.schemaRegistryCacheConfig.availableSchemasExpirationTime="${NUSSKNACKER_SCHEMAS_CACHE_TTL:-10s}" $@
+  --set kafka.schemaRegistryCacheConfig.availableSchemasExpirationTime="${NUSSKNACKER_SCHEMAS_CACHE_TTL:-0s}" $@

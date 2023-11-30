@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-set -e
+#!/bin/bash -e
 
 # This script allows to create and import scenario or fragment
 
@@ -10,7 +8,9 @@ then
   exit 1
 fi
 
-TOOLSPATH="$(dirname $0)"
+cd "$(dirname "$0")"
+
+TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
@@ -20,14 +20,14 @@ fi
 
 main() {
   SCENARIO_PATH=$1
-  SCENARIO_NAME=`cat $SCENARIO_PATH | jq -r .metaData.id`
+  SCENARIO_NAME=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.id)
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
   CATEGORY=${3:-"Default"}
   FORCE_REMOVE=${4-"false"}
 
-  TYPE_SPECIFIC_DATA=`cat $SCENARIO_PATH | jq -r .metaData.typeSpecificData.type`
+  TYPE_SPECIFIC_DATA=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.typeSpecificData.type)
   PROCESS_TYPE="Scenario"
   IS_FRAGMENT=false
 
@@ -55,8 +55,8 @@ main() {
   else
     echo "$PROCESS_TYPE creation failed with $CODE"
     echo " ------------------ Designer container logs below this line only -----------------------"
-    $TOOLSPATH/displayLogs.sh designer
-    exit 1
+    "$TOOLSPATH/displayLogs.sh" designer
+    exit 2
   fi
 
   echo "Importing $PROCESS_TYPE $SCENARIO_NAME"

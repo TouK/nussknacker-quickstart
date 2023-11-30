@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
 TOPIC=${1}
 RECORD_COUNT=${2}
@@ -10,7 +8,7 @@ SLEEP=${3-10}
 WAIT_LIMIT=${4-120}
 
 calcOffsetSumInTopic() {
-  ./runInKafka.sh  kafka-run-class kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic $TOPIC |
+  ./runInKafka.sh  kafka-run-class kafka.tools.GetOffsetShell --broker-list localhost:9092 --topic "$TOPIC" |
   grep -e ':[[:digit:]]*:' | awk -F ":" '{sum += $3} END {print sum}'
 }
 

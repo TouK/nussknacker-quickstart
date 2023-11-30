@@ -1,8 +1,11 @@
-#!/bin/bash
+#!/bin/bash -e
 
-set -e
-cd "$(dirname $0)"
+cd "$(dirname "$0")"
 
-./testStreaming.sh `realpath ../../docker/streaming/scenarios/DetectLargeTransactions.json`
+source ../scripts/utils.sh
+
+../scripts/waitForOkFromUrl.sh "api/app/healthCheck" "Checking Nussknacker Health Check API response.." "Nussknacker not started" "designer"
+
+./testStreaming.sh "$(fullPath ../../docker/streaming/scenarios/DetectLargeTransactions.json)"
 
 ../../docker/streaming/waitForDockerHealthchecks.sh
