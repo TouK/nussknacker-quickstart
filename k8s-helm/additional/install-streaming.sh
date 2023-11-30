@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 if ! command -v "helm" &> /dev/null; then
     echo "helm does not exist. Please install it first https://helm.sh/docs/helm/helm_install/"

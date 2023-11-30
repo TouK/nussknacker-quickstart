@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 unset RELEASE || true
 
 cd "$(dirname "$0")"
