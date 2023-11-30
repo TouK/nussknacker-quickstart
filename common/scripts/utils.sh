@@ -17,6 +17,7 @@ sha256() {
 }
 
 local_jq() {
+    set -x
     local UTILS_DIR="$(cd -P "$( dirname "${BASH_SOURCE[0]}")" && pwd)"
   
     if ! command -v "$UTILS_DIR/jq" &> /dev/null; then
@@ -37,5 +38,5 @@ local_jq() {
         chmod +x "$UTILS_DIR/jq"
     fi
 
-    "$UTILS_DIR/jq" $@
+    "$UTILS_DIR"/jq $@
 }
