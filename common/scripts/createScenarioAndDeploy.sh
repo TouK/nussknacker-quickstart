@@ -37,14 +37,23 @@ deploy() {
     sleep "$sleep"
     waitTime=$((waitTime + sleep))
 
-    STATUS=$(source ./utils.sh && curl -s -L  -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status" | local_jq -r .status.name)
-    if [[ $STATUS == 'RUNNING' ]]; then
-      echo "Scenario deployed within $waitTime sec"
-      exit 0
+    RESPONSE=$(curl -s -L -w "\n%{http_code}" -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status")
+    HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
+    RESPNSE_BODY=$(echo "$RESPONSE" | sed \$d)
+
+    if [[ "$HTTP_CODE" == 200 ]]; then
+      STATUS=$(source ./utils.sh && echo "$RESPNSE_BODY" | local_jq -r .status.name)
+      if [[ $STATUS == 'RUNNING' ]]; then
+        echo "Scenario deployed within $waitTime sec"
+        exit 0
+      else
+        echo "Scenario still not deployed within $waitTime sec with actual status: $STATUS.."
+      fi
     else
-      echo "Scenario still not deployed within $waitTime sec with actual status: $STATUS.."
+      echo "Cannot check status code in this iteration. HTTP status: $HTTP_CODE"
     fi
   done
+  
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
     "$TOOLSPATH/displayLogs.sh" runtime
