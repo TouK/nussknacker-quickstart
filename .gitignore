@@ -5,3 +5,4 @@ target
 .metals
 .vscode
 .DS_Store
+common/scripts/jq

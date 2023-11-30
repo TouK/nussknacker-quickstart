@@ -2,6 +2,8 @@
 
 # This script allows to create and import scenario and at the end to deploy
 
+cd "$(dirname "$0")"
+
 TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
@@ -12,8 +14,8 @@ fi
 
 deploy() {
   SCENARIO_PATH=$1
-  SCENARIO_NAME=$(cat "$SCENARIO_PATH" | jq -r .metaData.id)
-  TYPE_SPECIFIC_DATA=$(cat "$SCENARIO_PATH" | jq -r .metaData.typeSpecificData.type)
+  SCENARIO_NAME=$(source ./utils.sh && cat "$SCENARIO_PATH" | local_jq -r .metaData.id)
+  TYPE_SPECIFIC_DATA=$(source ./utils.sh && cat "$SCENARIO_PATH" | local_jq -r .metaData.typeSpecificData.type)
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
@@ -35,7 +37,7 @@ deploy() {
     sleep "$sleep"
     waitTime=$((waitTime + sleep))
 
-    STATUS=$(curl -s -L  -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status" | jq -r .status.name)
+    STATUS=$(source ./utils.sh && curl -s -L  -H "$AUTHORIZATION_HEADER" -X GET "$DESIGNER_URL/api/processes/$SCENARIO_NAME/status" | local_jq -r .status.name)
     if [[ $STATUS == 'RUNNING' ]]; then
       echo "Scenario deployed within $waitTime sec"
       exit 0

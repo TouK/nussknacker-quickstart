@@ -8,6 +8,8 @@ then
   exit 1
 fi
 
+cd "$(dirname "$0")"
+
 TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
@@ -18,14 +20,14 @@ fi
 
 main() {
   SCENARIO_PATH=$1
-  SCENARIO_NAME=$(cat $SCENARIO_PATH | jq -r .metaData.id)
+  SCENARIO_NAME=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.id)
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
   CATEGORY=${3:-"Default"}
   FORCE_REMOVE=${4-"false"}
 
-  TYPE_SPECIFIC_DATA=$(cat $SCENARIO_PATH | jq -r .metaData.typeSpecificData.type)
+  TYPE_SPECIFIC_DATA=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.typeSpecificData.type)
   PROCESS_TYPE="Scenario"
   IS_FRAGMENT=false
 
