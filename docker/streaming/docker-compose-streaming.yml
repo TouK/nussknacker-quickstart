@@ -171,7 +171,6 @@ services:
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081  
       DEFAULT_SCENARIO_TYPE: streaming
-      AVAILABLE_SCHEMAS_EXPIRATION_TIME: 0s
     volumes:
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
