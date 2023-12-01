@@ -7,6 +7,8 @@ source ../../scripts/utils.sh
 COUNT=$1
 SCENARIO=$2
 
+sleep 60
+
 rm -f /tmp/benchmarkResult.txt
 
 function measure() {

@@ -4,7 +4,7 @@
 
 cd "$(dirname "$0")"
 
-TOOLSPATH="$(dirname "$0")"
+TOOLSPATH="$pwd"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
