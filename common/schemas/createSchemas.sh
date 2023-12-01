@@ -2,6 +2,8 @@
 
 cd "$(dirname "$0")"
 
+sleep 60
+
 source ../scripts/utils.sh
 
 # If dir parameter not provided, fallback to script's directory
