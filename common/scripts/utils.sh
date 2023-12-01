@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 JQ_LINUX_URL="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64"
 JQ_MAC_URL="https://github.com/stedolan/jq/releases/download/jq-1.6/jq-osx-amd64"
