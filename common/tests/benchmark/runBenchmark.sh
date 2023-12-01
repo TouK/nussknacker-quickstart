@@ -7,7 +7,7 @@ source ../../scripts/utils.sh
 COUNT=$1
 SCENARIO=$2
 
-sleep 60
+sleep 30
 
 rm -f /tmp/benchmarkResult.txt
 
@@ -15,7 +15,8 @@ function measure() {
     NAME=$1
     shift
     echo "Running $NAME stage of benchmark"
-    /usr/bin/time -o /tmp/res -f "%e*1000" $@ 
+    # /usr/bin/time -o /tmp/res -f "%e*1000" $@ 
+    /usr/bin/time -o /tmp/res $@ 
     echo "$NAME,$(cat /tmp/res | bc)" >> /tmp/benchmarkResult.csv
 }
 

@@ -4,8 +4,6 @@
 
 cd "$(dirname "$0")"
 
-TOOLSPATH="$pwd"
-
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
 else 
@@ -56,13 +54,13 @@ deploy() {
 
   if [[ "$STATUS" != 'RUNNING' ]]; then
     echo "Deployed scenario couldn't start running"
-    "$TOOLSPATH/displayLogs.sh" runtime
+    ./displayLogs.sh runtime
     exit 1
   fi
 }
 
 # Create and import scenario
-"$TOOLSPATH/createScenario.sh" "$1" "$2" "$3" "$4"
+./createScenario.sh "$1" "$2" "$3" "$4"
 
 # With parameter that contains importing scheme file path
 deploy "$1" "$2"
