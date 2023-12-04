@@ -17,10 +17,10 @@ function runInKafka() {
 #is running at the same time
 echo "Preparing topics"
 
-runInKafka kafka-topics --delete --topic alerts --bootstrap-server localhost:9092 --if-eists
+runInKafka kafka-topics --delete --topic alerts --bootstrap-server localhost:9092 --if-exists
 runInKafka kafka-topics --create --topic alerts --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
-runInKafka kafka-topics --delete --topic "$TOPIC" --bootstrap-server localhost:9092 --if-eists
+runInKafka kafka-topics --delete --topic "$TOPIC" --bootstrap-server localhost:9092 --if-exists
 runInKafka kafka-topics --create --topic "$TOPIC" --bootstrap-server localhost:9092 --partitions "$PARTITION_COUNT" --replication-factor 1
 
 ../../schemas/createSchemas.sh
