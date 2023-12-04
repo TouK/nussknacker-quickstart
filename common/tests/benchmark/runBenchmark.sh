@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 cd "$(dirname "$0")"
 
@@ -16,7 +16,6 @@ function measure() {
     shift
     echo "Running $NAME stage of benchmark"
     /usr/bin/time -o /tmp/res -f "%e*1000" $@ 
-    # /usr/bin/time -o /tmp/res $@ 
     echo "$NAME,$(cat /tmp/res | bc)" >> /tmp/benchmarkResult.csv
 }
 

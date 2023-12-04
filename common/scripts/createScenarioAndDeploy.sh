@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 # This script allows to create and import scenario and at the end to deploy
 

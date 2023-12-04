@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 if ! command -v "docker-compose" &> /dev/null; then
     echo "docker-compose does not exist. Please install it first https://docs.docker.com/compose/install/"
