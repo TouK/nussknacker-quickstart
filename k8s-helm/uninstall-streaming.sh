@@ -8,6 +8,12 @@ fi
 cd "$(dirname "$0")"
 set -a; source .env; set +a
 
+displayLogs() {
+    scripts/displayAllPodLogs.sh
+}
+
+trap displayLogs ERR
+
 kubectl delete deployment -l nussknacker.io/nussknackerInstanceName=nu-quickstart
 helm uninstall "$RELEASE-akhq"
 kubectl delete -f additional/custom-services.yaml

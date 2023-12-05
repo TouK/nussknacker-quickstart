@@ -3,9 +3,9 @@
 cd "$(dirname "$0")"
 
 displayLogs() {
-    scripts/displayAllPodLogs.sh
+    ../../../k8s-helm/scripts/displayAllPodLogs.sh
 }
 
 trap displayLogs ERR
 
-./install-common.sh -f values-streaming.yaml
+./runBenchmark.sh
