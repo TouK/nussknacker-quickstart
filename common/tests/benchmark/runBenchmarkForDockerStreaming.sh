@@ -9,4 +9,4 @@ displayLogs() {
 
 trap displayLogs ERR
 
-./runBenchmark.sh
+./runBenchmark.sh $@ 
