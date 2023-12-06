@@ -15,3 +15,4 @@ source ../../common/scripts/utils.sh
 export ADDITIONAL_COMPOSE_FILE="-f $(fullPath ./docker-compose-streaming.yml)"
 
 ../common/restartDocker.sh
+./waitForDesignerStart.sh
