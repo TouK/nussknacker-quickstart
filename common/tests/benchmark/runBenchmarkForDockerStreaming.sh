@@ -3,8 +3,7 @@
 cd "$(dirname "$0")"
 
 displayLogs() {
-    export BASE_PATH="../../docker/streaming/"
-    ../../../docker/common/displayAllDockerLogs.sh 
+    ../../../docker/streaming/displayAllStreamingDockerLogs.sh 
 }
 
 trap displayLogs ERR
