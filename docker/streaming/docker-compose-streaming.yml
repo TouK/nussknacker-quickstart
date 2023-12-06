@@ -111,6 +111,7 @@ services:
   jobmanager:
     container_name: nussknacker_jobmanager
     image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    restart: unless-stopped
     ports:
       - "3031:8081"
       - "9249:9249"
@@ -138,6 +139,7 @@ services:
   taskmanager:
     container_name: nussknacker_taskmanager
     image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    restart: unless-stopped
     ports:
       - "3063:9069"
       - "9009:9009"
@@ -175,7 +177,7 @@ services:
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
     healthcheck:
-      test: ["CMD-SHELL", "curl localhost:8081/api/app/healthCheck"]
+      test: ["CMD-SHELL", "curl localhost:8080/api/app/healthCheck"]
       interval: 20s
       retries: 10
     depends_on:
@@ -183,6 +185,10 @@ services:
         condition: service_healthy
       kafka:
         condition: service_healthy
+      jobmanager:
+        condition: service_started
+      taskmanager:
+        condition: service_started
 
 volumes:
   storage_zookeeper_datalog:

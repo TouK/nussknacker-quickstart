@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash -ex
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 
