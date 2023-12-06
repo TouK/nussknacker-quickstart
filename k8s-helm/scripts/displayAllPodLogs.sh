@@ -5,12 +5,13 @@ if ! command -v "kubectl" &> /dev/null; then
     exit 1
 fi
 
+echo "--------------------------------------------------------------------"
 echo "Displaying logs from all pods ..."
 echo "--------------------------------------------------------------------"
 
 for pod in $(kubectl get pods -l app.kubernetes.io/instance=nu-quickstart --template='{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}'); do
     echo "Logs for Pod: $pod"
-    kubectl logs "$pod"
+    kubectl logs "$pod" 
     echo "--------------------------------------------------------------------"
 done
 
