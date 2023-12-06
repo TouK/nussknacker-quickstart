@@ -8,7 +8,7 @@ services:
       #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
       CONFIG_FILE: ${NUSSKNACKER_CONFIG_FILE-/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/nussknacker.conf}
-      JDK_JAVA_OPTIONS: -Xmx512M
+      JDK_JAVA_OPTIONS: -Xmx1024M
       JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
       DEFAULT_SCENARIO_TYPE: ${DEFAULT_SCENARIO_TYPE-}
       INFLUXDB_URL: http://influxdb:8086
