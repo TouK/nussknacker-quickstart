@@ -6,8 +6,6 @@ TIMEOUT_SECONDS=120
 TIMEOUT_START=$(date +%s)
 TIMEOUT_END=$((TIMEOUT_START + TIMEOUT_SECONDS))
 
-../common/invokeDocker.sh restart designer # todo: remove
-
 echo "Waiting for Nu Designer start ..."
 
 while true; do

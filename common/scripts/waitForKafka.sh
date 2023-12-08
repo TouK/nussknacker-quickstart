@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 
@@ -20,14 +20,12 @@ do
   sleep "$SLEEP"
   waitTime=$((WAIT_LIMIT+SLEEP))
   offsetSum=$(calcOffsetSumInTopic)
-  if [[ offsetSum -lt $((RECORD_COUNT)) ]]
-  then
+  if [[ $offsetSum -lt $((RECORD_COUNT)) ]]; then
     echo "All records have yet not been obtained by kafka within $waitTime sec, $offsetSum records processed so far."
   fi
 done
 
-if [[ offsetSum -lt $RECORD_COUNT ]]
-then
+if [[ $offsetSum -lt $RECORD_COUNT ]]; then
   echo "Records not obtained within time limit"
   exit 1
 fi

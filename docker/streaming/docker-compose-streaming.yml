@@ -144,10 +144,12 @@ services:
       - "3063:9069"
       - "9009:9009"
       - "9008:9008"
+      - "5010:5010"
     entrypoint: /flink-entrypoint.sh
     command: taskmanager
     environment:
       TASK_MANAGER_NUMBER_OF_TASK_SLOTS: 40
+      _JAVA_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5010
     depends_on:
       - zookeeper
       - kafka

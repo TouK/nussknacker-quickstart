@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 if [ -z "${RELEASE}" ]; then
   if ! command -v "docker" &> /dev/null; then

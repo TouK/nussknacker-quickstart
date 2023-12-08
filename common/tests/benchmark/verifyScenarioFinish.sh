@@ -1,11 +1,11 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 
-COMMAND="kafka-console-consumer --bootstrap-server localhost:9092 --topic alerts --from-beginning --max-messages 1"
-TIMEOUT=360s
+TIMEOUT_MS=$((60 * 60 * 100))
+COMMAND="kafka-console-consumer --bootstrap-server localhost:9092 --topic alerts --max-messages 1 --partition 0 --offset 0 --timeout-ms $TIMEOUT_MS"
 
-if timeout $TIMEOUT ../../scripts/runInKafka.sh $COMMAND | grep -q "Last request"; then
+if ../../scripts/runInKafka.sh "$COMMAND" | grep -q "Last request"; then
   echo "Last request has been processed"
   exit 0
 else
