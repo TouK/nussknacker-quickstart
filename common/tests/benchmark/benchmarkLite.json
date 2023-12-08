@@ -184,6 +184,13 @@
               "language" : "spel",
               "expression" : "\"Last request\""
             }
+          },
+          {
+            "name" : "eventDate",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#DATE.now.toEpochMilli"
+            }
           }
         ]
       },
