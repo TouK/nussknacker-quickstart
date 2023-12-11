@@ -34,7 +34,6 @@ jobs:
       - name: install quickstart
         shell: bash
         env:
-          AUTO_OFFSET_RESET: earliest
           KAFKA_AUTO_OFFSET_RESET: earliest
         run: ./docker/streaming/start.sh
       - name: Test
