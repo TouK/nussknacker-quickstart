@@ -12,7 +12,7 @@ rm -f /tmp/benchmarkResult.txt
 function measure() {
     NAME=$1
     shift
-    echo "Running $NAME stage of benchmark"
+    echo "Running $NAME stage of benchmark" 
     /usr/bin/time -o /tmp/res -f "%e*1000" $@ 
     echo "$NAME,$(cat /tmp/res | bc)" >> /tmp/benchmarkResult.csv
 }

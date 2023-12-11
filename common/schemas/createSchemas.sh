@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 source ../scripts/utils.sh
 
 # If dir parameter not provided, fallback to script's directory
-dir=${1:-$(dirname "$0")}
+dir=${1:-$pwd}
 resolved_dir=$(fullPath "$dir")
 echo "Registering schemas from $resolved_dir"
 cd "$resolved_dir"

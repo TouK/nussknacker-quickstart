@@ -7,6 +7,12 @@ fi
 
 cd "$(dirname "$0")"
 
+displayLogs() {
+    scripts/displayAllPodLogs.sh
+}
+
+trap displayLogs ERR
+
 kubectl delete deployment -l nussknacker.io/nussknackerInstanceName=nu-quickstart
 kubectl delete -f additional/custom-services.yaml
 helm uninstall nu-quickstart

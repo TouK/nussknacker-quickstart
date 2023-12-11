@@ -14,4 +14,4 @@ source ../../common/scripts/utils.sh
 
 export ADDITIONAL_COMPOSE_FILE="-f $(fullPath ./docker-compose-streaming.yml)"
 
-../common/invokeDocker.sh stop
+../common/invokeDocker.sh ps -a

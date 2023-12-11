@@ -3,9 +3,9 @@ image:
 
 resources:
   limits:
-    memory: 512Mi
+    memory: 1024Mi
   requests:
-    memory: 256Mi
+    memory: 512Mi
 
 ingress:
   enabled: true
@@ -17,7 +17,9 @@ nussknacker:
     kafka:
       kafkaProperties:
         auto.offset.reset: "earliest"
-
+      schemaRegistryCacheConfig:
+        availableSchemasExpirationTime: "0s"
+        
 persistence:
   enabled: false
 
@@ -33,3 +35,7 @@ kafka:
 
 zookeeper:
   replicaCount: 1
+
+extraEnv:
+  - name: KAFKA_AUTO_OFFSET_RESET
+    value: earliest

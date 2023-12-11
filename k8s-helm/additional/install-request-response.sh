@@ -8,6 +8,12 @@ fi
 cd "$(dirname "$0")"
 set -a; . ../.env; set +a
 
+displayLogs() {
+    ../scripts/displayAllPodLogs.sh
+}
+
+trap displayLogs ERR
+
 ./waitForServiceAccount.sh
 
 kubectl apply -f custom-services.yaml

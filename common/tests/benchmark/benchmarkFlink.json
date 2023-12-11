@@ -189,7 +189,7 @@
             "name" : "eventDate",
             "expression" : {
               "language" : "spel",
-              "expression" : ""
+              "expression" : "#DATE.now.toEpochMilli"
             }
           }
         ]

@@ -8,6 +8,12 @@ fi
 cd "$(dirname "$0")"
 set -a; source ../../k8s-helm/.env; set +a
 
+displayLogs() {
+    ../../k8s-helm/scripts/displayAllPodLogs.sh
+}
+
+trap displayLogs ERR
+
 WAIT_FOR_OK="../scripts/waitForOkFromUrl.sh"
 
 source ../scripts/utils.sh

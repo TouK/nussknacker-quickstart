@@ -13,6 +13,12 @@ fi
 cd "$(dirname $0)"
 set -a; . ../.env; set +a
 
+displayLogs() {
+    ../scripts/displayAllPodLogs.sh
+}
+
+trap displayLogs ERR
+
 ./waitForServiceAccount.sh
 
 export AKHQ_SECURITY_GROUP=admin
