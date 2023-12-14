@@ -187,6 +187,15 @@ services:
       - kafka
       - jobmanager
       - taskmanager
+#   Change this back after to non-list syntax with conditions after resolving problems with docker swarm
+#      schemaregistry:
+#        condition: service_healthy
+#      kafka:
+#        condition: service_healthy
+#      jobmanager:
+#        condition: service_started
+#      taskmanager:
+#        condition: service_started
 
 volumes:
   storage_zookeeper_datalog:
