@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 displayLogs() {
-    export BASE_PATH=$(pwd)
+    export BASE_PATH="$(fullPath ../../docker/streaming)"
     ../../docker/common/displayAllDockerLogs.sh 
 }
 
