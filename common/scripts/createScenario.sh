@@ -63,14 +63,14 @@ main() {
 
   RESPONSE=$(curl -s -L -F "process=@$SCENARIO_PATH" -w "\n%{http_code}" -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processes/import/$SCENARIO_NAME")
   HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
-  SCENARIO=$(echo "$RESPONSE" | sed \$d)
+  SCENARIO=$(echo "$RESPONSE" | sed \$d  | jq .scenarioGraph)
   if [[ "$HTTP_CODE" != 200 ]]; then
     echo "Failed to import $PROCESS_TYPE"
     exit 1
   fi
 
   echo "Saving $PROCESS_TYPE $SCENARIO_NAME"
-  START='{"process":'
+  START='{"scenarioGraph":'
   END=',"comment": ""}'
   curl -s -o /dev/null -L  -H "$AUTHORIZATION_HEADER" -H 'Accept: application/json, text/plain, */*' -H 'Content-Type: application/json;charset=UTF-8' \
     --data-raw "${START}${SCENARIO}${END}" -X PUT "$DESIGNER_URL/api/processes/$SCENARIO_NAME"
