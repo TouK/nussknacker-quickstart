@@ -18,9 +18,13 @@ helm repo add --force-update touk-snapshots https://helm-charts.touk.pl/nexus/re
 helm repo update
 
 if [[ "$DEVEL" = true ]]; then
+  # TODO This probably shouldn't be in the quickstart script, it is mostly for the CI case to has a quick feedback
+  # TODO that changes in the chart doesn't break scripts that user will use in the next released version during quickstart following
+  CHART_VERSION="^1.14.0-SNAPSHOT"
   HELM_REPO=${HELM_REPO:-touk-snapshots/nussknacker}
   DEVEL_ARG="--devel"
 else
+  CHART_VERSION=${CHART_VERSION:-1.13.0}
   HELM_REPO=${HELM_REPO:-touk/nussknacker}
   DEVEL_ARG=""
 fi
@@ -35,14 +39,12 @@ else
 fi
 
 IMAGE_VERSION_VALS=""
-if [[ -z $NUSSKNACKER_VERSION ]]
+if [[ -n $NUSSKNACKER_VERSION ]]
 then
   IMAGE_VERSION_VALS="--set image.tag=$NUSSKNACKER_VERSION"
 fi
 
 COMMAND=${COMMAND:-"upgrade -i"}
-
-CHART_VERSION=${CHART_VERSION:-1.13.0}
 
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
