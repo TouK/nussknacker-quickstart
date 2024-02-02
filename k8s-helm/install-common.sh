@@ -19,11 +19,9 @@ helm repo update
 
 if [[ "$DEVEL" = true ]]; then
   HELM_REPO=${HELM_REPO:-touk-snapshots/nussknacker}
-  NUSSKNACKER_VERSION=${NUSSKNACKER_VERSION:-staging-latest}
   DEVEL_ARG="--devel"
 else
   HELM_REPO=${HELM_REPO:-touk/nussknacker}
-  NUSSKNACKER_VERSION=${NUSSKNACKER_VERSION:-latest}
   DEVEL_ARG=""
 fi
 
@@ -31,18 +29,27 @@ kubectl get secret "$RELEASE-postgresql" || cat postgres-secret.yaml | POSTGRES_
 
 if [[ -z $DOMAIN ]]
 then
-  ADDITIONAL_VALS="--set ingress.skipHost=true"
+  INGRESS_VALS="--set ingress.skipHost=true"
 else 
-  ADDITIONAL_VALS="--set ingress.skipHost=false --set ingress.domain=$DOMAIN"
+  INGRESS_VALS="--set ingress.skipHost=false --set ingress.domain=$DOMAIN"
+fi
+
+IMAGE_VERSION_VALS=""
+if [[ -z $NUSSKNACKER_VERSION ]]
+then
+  IMAGE_VERSION_VALS="--set image.tag=$NUSSKNACKER_VERSION"
 fi
 
 COMMAND=${COMMAND:-"upgrade -i"}
 
+CHART_VERSION=${CHART_VERSION:-1.13.0}
+
 helm $COMMAND $DEVEL_ARG "${RELEASE}" $HELM_REPO \
   --wait \
   --timeout=10m \
-  $ADDITIONAL_VALS \
-  --set image.tag="${NUSSKNACKER_VERSION}" \
+  --version "$CHART_VERSION" \
+  $INGRESS_VALS \
+  $IMAGE_VERSION_VALS \
   --set nussknacker.usageStatisticsReportsFingerprint="${USAGE_REPORTS_FINGERPRINT}" \
   --set postgresql.auth.existingSecret="${RELEASE}-postgresql" \
   --set kafka.schemaRegistryCacheConfig.availableSchemasExpirationTime="${NUSSKNACKER_SCHEMAS_CACHE_TTL:-0s}" $@
