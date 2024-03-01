@@ -14,8 +14,10 @@ TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
+  ENGINE="Flink"
 else 
   DESIGNER_URL=http://$RELEASE-nussknacker.$DOMAIN
+  ENGINE="Lite K8s"
 fi
 
 main() {
@@ -27,13 +29,18 @@ main() {
   CATEGORY=${3:-"Default"}
   FORCE_REMOVE=${4-"false"}
 
-  TYPE_SPECIFIC_DATA=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.typeSpecificData.type)
+  META_DATA_TYPE=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.additionalFields.metaDataType)
   PROCESS_TYPE="Scenario"
   IS_FRAGMENT=false
 
-  if [[ "$TYPE_SPECIFIC_DATA" == "FragmentSpecificData" ]]; then
+  if [[ "$META_DATA_TYPE" == "FragmentSpecificData" ]]; then
     PROCESS_TYPE="Fragment"
     IS_FRAGMENT=true
+  fi
+  if [[ "$META_DATA_TYPE" == "StreamMetaData" || "$META_DATA_TYPE" == "LiteStreamMetaData" ]]; then
+    PROCESSING_MODE="Unbounded-Stream"
+  elif [[ "$META_DATA_TYPE" == "RequestResponseMetaData" ]]; then
+    PROCESSING_MODE="Request-Response"
   fi
 
   if [[ "$FORCE_REMOVE" == "true" ]]; then
@@ -46,8 +53,9 @@ main() {
     curl -L -H "$AUTHORIZATION_HEADER" -X DELETE "$DESIGNER_URL/api/processes/$SCENARIO_NAME" -v
   fi
 
-  echo "Creating $PROCESS_TYPE $SCENARIO_PATH"
-  CODE=$(curl -s -L -o /dev/null -w "%{http_code}" -H "$AUTHORIZATION_HEADER" -X POST "$DESIGNER_URL/api/processes/$SCENARIO_NAME/$CATEGORY?isSubprocess=$IS_FRAGMENT")
+  echo "Creating $PROCESS_TYPE with processing mode [$PROCESSING_MODE] and engine [$ENGINE] from file [$SCENARIO_PATH]"
+  REQUEST=$(echo "{ \"name\": \"$SCENARIO_NAME\", \"processingMode\": \"$PROCESSING_MODE\", \"category\": \"$CATEGORY\", \"engineSetupName\": \"$ENGINE\", \"isFragment\": $IS_FRAGMENT }")
+  CODE=$(echo "$REQUEST" | curl -s -L -o /dev/null -w "%{http_code}" -H "$AUTHORIZATION_HEADER" -X POST -H "Content-type: application/json" "$DESIGNER_URL/api/processes" -d @-)
   if [[ $CODE == 201 ]]; then
     echo "$PROCESS_TYPE creation success"
   elif [[ $CODE == 400 ]]; then

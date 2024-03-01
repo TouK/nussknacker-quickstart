@@ -13,12 +13,12 @@ fi
 deploy() {
   SCENARIO_PATH=$1
   SCENARIO_NAME=$(source ./utils.sh && cat "$SCENARIO_PATH" | local_jq -r .metaData.id)
-  TYPE_SPECIFIC_DATA=$(source ./utils.sh && cat "$SCENARIO_PATH" | local_jq -r .metaData.typeSpecificData.type)
+  META_DATA_TYPE=$(source ./utils.sh && cat "$SCENARIO_PATH" | local_jq -r .metaData.additionalFields.metaDataType)
   #Default authorization is basic encoded admin:admin
   AUTHORIZATION_HEADER_VALUE=${2:-"Basic YWRtaW46YWRtaW4="}
   AUTHORIZATION_HEADER="authorization: $AUTHORIZATION_HEADER_VALUE"
 
-  if [[ "$TYPE_SPECIFIC_DATA" == "FragmentSpecificData" ]]; then
+  if [[ "$META_DATA_TYPE" == "FragmentSpecificData" ]]; then
      echo "Fragment can't be deployed.."
      exit 1
   fi
