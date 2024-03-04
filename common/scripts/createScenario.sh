@@ -14,10 +14,8 @@ TOOLSPATH="$(dirname "$0")"
 
 if [[ -z $DOMAIN || -z $RELEASE ]]; then
   DESIGNER_URL=${DESIGNER_URL:-http://localhost:8081}
-  ENGINE="Flink"
 else 
   DESIGNER_URL=http://$RELEASE-nussknacker.$DOMAIN
-  ENGINE="Lite K8s"
 fi
 
 main() {
@@ -35,9 +33,14 @@ main() {
   if [[ "$META_DATA_TYPE" == "FragmentSpecificData" ]]; then
     echo "Currently fragments importing is not supported by this script"
     exit 3
-  elif [[ "$META_DATA_TYPE" == "StreamMetaData" || "$META_DATA_TYPE" == "LiteStreamMetaData" ]]; then
+  elif [[ "$META_DATA_TYPE" == "StreamMetaData" ]]; then
+    ENGINE="Flink"
+    PROCESSING_MODE="Unbounded-Stream"
+  elif [[ "$META_DATA_TYPE" == "LiteStreamMetaData" ]]; then
+    ENGINE="Lite K8s"
     PROCESSING_MODE="Unbounded-Stream"
   elif [[ "$META_DATA_TYPE" == "RequestResponseMetaData" ]]; then
+    ENGINE="Lite K8s"
     PROCESSING_MODE="Request-Response"
   fi
 
