@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# This script allows to create and import scenario or fragment
+# This script allows to create and import scenario
 
 if [ ! -f "$1" ]
 then  
@@ -30,60 +30,56 @@ main() {
   FORCE_REMOVE=${4-"false"}
 
   META_DATA_TYPE=$(source ./utils.sh && cat $SCENARIO_PATH | local_jq -r .metaData.additionalFields.metaDataType)
-  PROCESS_TYPE="Scenario"
-  IS_FRAGMENT=false
 
+  # TODO: Replace usage of metaDataType by custom script parameters. Parameters should be parsed using getopt or similar
   if [[ "$META_DATA_TYPE" == "FragmentSpecificData" ]]; then
-    PROCESS_TYPE="Fragment"
-    IS_FRAGMENT=true
-  fi
-  if [[ "$META_DATA_TYPE" == "StreamMetaData" || "$META_DATA_TYPE" == "LiteStreamMetaData" ]]; then
+    echo "Currently fragments importing is not supported by this script"
+    exit 3
+  elif [[ "$META_DATA_TYPE" == "StreamMetaData" || "$META_DATA_TYPE" == "LiteStreamMetaData" ]]; then
     PROCESSING_MODE="Unbounded-Stream"
   elif [[ "$META_DATA_TYPE" == "RequestResponseMetaData" ]]; then
     PROCESSING_MODE="Request-Response"
   fi
 
   if [[ "$FORCE_REMOVE" == "true" ]]; then
-    echo "Force removing $PROCESS_TYPE $SCENARIO_PATH.."
+    echo "Force removing scenario $SCENARIO_PATH.."
 
-    if [[ "$IS_FRAGMENT" == "false" ]]; then
-       curl -L -X POST -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processManagement/cancel/$SCENARIO_NAME"
-    fi
+    curl -L -X POST -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processManagement/cancel/$SCENARIO_NAME"
 
     curl -L -H "$AUTHORIZATION_HEADER" -X DELETE "$DESIGNER_URL/api/processes/$SCENARIO_NAME" -v
   fi
 
-  echo "Creating $PROCESS_TYPE with processing mode [$PROCESSING_MODE] and engine [$ENGINE] from file [$SCENARIO_PATH]"
-  REQUEST=$(echo "{ \"name\": \"$SCENARIO_NAME\", \"processingMode\": \"$PROCESSING_MODE\", \"category\": \"$CATEGORY\", \"engineSetupName\": \"$ENGINE\", \"isFragment\": $IS_FRAGMENT }")
+  echo "Creating scenario with processing mode [$PROCESSING_MODE] and engine [$ENGINE] from file [$SCENARIO_PATH]"
+  REQUEST=$(echo "{ \"name\": \"$SCENARIO_NAME\", \"processingMode\": \"$PROCESSING_MODE\", \"category\": \"$CATEGORY\", \"engineSetupName\": \"$ENGINE\", \"isFragment\": false }")
   CODE=$(echo "$REQUEST" | curl -s -L -o /dev/null -w "%{http_code}" -H "$AUTHORIZATION_HEADER" -X POST -H "Content-type: application/json" "$DESIGNER_URL/api/processes" -d @-)
   if [[ $CODE == 201 ]]; then
-    echo "$PROCESS_TYPE creation success"
+    echo "Scenario creation success"
   elif [[ $CODE == 400 ]]; then
-    echo "$PROCESS_TYPE has already exists in db."
+    echo "Scenario has already exists in db."
   else
-    echo "$PROCESS_TYPE creation failed with $CODE"
+    echo "Scenario creation failed with $CODE"
     echo " ------------------ Designer container logs below this line only -----------------------"
     "$TOOLSPATH/displayLogs.sh" designer
     exit 2
   fi
 
-  echo "Importing $PROCESS_TYPE $SCENARIO_NAME"
+  echo "Importing scenario $SCENARIO_NAME"
 
   RESPONSE=$(curl -s -L -F "process=@$SCENARIO_PATH" -w "\n%{http_code}" -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processes/import/$SCENARIO_NAME")
   HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
   SCENARIO=$(echo "$RESPONSE" | sed \$d  | jq .scenarioGraph)
   if [[ "$HTTP_CODE" != 200 ]]; then
-    echo "Failed to import $PROCESS_TYPE"
+    echo "Failed to import scenario"
     exit 1
   fi
 
-  echo "Saving $PROCESS_TYPE $SCENARIO_NAME"
+  echo "Saving scenario $SCENARIO_NAME"
   START='{"scenarioGraph":'
   END=',"comment": ""}'
   curl -s -o /dev/null -L  -H "$AUTHORIZATION_HEADER" -H 'Accept: application/json, text/plain, */*' -H 'Content-Type: application/json;charset=UTF-8' \
     --data-raw "${START}${SCENARIO}${END}" -X PUT "$DESIGNER_URL/api/processes/$SCENARIO_NAME"
 
-  echo "$PROCESS_TYPE successful created and saved.."
+  echo "Scenario successful created and saved.."
 }
 
 # With parameter that contains importing scheme file path
