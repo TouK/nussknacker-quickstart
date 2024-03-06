@@ -1,10 +1,10 @@
 #!/bin/bash -e
 
 DOCKER_COMPOSE_COMMAND=""
-if command -v docker-compose &> /dev/null; then
-    DOCKER_COMPOSE_COMMAND="docker-compose"
-elif command -v docker compose &> /dev/null; then
+if command -v docker &>/dev/null && docker compose version &>/dev/null; then
     DOCKER_COMPOSE_COMMAND="docker compose"
+elif command -v docker-compose2 &> /dev/null; then
+    DOCKER_COMPOSE_COMMAND="docker-compose"
 else
   echo "Docker Compose does not exist. Please install it first https://docs.docker.com/compose/install/"
   exit 1
