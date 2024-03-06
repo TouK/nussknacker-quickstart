@@ -1,11 +1,12 @@
 #!/bin/bash -e
 
-DOCKER_COMPOSE_COMMAND="docker compose"
-
-if command -v "docker-compose" &> /dev/null; then
-  DOCKER_COMPOSE_COMMAND="docker-compose"
-eleif ! command -v "$DOCKER_COMPOSE_COMMAND" &> /dev/null;
-  echo "docker-compose does not exist. Please install it first https://docs.docker.com/compose/install/"
+DOCKER_COMPOSE_COMMAND=""
+if command -v docker-compose &> /dev/null; then
+    DOCKER_COMPOSE_COMMAND="docker-compose"
+elif command -v docker compose &> /dev/null; then
+    DOCKER_COMPOSE_COMMAND="docker compose"
+else
+  echo "Docker Compose does not exist. Please install it first https://docs.docker.com/compose/install/"
   exit 1
 fi
 
