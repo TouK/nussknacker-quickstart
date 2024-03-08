@@ -2,4 +2,4 @@
 
 cd "$(dirname "$0")"
 
-cat ../testData/transactions.json | ./sendToKafka.sh transactions
+cat ../testData/DetectLargeTransactions-testData.json | ./sendToKafka.sh transactions
