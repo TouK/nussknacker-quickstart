@@ -4,7 +4,7 @@ services:
   customerservice:
     container_name: nussknacker_customerservice
     hostname: customerservice
-    image: ghcr.io/touk/nussknacker-quickstart/customerservice:latest
+    image: ghcr.io/touk/nussknacker-quickstart/customerservice:0.2
     ports:
       - "5001:5000"
 
