@@ -12,6 +12,7 @@ on:
         type: string
 
 env:
+  INPUT_NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version }}
   # TODO version should be set up only when build is triggered from nk core (workflow_dispatch / inputs.nussknacker_version defined)
   # TODO and when build is on staging or target branch is staging. In any other situation, version from helm values should be used
   NUSSKNACKER_VERSION: ${{
@@ -39,6 +40,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION"
       - name: install quickstart
         shell: bash
         env:
