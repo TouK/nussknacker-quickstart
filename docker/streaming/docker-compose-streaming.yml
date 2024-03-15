@@ -174,7 +174,6 @@ services:
       FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
       KAFKA_ADDRESS: kafka:9092
       SCHEMA_REGISTRY_URL: http://schemaregistry:8081  
-      DEFAULT_SCENARIO_TYPE: streaming
     volumes:
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
