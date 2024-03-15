@@ -70,7 +70,7 @@ main() {
 
   RESPONSE=$(curl -s -L -F "process=@$SCENARIO_PATH" -w "\n%{http_code}" -H "$AUTHORIZATION_HEADER" "$DESIGNER_URL/api/processes/import/$SCENARIO_NAME")
   HTTP_CODE=$(echo "$RESPONSE" | tail -n 1)
-  SCENARIO=$(echo "$RESPONSE" | sed \$d  | local_jq .scenarioGraph)
+  SCENARIO=$(source ./utils.sh && echo "$RESPONSE" | sed \$d  | local_jq .scenarioGraph)
   if [[ "$HTTP_CODE" != 200 ]]; then
     echo "Failed to import scenario"
     exit 1
