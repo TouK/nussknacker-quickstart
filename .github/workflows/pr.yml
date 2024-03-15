@@ -20,13 +20,13 @@ on:
 
 env:
   # for k8s tests purpose - sets correct repo and adds --devel flag
-  DEVEL: ${{ (github.base_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
+  DEVEL: ${{ (github.base_ref == 'staging' || github.head_ref == 'staging') && 'true' || 'false' }}
   # TODO version should be set up only when build is triggered from nk core (workflow_dispatch / inputs.nussknacker_version defined)
   # TODO and when build is on staging or target branch is staging. In any other situation, version from helm values should be used
   INPUT_NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version }}
   NUSSKNACKER_VERSION: ${{ 
     inputs.nussknacker_version != '' && inputs.nussknacker_version || 
-    ((github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 
+    ((github.base_ref == 'staging' || github.head_ref == 'staging') && 'staging-latest' || 
     '1.13.0') }}
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
       # TODO (2) and when build is on staging or target branch is staging. In any other situation, version from docker-compose should be used
       NUSSKNACKER_VERSION: ${{
         endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
-        ((github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
+        ((github.base_ref == 'staging' || github.head_ref == 'staging') && 'staging-latest_scala-2.12' ||
         '1.13.0_scala-2.12') }}
     steps:
       - name: Cancel previous runs
@@ -53,7 +53,7 @@ jobs:
       - uses: actions/checkout@v3
       - name: Print Nussknacker version
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
       - name: install quickstart
         shell: bash
         run: ./docker/streaming/start.sh
@@ -75,7 +75,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Print Nussknacker version
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
       - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"
@@ -110,7 +110,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Print Nussknacker version
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
       - uses: AbsaOSS/k3d-action@v2.3.0
         with:
           cluster-name: "k3s-default"

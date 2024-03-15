@@ -17,7 +17,7 @@ env:
   # TODO and when build is on staging or target branch is staging. In any other situation, version from helm values should be used
   NUSSKNACKER_VERSION: ${{
     inputs.nussknacker_version != '' && inputs.nussknacker_version ||
-    ((github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' ||
+    ((github.base_ref == 'staging' || github.head_ref == 'staging') && 'staging-latest' ||
     '1.13.0') }}
   TRANSACTION_COUNT: ${{ inputs.transaction_count != '' && inputs.transaction_count || '10000000' }}
 
@@ -32,7 +32,7 @@ jobs:
       # TODO (2) and when build is on staging or target branch is staging. In any other situation, version from docker-compose should be used
       NUSSKNACKER_VERSION: ${{
         endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
-        ((github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
+        ((github.base_ref == 'staging' || github.head_ref == 'staging') && 'staging-latest_scala-2.12' ||
         '1.13.0_scala-2.12') }}
     defaults:
       run:
@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Print Nussknacker version
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
       - name: install quickstart
         shell: bash
         env:
