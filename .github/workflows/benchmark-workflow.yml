@@ -67,6 +67,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Print Nussknacker version
+        run: |
+          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
       - uses: AbsaOSS/k3d-action@v2.4.0
         with:
           cluster-name: "k3s-default"
