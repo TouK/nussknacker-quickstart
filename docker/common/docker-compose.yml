@@ -3,7 +3,7 @@ version: '3.8'
 services:
   designer:
     container_name: nussknacker_designer
-    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-1.13.0_scala-2.12}
+    image: ${NUSSKNACKER_IMAGE-touk/nussknacker}:${NUSSKNACKER_VERSION-1.14.0_scala-2.12}
     environment:
       #multiple, comma separated, config files can be used. They will be merged in order, via HOCON fallback mechanism
       #https://github.com/lightbend/config/blob/master/HOCON.md#config-object-merging-and-file-merging
