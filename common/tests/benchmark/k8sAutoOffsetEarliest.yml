@@ -12,7 +12,7 @@ ingress:
 
 #It's not easily possible to pass entry with dots via --set in helm...
 nussknacker:
-  mode: "streaming-lite"
+  mode: "lite-k8s"
   modelConfig:
     kafka:
       kafkaProperties:

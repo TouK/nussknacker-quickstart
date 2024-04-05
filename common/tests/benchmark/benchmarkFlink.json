@@ -1,21 +1,12 @@
 {
   "metaData" : {
     "id" : "DetectLargeTransactions",
-    "typeSpecificData" : {
-      "parallelism" : 2,
-      "spillStateToDisk" : true,
-      "useAsyncInterpretation" : null,
-      "checkpointIntervalInSeconds" : null,
-      "type" : "StreamMetaData"
-    },
     "additionalFields" : {
       "description" : null,
       "properties" : {
-        
-      }
-    },
-    "subprocessVersions" : {
-      
+        "parallelism" : "2"
+      },
+      "metaDataType": "StreamMetaData"
     }
   },
   "nodes" : [

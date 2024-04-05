@@ -15,7 +15,9 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 nussknacker:
-  mode: "request-response"
+  mode: "lite-k8s"
+  streaming:
+    enabled: false
   modelConfig:
     components:
       openAPI:

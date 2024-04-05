@@ -1,29 +1,13 @@
 {
   "metaData" : {
     "id" : "DetectLargeTransactions",
-    "typeSpecificData" : {
-      "parallelism" : 2,
-      "spillStateToDisk" : true,
-      "useAsyncInterpretation" : null,
-      "checkpointIntervalInSeconds" : null,
-      "type" : "LiteStreamMetaData"
-    },
-    "isSubprocess" : false,
     "additionalFields" : {
       "description" : null,
-      "groups" : [
-      ],
       "properties" : {
-
-      }
-    },
-    "subprocessVersions" : {
-
+        "parallelism" : "2"
+      },
+      "metaDataType": "LiteStreamMetaData"
     }
-  },
-  "exceptionHandlerRef" : {
-    "parameters" : [
-    ]
   },
   "nodes" : [
     {

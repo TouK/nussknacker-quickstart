@@ -15,7 +15,7 @@ ingress:
     cert-manager.io/cluster-issuer: "letsencrypt-prod"
 
 nussknacker:
-  mode: "streaming-lite"
+  mode: "lite-k8s"
   #additional AKHQ tab
   customTabs: 
     - title: "Data"
