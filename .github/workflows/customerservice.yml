@@ -31,6 +31,6 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2.8.0
         with:
-          context: ./common/customerservice
+          context: ./docker/common/customerservice
           push: true
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:${{ env.VERSION }}
