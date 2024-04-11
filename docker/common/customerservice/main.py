@@ -7,7 +7,7 @@ from pydantic import BaseModel
 app = FastAPI(title="Customers", description="Customers", version="v1", openapi_url="/swagger")
 
 class Customer(BaseModel):
-    id: int
+    id: str
     name: str
     category: str
     balance: float
@@ -20,11 +20,11 @@ def error(status_code: int, code: str, message: str):
     return JSONResponse(status_code = status_code, content = jsonable_encoder(Error(code = code, message = message)))
 
 @app.get('/{customer_id}', response_model=Customer, operation_id="getCustomer", responses={404: {"model": Error}, 500: {"model": Error}})
-async def root(customer_id: int):
-    #Well, python is not very reliable language :P
+async def root(customer_id: str):
+    #Well, python is not very reliable language :P 
     if random.randrange(10) == 0:
         return error(500, "simulated_error", "Simulated, randomly returned error - don't worry, everything works as expected")
-    idstr = str(customer_id)
+    idstr = customer_id.replace("Client","")
     customers = {
         "1": Customer(id = customer_id, name = "John Doe", category = "STANDARD", balance = 1653.23),
         "2": Customer(id = customer_id, name = "Robert Wright", category = "GOLD", balance = 100100.32),

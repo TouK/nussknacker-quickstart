@@ -71,7 +71,7 @@
                   "name": "customer_id",
                   "expression": {
                     "language": "spel",
-                    "expression": "#CONV.toNumber(#input.clientId).longValue"
+                    "expression": "#input.clientId"
                   }
                 }
               ]
