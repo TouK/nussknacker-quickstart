@@ -110,7 +110,7 @@ services:
 
   jobmanager:
     container_name: nussknacker_jobmanager
-    image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.18.1}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     restart: unless-stopped
     ports:
       - "3031:8081"
@@ -138,7 +138,7 @@ services:
 
   taskmanager:
     container_name: nussknacker_taskmanager
-    image: flink:${FLINK_VERSION-1.16.0}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
+    image: flink:${FLINK_VERSION-1.18.1}-scala_${SCALA_VERSION-2.12}-${JAVA_VERSION-java11}
     restart: unless-stopped
     ports:
       - "3063:9069"
@@ -173,7 +173,7 @@ services:
       FLINK_REST_URL: http://jobmanager:8081
       FLINK_QUERYABLE_STATE_PROXY_URL: taskmanager:9069
       KAFKA_ADDRESS: kafka:9092
-      SCHEMA_REGISTRY_URL: http://schemaregistry:8081  
+      SCHEMA_REGISTRY_URL: http://schemaregistry:8081
     volumes:
       #this is needed to be able to verify savepoints during deployments
       - storage_flink:/opt/flink/data
