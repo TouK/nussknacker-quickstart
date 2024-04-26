@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "cdr",
+  "namespace": "io.nussknacker",
+  "fields": [
+    {
+      "name": "duration",
+      "type": "int"
+    },
+    {
+      "name": "caller_number",
+      "type": "string"
+    },
+    {
+      "name": "called_number",
+      "type": "string"
+    },
+    {
+      "name": "connect_time",
+      "type": "int"
+    }
+  ]
+}

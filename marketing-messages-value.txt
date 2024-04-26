@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "MarketingMessage",
+  "namespace": "io.nussknacker",
+  "fields": [
+    {
+      "name": "msisdn",
+      "type": "string"
+    },
+    {
+      "name": "message",
+      "type": "string"
+    }
+  ]
+}

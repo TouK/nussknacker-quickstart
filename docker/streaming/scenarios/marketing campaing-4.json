@@ -1,0 +1,151 @@
+{
+  "metaData" : {
+    "id" : "marketing campaing",
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "parallelism" : "1",
+        "spillStateToDisk" : "true",
+        "useAsyncInterpretation" : "",
+        "checkpointIntervalInSeconds" : ""
+      },
+      "metaDataType" : "StreamMetaData"
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "call data records stream",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'cdrs'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          }
+        ]
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -190,
+          "y" : -246
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "id" : "getCustomerInfo",
+      "service" : {
+        "id" : "getCustomerInfo",
+        "parameters" : [
+          {
+            "name" : "customer_msisdn",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.caller_number"
+            }
+          }
+        ]
+      },
+      "output" : "customer_info",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -163,
+          "y" : -174
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "aged between 25-35",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#customer_info.age > 25 && #customer_info.age < 35"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -173,
+          "y" : -90
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "sms gateway",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'marketing-messages'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          },
+          {
+            "name" : "Key",
+            "expression" : {
+              "language" : "spel",
+              "expression" : ""
+            }
+          },
+          {
+            "name" : "Raw editor",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "false"
+            }
+          },
+          {
+            "name" : "msisdn",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.caller_number"
+            }
+          },
+          {
+            "name" : "message",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "\"Hello customer, here's some great offer for you\""
+            }
+          }
+        ]
+      },
+      "endResult" : null,
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -365,
+          "y" : 50
+        }
+      },
+      "type" : "Sink"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}
