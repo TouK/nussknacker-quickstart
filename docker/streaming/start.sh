@@ -23,7 +23,7 @@ export ADDITIONAL_COMPOSE_FILE="-f $(fullPath ./docker-compose-streaming.yml)"
 cat << EOF
 ----------------------------------------------------------------------------------
 
-Nussknaker will be available at http://localhost:8081 (credentials: admin:admin) ...
+Nussknacker will be available at http://localhost:8081 (credentials: admin:admin) ...
 
 ----------------------------------------------------------------------------------
 EOF
