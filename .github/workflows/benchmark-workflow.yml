@@ -18,7 +18,7 @@ env:
   NUSSKNACKER_VERSION: ${{
     inputs.nussknacker_version != '' && inputs.nussknacker_version ||
     ((github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' ||
-    '1.14.0') }}
+    '1.15.0') }}
   TRANSACTION_COUNT: ${{ inputs.transaction_count != '' && inputs.transaction_count || '10000000' }}
 
 jobs:
@@ -33,7 +33,7 @@ jobs:
       NUSSKNACKER_VERSION: ${{
         endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
         ((github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
-        '1.14.0_scala-2.12') }}
+        '1.15.0_scala-2.12') }}
     defaults:
       run:
         shell: bash

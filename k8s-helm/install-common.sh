@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 if ! command -v "helm" &> /dev/null; then
-    echo "heml does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
+    echo "helm does not exist. Please install it first https://kubernetes.io/docs/tasks/tools/"
     exit 1
 fi
 
@@ -20,11 +20,11 @@ helm repo update
 if [[ "$DEVEL" = true ]]; then
   # TODO This probably shouldn't be in the quickstart script, it is mostly for the CI case to has a quick feedback
   # TODO that changes in the chart doesn't break scripts that user will use in the next released version during quickstart following
-  CHART_VERSION="^1.15.0-SNAPSHOT"
+  CHART_VERSION="^1.16.0-SNAPSHOT"
   HELM_REPO=${HELM_REPO:-touk-snapshots/nussknacker}
   DEVEL_ARG="--devel"
 else
-  CHART_VERSION=${CHART_VERSION:-1.14.0}
+  CHART_VERSION=${CHART_VERSION:-1.15.0}
   HELM_REPO=${HELM_REPO:-touk/nussknacker}
   DEVEL_ARG=""
 fi
