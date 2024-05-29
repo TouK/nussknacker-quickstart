@@ -26,7 +26,7 @@ env:
   INPUT_NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version }}
   NUSSKNACKER_VERSION: ${{ 
     inputs.nussknacker_version != '' && inputs.nussknacker_version || 
-    (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 
+    (github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 
     '1.15.0' }}
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
       # TODO (2) and when build is on staging or target branch is staging. In any other situation, version from docker-compose should be used
       NUSSKNACKER_VERSION: ${{
         endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
-        (github.base_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
+        (github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
         '1.15.0_scala-2.12' }}
     steps:
       - name: Cancel previous runs
