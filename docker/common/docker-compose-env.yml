@@ -16,7 +16,8 @@ services:
 
   grafana:
     container_name: nussknacker_grafana
-    image: grafana/grafana:${GRAFANA_VERSION-8.4.2}
+    # Grafana changed its license from Apache 2.0 to AGPLv3 after version 7.5
+    image: grafana/grafana:${GRAFANA_VERSION-7.5.15}
     volumes:
       - ./grafana:/etc/grafana/provisioning
       - ./grafana/dashboards:/var/lib/grafana/dashboards
