@@ -24,7 +24,7 @@ if [[ "$DEVEL" = true ]]; then
   HELM_REPO=${HELM_REPO:-touk-snapshots/nussknacker}
   DEVEL_ARG="--devel"
 else
-  CHART_VERSION=${CHART_VERSION:-1.15.0}
+  CHART_VERSION=${CHART_VERSION:-1.15.1}
   HELM_REPO=${HELM_REPO:-touk/nussknacker}
   DEVEL_ARG=""
 fi
