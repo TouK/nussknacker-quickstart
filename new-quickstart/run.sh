@@ -2,11 +2,11 @@
 
 cd "$(dirname "$0")"
 
-echo "Running Nussknacker installation example ..."
+echo "Running Nussknacker Quickstart ..."
 echo ""
 
 if ! docker version &>/dev/null; then
-  echo "No Docker found. Docker is required to run this example. See https://docs.docker.com/engine/install/"
+  echo "No Docker found. Docker is required to run this Quickstart. See https://docs.docker.com/engine/install/"
   exit 1
 fi
 

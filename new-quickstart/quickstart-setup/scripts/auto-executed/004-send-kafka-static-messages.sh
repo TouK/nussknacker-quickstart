@@ -20,9 +20,9 @@ function sendMessage() {
 
 echo "Starting to send preconfigured messages ..."
 
-for FILE in "../../data/kafka/messages"/*; do
+for FILE in "../../data/kafka/static-messages"/*; do
   if [ -f "$FILE" ]; then
-    TOPIC_NAME=$(basename "$FILE")
+    TOPIC_NAME=$(basename "$FILE" .txt)
 
     while IFS= read -r MSG; do
       if [[ $MSG == "#"* ]]; then
