@@ -21,7 +21,7 @@ echo "Starting to send preconfigured messages ..."
 
 for FILE in "../../data/kafka/generate-messages"/*; do
   if [ -f "$FILE" ]; then
-    TOPIC_NAME=$(basename "$FILE" .sh)
+    TOPIC_NAME=$(basename "$FILE" .sh) 
 
     while IFS= read -r MSG; do
       if [[ $MSG == "#"* ]]; then
