@@ -132,11 +132,11 @@ case "$META_DATA_TYPE" in
     PROCESSING_MODE="Unbounded-Stream"
     ;;
   "LiteStreamMetaData")
-    ENGINE="Lite K8s"
+    ENGINE="Lite Embedded"
     PROCESSING_MODE="Unbounded-Stream"
     ;;
   "RequestResponseMetaData")
-    ENGINE="Lite K8s"
+    ENGINE="Lite Embedded"
     PROCESSING_MODE="Request-Response"
     ;;
   *)
