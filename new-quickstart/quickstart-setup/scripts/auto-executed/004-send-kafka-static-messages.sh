@@ -20,18 +20,24 @@ function sendMessage() {
 
 echo "Starting to send preconfigured messages ..."
 
-for FILE in "../../data/kafka/static-messages"/*; do
-  if [ -f "$FILE" ]; then
-    TOPIC_NAME=$(basename "$FILE" .txt)
+while IFS= read -r TOPIC_NAME; do
 
+  if [[ $TOPIC_NAME == "#"* ]]; then
+    continue
+  fi
+
+  MESSAGES_FILE="../../data/kafka/static-messages/$TOPIC_NAME.txt"
+
+  if [[ -f "$MESSAGES_FILE" ]]; then
     while IFS= read -r MSG; do
       if [[ $MSG == "#"* ]]; then
         continue
       fi
 
       sendMessage "$TOPIC_NAME" "$MSG"
-    done < "$FILE"
+    done < "$MESSAGES_FILE"
   fi
-done
+
+done < "../../data/kafka/topics.txt"
 
 echo "DONE!"

@@ -30,6 +30,5 @@ verifyBashScript "$GENERATOR_SCRIPT"
 
 while true; do
   sleep 0.1
-  
   ./send-to-topic.sh "$TOPIC" "$($GENERATOR_SCRIPT)"
 done

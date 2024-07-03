@@ -6,5 +6,6 @@ while IFS= read -r script; do
 done < <(find /app/scripts/auto-executed -type f -name '*.sh' | sort)
 
 echo "Setup done!"
+
 # loop forever (you can use manually called utils scripts now)
 tail -f /dev/null
