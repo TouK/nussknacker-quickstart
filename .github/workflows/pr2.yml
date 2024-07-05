@@ -1,0 +1,37 @@
+name: CI2
+
+on:
+  pull_request:
+    branches:
+      - feature/NU-1726
+  push:
+    branches:
+      - feature/NU-1726
+
+jobs:
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - name: Test Quickstart start
+        timeout-minutes: 10
+        run: |
+          run.sh
+
+  cleanup:
+    runs-on: ubuntu-latest
+    needs: test
+    if: always()
+    steps:
+      - name: Clean up Quickstart
+        run: |
+          ./clean.sh
