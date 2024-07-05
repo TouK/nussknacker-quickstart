@@ -25,7 +25,7 @@ jobs:
       - name: Test Quickstart start
         timeout-minutes: 10
         run: |
-          run.sh
+          ./new-quickstart/run.sh # todo: fixme
 
   cleanup:
     runs-on: ubuntu-latest
@@ -34,4 +34,4 @@ jobs:
     steps:
       - name: Clean up Quickstart
         run: |
-          ./clean.sh
+          ./new-quickstart/clean.sh # todo: fixme
