@@ -1,5 +1,9 @@
 name: nussknacker
 
+# todo: 
+# - setup script idempotence
+# - RAM comsumption optimization
+
 services:
 
   ### Quickstart setup container 
@@ -92,7 +96,7 @@ services:
   ### Nussknacker metrics-related services:
 
   grafana:
-    image: grafana/grafana:7.5.17
+    image: grafana/grafana:10.1.10
     restart: unless-stopped
     environment:
       GF_AUTH_ANONYMOUS_ENABLED: "true"
