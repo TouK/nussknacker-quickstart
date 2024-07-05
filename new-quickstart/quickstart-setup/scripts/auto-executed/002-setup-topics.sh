@@ -12,8 +12,7 @@ function createTopic() {
   local TOPIC_NAME=$1
 
   echo "Creating topic '$TOPIC_NAME'"
-  /opt/bitnami/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka:9092 --topic "$TOPIC_NAME"
-  echo "Creating topic '$TOPIC_NAME'"
+  ../utils/kafka/create-topic-idempotently.sh "$TOPIC_NAME"
 }
 
 echo "Starting to create preconfigured topics ..."

@@ -46,7 +46,18 @@ function createEmptyScenario() {
   local HTTP_STATUS
   HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
 
-  if [ "$HTTP_STATUS" != "201" ]; then
+  if [ "$HTTP_STATUS" == "400" ]; then
+    local RESPONSE_BODY
+    RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
+    
+    if [[ "$RESPONSE_BODY" == *"already exists"* ]]; then
+      echo "Scenario already exists."
+      exit 0
+    else
+      echo -e "Error: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+      exit 12
+    fi
+  elif [ "$HTTP_STATUS" != "201" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
     echo -e "Error: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"

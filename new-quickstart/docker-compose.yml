@@ -1,7 +1,6 @@
 name: nussknacker
 
 # todo: 
-# - setup script idempotence
 # - RAM comsumption optimization
 
 services:

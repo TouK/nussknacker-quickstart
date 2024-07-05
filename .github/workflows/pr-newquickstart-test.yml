@@ -1,12 +1,16 @@
-name: CI2
+name: QUICKSTART CI
 
 on:
   pull_request:
     branches:
-      - feature/NU-1726
+      - main
+      - staging
+      - release/*
   push:
     branches:
-      - feature/NU-1726
+      - main
+      - staging
+      - release/*
 
 jobs:
 
@@ -25,8 +29,8 @@ jobs:
       - name: Test Quickstart start
         timeout-minutes: 10
         run: |
-          ./new-quickstart/run.sh || (docker-compose logs && exit 1) # todo: fixme
+          ./new-quickstart/run.sh || (docker-compose logs && exit 1) 
       - name: Clean up Quickstart
         run: |
-          ./new-quickstart/clean.sh # todo: fixme
+          ./new-quickstart/stop-and-clean.sh 
   
