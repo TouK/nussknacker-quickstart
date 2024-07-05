@@ -27,8 +27,8 @@ while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
 
   EXAMPLE_SCENARIO_NAME=$(basename "$EXAMPLE_SCENARIO_FILENAME" ".json")
 
-  importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$(realpath ../../data/nu/scenarios/"$EXAMPLE_SCENARIO_FILENAME")"
+  importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$(realpath ../../setup/nu/scenarios/"$EXAMPLE_SCENARIO_FILENAME")"
 
-done < "../../data/nu/examples.txt"
+done < "../../setup/nu/examples.txt"
 
 echo -e "DONE!\n\n"

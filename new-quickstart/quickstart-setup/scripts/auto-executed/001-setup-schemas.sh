@@ -50,9 +50,9 @@ while IFS= read -r SCHEMA_FILENAME; do
   fi
 
   SCHEMA_NAME="$(basename "$SCHEMA_FILENAME" ".schema.json")-value"
-  createJsonSchema "$SCHEMA_NAME" "$(realpath ../../data/schema-registry/schemas/"$SCHEMA_FILENAME")"
+  createJsonSchema "$SCHEMA_NAME" "$(realpath ../../setup/schema-registry/schemas/"$SCHEMA_FILENAME")"
 
-done < "../../data/schema-registry/active-schemas.txt"
+done < "../../setup/schema-registry/active-schemas.txt"
 
 
 echo -e "DONE!\n\n"

@@ -1,4 +1,4 @@
 # Scenarios to put as examples (file with scenario from the scenarios folder per line)
 DetectLargeTransactions.json
-DetermineOfferedPlan.json
+#DetermineOfferedPlan.json
 LoanRequest.json

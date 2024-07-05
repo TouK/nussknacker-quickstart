@@ -11,6 +11,7 @@ WORKDIR /app
 COPY entrypoint.sh /
 COPY scripts/ /app/scripts/
 COPY data/ /app/data/
+COPY setup/ /app/setup/
 
 HEALTHCHECK --interval=10s --timeout=1s --retries=12 CMD /bin/bash -c 'test -f "/app/healthy"'
 

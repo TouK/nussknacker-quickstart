@@ -25,6 +25,6 @@ while IFS= read -r TOPIC_NAME; do
 
   createTopic "$TOPIC_NAME"
 
-done < "../../data/kafka/topics.txt"
+done < "../../setup/kafka/topics.txt"
 
 echo -e "DONE!\n\n"
