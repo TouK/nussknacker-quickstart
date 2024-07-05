@@ -25,13 +25,8 @@ jobs:
       - name: Test Quickstart start
         timeout-minutes: 10
         run: |
-          ./new-quickstart/run.sh # todo: fixme
-
-  cleanup:
-    runs-on: ubuntu-latest
-    needs: test
-    if: always()
-    steps:
+          ./new-quickstart/run.sh || (docker-compose logs && exit 1) # todo: fixme
       - name: Clean up Quickstart
         run: |
           ./new-quickstart/clean.sh # todo: fixme
+  
