@@ -1,4 +1,12 @@
 #!/bin/bash -e
 
-# todo:
-echo '{"customerId": "anon", "requestedAmount": 1555, "requestType": "mortgage", "location": { "city": "Warszawa", "street": "Marszałkowska" }}'
+cd "$(dirname "$0")"
+
+source ../../../scripts/utils/lib.sh
+
+ID="$(random_4digit_number)"
+AMOUNT="$(random_4digit_number)"
+REQUEST_TYPE="$(pick_randomly "loan" "mortgage" "insurance")"
+CITY="$(pick_randomly "Warszawa" "Berlin" "Gdańsk" "Kraków", "Poznań", "Praga")"
+
+echo "{\"customerId\": \"$ID\", \"requestedAmount\": $AMOUNT, \"requestType\": \"$REQUEST_TYPE\", \"location\": { \"city\": \"$CITY\", \"street\": \"\" }}"

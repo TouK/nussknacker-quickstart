@@ -10,7 +10,6 @@ services:
     depends_on:
       nginx:
         condition: service_healthy
-    # todo: healthcheck
 
   ### Nussknacker-related services
 
