@@ -1,4 +1,4 @@
-# Example topic names below (topic name per line)
+# Topic name the static and generated messages should be sent to
 Customers
 ProcessedTransactions
 SmsesWithOffer

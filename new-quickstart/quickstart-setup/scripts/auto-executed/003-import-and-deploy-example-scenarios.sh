@@ -31,4 +31,4 @@ while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
 
 done < "../../data/nu/examples.txt"
 
-echo "DONE!"
+echo -e "DONE!\n\n"

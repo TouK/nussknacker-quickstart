@@ -3,7 +3,7 @@ FROM bitnami/kafka:3.7.0
 USER root
 
 RUN apt update && \
-    apt install -y curl jq uuid-runtime kafkacat logrotate cron && \
+    apt install -y curl jq kafkacat less && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

@@ -40,4 +40,4 @@ while IFS= read -r TOPIC_NAME; do
 
 done < "../../data/kafka/topics.txt"
 
-echo "DONE!"
+echo -e "DONE!\n\n"

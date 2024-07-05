@@ -55,4 +55,4 @@ while IFS= read -r SCHEMA_FILENAME; do
 done < "../../data/schema-registry/active-schemas.txt"
 
 
-echo "DONE!"
+echo -e "DONE!\n\n"
