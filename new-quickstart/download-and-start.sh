@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
 set -e
 
-BRANCH_NAME="NU-1726"
-ZIP_NAME="$BRANCH_NAME.zip"
+BRANCH_NAME="feature/NU-1726"
+NU_QUICKSTART_DIR="nussknacker-quickstart"
 
-wget 'https://github.com/TouK/nussknacker-quickstart/archive/refs/heads/feature/'$ZIP_NAME
-rm -rf "$BRANCH_NAME"
-unzip "$ZIP_NAME"    
-cd "$BRANCH_NAME"
+https://github.com/TouK/nussknacker-quickstart/archive/refs/heads/main.zip
+wget -O "$NU_QUICKSTART_DIR.zip" "https://github.com/TouK/nussknacker-quickstart/archive/refs/heads/$BRANCH_NAME.zip"
+rm -rf "$NU_QUICKSTART_DIR"
+unzip "$NU_QUICKSTART_DIR.zip"    
+cd "$NU_QUICKSTART_DIR/new-quickstart"
 ./start.sh
