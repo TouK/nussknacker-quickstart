@@ -56,7 +56,6 @@ services:
       SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
       INFLUXDB_URL: "http://influxdb:8086"
       FLINK_REST_URL: "http://flink-jobmanager:8081"
-      FLINK_QUERYABLE_STATE_PROXY_URL: "flink-taskmanager:9069"
       JDK_JAVA_OPTIONS: "-Xmx1024M"
       USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
     depends_on:
