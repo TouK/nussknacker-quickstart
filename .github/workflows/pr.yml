@@ -11,122 +11,26 @@ on:
       - main
       - staging
       - release/*
-  workflow_dispatch:
-    inputs:
-      nussknacker_version:
-        description: "Nussknacker version"
-        required: false
-        type: string
-
-env:
-  # for k8s tests purpose - sets correct repo and adds --devel flag
-  DEVEL: ${{ (github.head_ref == 'staging' || github.ref_name == 'staging') && 'true' || 'false' }}
-  # TODO version should be set up only when build is triggered from nk core (workflow_dispatch / inputs.nussknacker_version defined)
-  # TODO and when build is on staging or target branch is staging. In any other situation, version from helm values should be used
-  INPUT_NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version }}
-  NUSSKNACKER_VERSION: ${{ 
-    inputs.nussknacker_version != '' && inputs.nussknacker_version || 
-    ((github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest' || 
-    '1.15.3') }}
 
 jobs:
-  docker-compose-streaming-test:
+
+  test:
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
-    env:
-      # TODO (1) scala_2.12 is used because we use the default flink image. We should prepare our own (https://github.com/TouK/flink-scala-2.13)
-      # TODO (1) and switch to it
-      # TODO (2) version should be set up only when build is triggered from nk core (workflow_dispatch / inputs.nussknacker_version defined)
-      # TODO (2) and when build is on staging or target branch is staging. In any other situation, version from docker-compose should be used
-      NUSSKNACKER_VERSION: ${{
-        endsWith(inputs.nussknacker_version, 'SNAPSHOT') && format('{0}_{1}', inputs.nussknacker_version, 'scala-2.12') ||
-        ((github.head_ref == 'staging' || github.ref_name == 'staging') && 'staging-latest_scala-2.12' ||
-        '1.15.3_scala-2.12') }}
     steps:
       - name: Cancel previous runs
         uses: styfle/cancel-workflow-action@0.11.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/checkout@v3
-      - name: Print Nussknacker version
+      - name: Test Quickstart start
+        timeout-minutes: 10
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
-      - name: install quickstart
-        shell: bash
-        run: ./docker/streaming/start.sh
-      - name: Test quickstart
-        shell: bash
-        run: ./common/tests/testDockerStreaming.sh
-
-  helm-k8s-requestresponse-test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v2
-      - name: Print Nussknacker version
+          ./start.sh || (docker-compose logs && exit 1) 
+      - name: Clean up Quickstart
         run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
-      - uses: AbsaOSS/k3d-action@v2.3.0
-        with:
-          cluster-name: "k3s-default"
-          k3d-version: "v5.4.1" # default version - change with caution, there was some problem after upgrade
-          args: >-
-            --config=.k3d/single-cluster.yml
-            --trace
-      - name: install additional components
-        shell: bash
-        run: ./k8s-helm/additional/install-request-response.sh
-      - name: verify quickstart template
-        shell: bash
-        run: COMMAND=template ./k8s-helm/install-request-response.sh
-      - name: install quickstart
-        shell: bash
-        run: ./k8s-helm/install-request-response.sh --debug
-      - name: Test quickstart
-        shell: bash
-        run: ./common/tests/testK8sRequestResponse.sh
-
-  helm-k8s-streaming-test:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Cancel previous runs
-        uses: styfle/cancel-workflow-action@0.11.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-      - uses: actions/checkout@v2
-      - name: Print Nussknacker version
-        run: |
-          echo "Nussknacker version: $NUSSKNACKER_VERSION, dispatch input version: $INPUT_NUSSKNACKER_VERSION, GITHUB_BASE_REF: $GITHUB_BASE_REF, GITHUB_HEAD_REF: $GITHUB_HEAD_REF, GITHUB_REF_NAME: $GITHUB_REF_NAME"
-      - uses: AbsaOSS/k3d-action@v2.3.0
-        with:
-          cluster-name: "k3s-default"
-          k3d-version: "v5.4.1" # default version - change with caution, there was some problem after upgrade
-          args: >-
-            --config=.k3d/single-cluster.yml
-            --trace
-      - name: install additional components
-        shell: bash
-        run: ./k8s-helm/additional/install-streaming.sh
-      - name: verify quickstart template
-        shell: bash
-        run: COMMAND=template ./k8s-helm/install-streaming.sh
-      - name: install quickstart
-        shell: bash
-        run: ./k8s-helm/install-streaming.sh --debug
-      - name: Test quickstart
-        shell: bash
-        run: ./common/tests/testK8sStreaming.sh
+          ./stop-and-clean.sh 
+  
