@@ -1,0 +1,7 @@
+# Example Request-Response OpenAPI service requests (request payload per line)
+#{"customerId": "anon", "requestedAmount": 1555, "requestType": "mortgage", "location": { "city": "Warszawa", "street": "Marszałkowska" }}
+#{"customerId": "anon", "requestedAmount": 86, "requestType": "loan", "location": { "city": "Lublin", "street": "Głęboka" }}
+#{"customerId": "1", "requestedAmount": 1000, "requestType": "loan", "location": { "city": "Warszawa", "street": "Marszałkowska" }}
+#{"customerId": "1", "requestedAmount": 500, "requestType": "savings", "location": { "city": "London", "street": "Kensington" }}
+#{"customerId": "4", "requestedAmount": 2000, "requestType": "mortgage", "location": { "city": "Lublin", "street": "Lipowa" }}
+#{"customerId": "3", "requestedAmount": 2000, "requestType": "loan", "location": { "city": "Lublin", "street": "Głęboka" }}

@@ -1,0 +1,3 @@
+# Example messages below (message per line)
+#{ "clientId": "Client1", "amount": 100, "eventDate": 1720166429}"
+#{ "clientId": "Client2", "amount": 1000, "eventDate": 1720166429}"
