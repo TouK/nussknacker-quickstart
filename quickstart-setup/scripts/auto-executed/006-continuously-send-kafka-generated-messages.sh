@@ -27,7 +27,7 @@ while IFS= read -r TOPIC_NAME; do
     continue
   fi
 
-  MSG_GENERATION_SCRIPT="../../data/kafka/generate-messages/$TOPIC_NAME.sh"
+  MSG_GENERATION_SCRIPT=$(find ../../data/kafka/generate-messages -iname "$TOPIC_NAME.sh" | head)
 
   if [[ -f "$MSG_GENERATION_SCRIPT" ]]; then
     runMessageSending "$TOPIC_NAME" "$(realpath $MSG_GENERATION_SCRIPT)"

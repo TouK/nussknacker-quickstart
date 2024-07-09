@@ -27,7 +27,7 @@ while IFS= read -r OPENAPI_SERVICE_SLUG; do
     continue
   fi
 
-  REQUEST_GENERATOR_SCRIPT="../../data/http/generate-requests/$OPENAPI_SERVICE_SLUG.sh"
+  REQUEST_GENERATOR_SCRIPT=$(find ../../data/http/generate-requests -iname "$OPENAPI_SERVICE_SLUG.sh" | head)
 
   if [[ -f "$REQUEST_GENERATOR_SCRIPT" ]]; then
     runRequestSending "$OPENAPI_SERVICE_SLUG" "$(realpath $REQUEST_GENERATOR_SCRIPT)"

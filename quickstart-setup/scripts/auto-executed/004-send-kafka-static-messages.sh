@@ -26,7 +26,7 @@ while IFS= read -r TOPIC_NAME; do
     continue
   fi
 
-  MESSAGES_FILE="../../data/kafka/static-messages/$TOPIC_NAME.txt"
+  MESSAGES_FILE=$(find ../../data/kafka/static-messages -iname "$TOPIC_NAME.txt" | head)
 
   if [[ -f "$MESSAGES_FILE" ]]; then
     while IFS= read -r MSG; do

@@ -27,7 +27,7 @@ while IFS= read -r OPENAPI_SERVICE_SLUG; do
     continue
   fi
 
-  MESSAGES_FILE="../../data/http/static-requests/$OPENAPI_SERVICE_SLUG.txt"
+  MESSAGES_FILE=$(find ../../data/http/static-requests -iname "$OPENAPI_SERVICE_SLUG.txt" | head)
 
   if [[ -f "$MESSAGES_FILE" ]]; then
     while IFS= read -r REQUEST_BODY; do
