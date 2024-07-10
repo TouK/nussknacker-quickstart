@@ -1,5 +1,0 @@
-# List of topics that should be created
-Customers
-ProcessedTransactions
-SmsesWithOffer
-Transactions
