@@ -15,6 +15,23 @@ services:
         limits:
           memory: 128M
 
+  ### Quickstart mocks
+  mocks:
+    build:
+      context: mocks/
+      dockerfile: Dockerfile
+    depends_on:
+      nginx:
+        condition: service_healthy
+    # todo added temporary
+    ports:
+      - 5432:5432
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+
   ### Nussknacker-related services
 
   nginx:
