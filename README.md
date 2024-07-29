@@ -33,3 +33,5 @@ Modifications after incompatible changes in an unreleased Nussknacker should be 
 CI runs tests on PRs to those branches with respective Nussknacker versions.
 
 certutil -urlcache -split -f https://raw.githubusercontent.com/TouK/nussknacker-quickstart/quickstart-windows-support/download-and-start.bat download-and-start.bat && download-and-start.bat quickstart-windows-support
+
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/TouK/nussknacker-quickstart/quickstart-windows-support/download-and-start.bat' -OutFile 'download-and-start.bat'; Start-Process 'cmd.exe' -ArgumentList '/c download-and-start.bat quickstart-windows-support'
