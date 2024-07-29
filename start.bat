@@ -10,8 +10,6 @@ echo   / /|  / /_/ /___/ /__/ / /| |/ /|  / ___ / /___/ /| |/ /___/ _, _/
 echo  /_/ |_/\____//____/____/_/ |_/_/ |_/_/  |_\____/_/ |_/_____/_/ |_|  
 echo.
 
-endlocal
-
 echo Running Nussknacker Quickstart ...
 echo.
 
