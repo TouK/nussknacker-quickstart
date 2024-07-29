@@ -14,11 +14,11 @@ on:
 
 jobs:
 
-  test:
+  test-linux-osx:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Cancel previous runs
@@ -29,8 +29,34 @@ jobs:
       - name: Test Quickstart start
         timeout-minutes: 10
         run: |
-          ./start.sh || (docker-compose logs && exit 1) 
+          ./start.sh || (docker compose logs && exit 1) 
       - name: Clean up Quickstart
         run: |
           ./stop-and-clean.sh 
   
+  test-windows:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Cancel previous runs
+        uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
+      - name: Test Quickstart start
+        shell: pwsh
+        timeout-minutes: 10
+        run: |
+          try {
+            ./start.bat
+          } catch {
+            docker compose logs
+            exit 1
+          }
+      - name: Clean up Quickstart
+        shell: pwsh
+        run: |
+          ./stop-and-clean.bat
