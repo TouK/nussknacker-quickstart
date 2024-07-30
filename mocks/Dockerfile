@@ -1,7 +1,7 @@
-FROM phusion/baseimage:noble-1.0.0
+FROM holomekc/wiremock-gui:3.8.1 AS wiremock
+FROM postgres:16 AS postgres
 
-# Use baseimage-docker's init system.
-CMD ["/sbin/my_init"]
+FROM phusion/baseimage:noble-1.0.0
 
 # install
 USER root
@@ -11,30 +11,31 @@ RUN apt-get install -y --no-install-recommends curl ca-certificates && \
     curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
     echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
     apt-get update -y && \
-    apt -y install postgresql-16 && \
+    apt -y install postgresql-16 openjdk-11-jre-headless && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-# users
-# postgres user is already added by install command
+# WIREMOCK
+COPY --from=wiremock /var/wiremock /var/wiremock
+COPY --from=wiremock /home/wiremock /home/wiremock
 
-# postgres
-ENV PG_DB_NAME="mocks"
-ENV PG_USER="mocks"
-ENV PG_PASS="mocks_pass"
+COPY http-service/run-wiremock.sh /var/wiremock
+RUN mkdir -p /etc/service/http-service && \
+    mv /var/wiremock/run-wiremock.sh /etc/service/http-service/run
 
-ENV PG_BIN_DIR="/usr/lib/postgresql/16/bin"
-ENV PG_DIR="/usr/local/pgsql"
-ENV PG_DATA_DIR="$PG_DIR/data"
-ENV PG_CUSTOM_BIN_DIR="$PG_DIR/bin"
-ENV PG_CUSTOM_CONF_DIR="$PG_DIR/conf"
-ENV PG_CONF_FILE="$PG_CUSTOM_CONF_DIR/postgresql.conf"
-ENV PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
+EXPOSE 8080
 
-COPY postgres "$PG_CUSTOM_BIN_DIR"
-RUN chmod -R +x "$PG_CUSTOM_BIN_DIR" && \
-    mkdir /etc/service/postgres && \
-    mv "$PG_CUSTOM_BIN_DIR"/run_postgres.sh /etc/service/postgres/run && \
-    "$PG_CUSTOM_BIN_DIR"/postgres_setup.sh
+# POSTGRES
+COPY --from=postgres /usr/local/bin/docker-entrypoint.sh /usr/local/bin/
+COPY --from=postgres /docker-entrypoint-initdb.d/ /docker-entrypoint-initdb.d/
+COPY --from=postgres /usr/share/postgresql/ /usr/share/postgresql/
 
-# ports
+COPY postgres /etc/service/postgresql
+RUN mv /etc/service/postgresql/run_postgres.sh /etc/service/postgresql/run 
+
 EXPOSE 5432
+
+# Use baseimage-docker's init system.
+CMD ["/sbin/my_init"]
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=30 \
+  CMD (curl -f http://localhost:8080/__admin/ && pg_isready -U postgres) || exit 1

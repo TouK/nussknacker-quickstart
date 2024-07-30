@@ -1,10 +1,12 @@
 #!/bin/bash -e
 
-script_dir=$(dirname "${BASH_SOURCE[0]}")
+cd "$(dirname "$0")"
+
 # shellcheck source=/dev/null
-. "${script_dir}"/postgres_operations.sh
+. postgres_operations.sh
 
 init_db() {
+  echo "Initiation of Postgres DB ..."
   init_bg_log_file
   init_data_dir
   init_custom_conf_dir
@@ -13,6 +15,7 @@ init_db() {
 }
 
 configure_users() {
+  echo "Configuring Postgres users ..."
   start_bg
   wait_until_started
   create_user
@@ -22,5 +25,7 @@ configure_users() {
   stop
 }
 
-init_db
-configure_users
+if ! is_db_initialized; then
+  init_db
+  configure_users
+fi

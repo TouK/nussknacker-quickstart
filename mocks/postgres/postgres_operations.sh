@@ -1,4 +1,12 @@
-#!/bin/bash -e
+#!/bin/bash -ex
+
+is_db_initialized() {
+  if [ -f "$PG_DATA_DIR/PG_VERSION" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
 
 init_data_dir() {
   mkdir -p "$PG_DATA_DIR"
@@ -32,7 +40,7 @@ init_bg_log_file() {
 
 wait_until_started() {
   local max_startup_timeout_in_s=10
-  while ! pg_isready >/dev/null 2>&1; do
+  while ! pg_isready -U postgres >/dev/null 2>&1; do
     sleep 1
     max_startup_timeout_in_s=$((max_startup_timeout_in_s - 1))
     if ((max_startup_timeout_in_s <= 0)); then
