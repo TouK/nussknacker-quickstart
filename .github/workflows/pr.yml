@@ -11,6 +11,15 @@ on:
       - main
       - staging
       - release/*
+  workflow_dispatch:
+    inputs:
+      nussknacker_version:
+        description: "Nussknacker version"
+        required: false
+        type: string
+
+env:
+  INPUT_NUSSKNACKER_VERSION: ${{ inputs.nussknacker_version }}
 
 jobs:
 
@@ -29,6 +38,9 @@ jobs:
       - name: Test Quickstart start
         timeout-minutes: 10
         run: |
+          if [[ -n "$INPUT_NUSSKNACKER_VERSION" ]]; then
+            echo "NUSSKNACKER_VERSION=$INPUT_NUSSKNACKER_VERSION" > .env
+          fi
           ./start.sh || (docker compose logs && exit 1) 
       - name: Clean up Quickstart
         run: |
