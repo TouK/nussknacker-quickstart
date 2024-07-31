@@ -26,6 +26,7 @@ services:
     # todo added temporary
     ports:
       - 5432:5432
+      - 18080:8080
     deploy:
       resources:
         limits:

@@ -1,0 +1,220 @@
+{
+    "metaData" : {
+      "id" : "CustomerProfileOffers",
+      "additionalFields" : {
+        "description" : null,
+        "properties" : {
+          "parallelism" : "1",
+          "spillStateToDisk" : "true",
+          "useAsyncInterpretation" : "",
+          "checkpointIntervalInSeconds" : ""
+        },
+        "metaDataType" : "StreamMetaData"
+      }
+    },
+    "nodes" : [
+      {
+        "id" : "Customer events",
+        "ref" : {
+          "typ" : "kafka",
+          "parameters" : [
+            {
+              "name" : "Topic",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "'customer.data'"
+              }
+            },
+            {
+              "name" : "Schema version",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "'latest'"
+              }
+            }
+          ]
+        },
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 180,
+            "y" : 69
+          }
+        },
+        "type" : "Source"
+      },
+      {
+        "id" : "getCustomerProfile",
+        "service" : {
+          "id" : "getCustomerProfile",
+          "parameters" : [
+            {
+              "name" : "customerId",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "#input.customerId"
+              }
+            }
+          ]
+        },
+        "output" : "customerProfileData",
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 180,
+            "y" : 226
+          }
+        },
+        "type" : "Enricher"
+      },
+      {
+        "nextFalse" : [
+        ],
+        "id" : "relevantProfiles",
+        "expression" : {
+          "language" : "spel",
+          "expression" : "true"
+        },
+        "isDisabled" : null,
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 180,
+            "y" : 384
+          }
+        },
+        "type" : "Filter"
+      },
+      {
+        "id" : "getOffersForCustomerType",
+        "service" : {
+          "id" : "getOffersForCustomerType",
+          "parameters" : [
+            {
+              "name" : "customerType",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "#customerProfileData.customerType"
+              }
+            }
+          ]
+        },
+        "output" : "offer",
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 180,
+            "y" : 564
+          }
+        },
+        "type" : "Enricher"
+      },
+      {
+        "nextFalse" : [
+          {
+            "id" : "rejected",
+            "ref" : {
+              "typ" : "dead-end",
+              "parameters" : [
+              ]
+            },
+            "endResult" : null,
+            "isDisabled" : null,
+            "additionalFields" : {
+              "description" : null,
+              "layoutData" : {
+                "x" : 409,
+                "y" : 870
+              }
+            },
+            "type" : "Sink"
+          }
+        ],
+        "id" : "relevantOffers",
+        "expression" : {
+          "language" : "spel",
+          "expression" : "true"
+        },
+        "isDisabled" : null,
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 180,
+            "y" : 720
+          }
+        },
+        "type" : "Filter"
+      },
+      {
+        "id" : "enrichedOfferForCustomer",
+        "varName" : "enrichedData",
+        "value" : {
+          "language" : "spel",
+          "expression" : "{\n    \"customerId\": #input.customerId,\n    \"profileId\": #customerProfileData.id,\n    \"customerType\": #customerProfileData.customerType,\n    \"offerName\": #offer.name,\n    \"isPremiumOffer\": #offer.isPremium,\n    \"offerDiscountType\": #offer.discountType,\n    \"offerValidity\": #offer.validityDate\n}"
+        },
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 13,
+            "y" : 869
+          }
+        },
+        "type" : "Variable"
+      },
+      {
+        "id" : "Offer proposal to customer",
+        "ref" : {
+          "typ" : "kafka",
+          "parameters" : [
+            {
+              "name" : "Topic",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "'customer.profile.offer'"
+              }
+            },
+            {
+              "name" : "Schema version",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "'latest'"
+              }
+            },
+            {
+              "name" : "Key",
+              "expression" : {
+                "language" : "spel",
+                "expression" : ""
+              }
+            },
+            {
+              "name" : "Raw editor",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "false"
+              }
+            },
+            {
+              "name" : "Value",
+              "expression" : {
+                "language" : "spel",
+                "expression" : "#enrichedData"
+              }
+            }
+          ]
+        },
+        "endResult" : null,
+        "isDisabled" : null,
+        "additionalFields" : {
+          "description" : null,
+          "layoutData" : {
+            "x" : 13,
+            "y" : 1015
+          }
+        },
+        "type" : "Sink"
+      }
+    ],
+    "additionalBranches" : [
+    ]
+  }
