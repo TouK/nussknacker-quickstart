@@ -44,7 +44,8 @@ wait_until_started() {
 }
 
 create_custom_database() {
-  echo "CREATE DATABASE \"$PG_DB_NAME\"" | execute_sql "" "postgres" ""
+  local db_name="${1:-$PG_DB_NAME}"
+  echo "CREATE DATABASE \"$db_name\"" | execute_sql "" "postgres" ""
 }
 
 create_user() {
@@ -52,9 +53,27 @@ create_user() {
 }
 
 grant_privileges() {
+  local user="${1:-$PG_USER}"
+  local db_name="${2:-$PG_DB_NAME}"
     execute_sql "" "postgres" "" <<EOF
-GRANT ALL PRIVILEGES ON DATABASE "${PG_DB_NAME}" TO "${PG_USER}";
-ALTER DATABASE "${PG_DB_NAME}" OWNER TO "${PG_USER}";
+GRANT ALL PRIVILEGES ON DATABASE "${db_name}" TO "${user}";
+ALTER DATABASE "${db_name}" OWNER TO "${user}";
+EOF
+}
+
+create_schema() {
+  local user="${1:-$PG_USER}"
+  local schema_name="${2:-PUBLIC}"
+  echo "CREATE SCHEMA \"$schema_name\" AUTHORIZATION \"$user\"" | execute_sql "$PG_DB_NAME" "postgres" ""
+}
+
+wrap_sql_with_current_schema() {
+  local schema_name="${1:-PUBLIC}"
+  local sql="$2"
+  cat <<EOF
+SET search_path TO $schema_name;
+$sql
+RESET search_path;
 EOF
 }
 
