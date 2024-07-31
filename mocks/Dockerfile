@@ -6,12 +6,8 @@ FROM phusion/baseimage:noble-1.0.0
 # install
 USER root
 
-RUN apt-get install -y --no-install-recommends curl ca-certificates && \
-    install -d /usr/share/postgresql-common/pgdg && \
-    curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
-    echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    apt-get update -y && \
-    apt -y install postgresql-16 openjdk-11-jre-headless && \
+RUN apt-get update -y && \
+    apt -y install openjdk-11-jre-headless && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # WIREMOCK
