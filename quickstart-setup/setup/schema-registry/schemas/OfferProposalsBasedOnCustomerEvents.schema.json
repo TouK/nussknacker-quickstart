@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "title": "OfferProposal",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "required": [
+      "offerName",
+      "offerDescription",
+      "clientName",
+      "amount",
+      "dueDate"
+    ],
+    "properties": {
+      "offerName": {
+        "type": "string",
+        "description": "The assigned offer for the person"
+      },
+      "offerDescription": {
+        "type": "string",
+        "description": "The assigned offer human readable description"
+      },
+      "clientName": {
+        "type": "string",
+        "description": "The person's full name"
+      },
+      "amount": {
+        "type": "integer",
+        "description": "The offer price"
+      },
+      "dueDate": {
+        "type": "string",
+        "description": "The expiration date for the offer"
+      }
+    }
+  }
+  

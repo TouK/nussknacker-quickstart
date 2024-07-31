@@ -20,9 +20,6 @@ services:
     build:
       context: mocks/
       dockerfile: Dockerfile
-    depends_on:
-      nginx:
-        condition: service_healthy
     # todo added temporary
     ports:
       - 5432:5432
@@ -31,7 +28,6 @@ services:
       resources:
         limits:
           memory: 256M
-
 
   ### Nussknacker-related services
 
@@ -89,6 +85,8 @@ services:
         condition: service_healthy
       flink-taskmanager:
         condition: service_started
+      mocks:
+        condition: service_healthy
     expose: 
       - 8181
     healthcheck:

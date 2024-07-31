@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Customer Profile API
+  version: 1.0.0
+  description: API for retrieving customer profiles and offers based on customer type.
+
+paths:
+  '/customer/{customerId}/profile':
+    get:
+      summary: Get customer profile by customer's ID
+      description: Retrieve detailed profile information for a customer using their unique customer ID.
+      operationId: getCustomerProfile
+      parameters:
+        - name: customerId
+          in: path
+          required: true
+          description: The unique identifier of the customer.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Customer profile found successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerProfile'
+        '404':
+          description: No customer profile found for the given ID.
+
+  '/customer/{customerType}/offer':
+    get:  
+      summary: Get offer by customer type
+      description: Retrieve special offers available for a specific type of customer.
+      operationId: getCustomerTypeOffer
+      parameters:
+        - name: customerType
+          in: path
+          required: true
+          description: The type/category of the customer.
+          schema: 
+            type: string
+      responses:
+        '200': 
+          description: Offer found for the specified customer type.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerTypeOffer'
+        '404':
+          description: No offer found for the specified customer type.
+
+components:
+  schemas:
+    CustomerProfile:
+      title: CustomerProfile
+      type: object
+      description: Schema representing a customer's profile information.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the customer profile.
+        customerType:
+          type: string
+          description: The type or category of the customer.
+
+    CustomerTypeOffer:
+      title: CustomerTypeOffer
+      type: object
+      description: Schema representing an offer available for a specific type of customer.
+      properties:
+        id:
+          type: integer
+          description: The unique identifier of the offer.
+        name:
+          type: string
+          description: The name or title of the offer.
+        description:
+          type: string
+          description: A detailed description of the offer.
+        amount:
+          type: integer
+          description: The amount or value of the offer.
+        currency:
+          type: string
+          description: The currency in which the offer amount is denoted.
