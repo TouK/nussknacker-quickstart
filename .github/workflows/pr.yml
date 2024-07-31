@@ -41,7 +41,7 @@ jobs:
           if [[ -n "$INPUT_NUSSKNACKER_VERSION" ]]; then
             echo "NUSSKNACKER_VERSION=$INPUT_NUSSKNACKER_VERSION" > .env
           fi
-          ./start.sh || (docker-compose logs && exit 1) 
+          ./start.sh || (docker compose logs && exit 1) 
       - name: Clean up Quickstart
         run: |
           ./stop-and-clean.sh 
