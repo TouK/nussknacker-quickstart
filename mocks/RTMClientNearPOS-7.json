@@ -1,0 +1,532 @@
+{
+  "metaData" : {
+    "id" : "RTMClientNearPOS",
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "parallelism" : "1",
+        "spillStateToDisk" : "true",
+        "useAsyncInterpretation" : "",
+        "checkpointIntervalInSeconds" : ""
+      },
+      "metaDataType" : "StreamMetaData"
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "stream of given clients geo location",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'GeoLocations'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          }
+        ]
+      },
+      "additionalFields" : {
+        "description" : "geo locations stream",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 0
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "id" : "fetch given client contact history from last X Days",
+      "service" : {
+        "id" : "rtm-near-pos-query-enricher",
+        "parameters" : [
+          {
+            "name" : "Result strategy",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'Result set'"
+            }
+          },
+          {
+            "name" : "Query",
+            "expression" : {
+              "language" : "spelTemplate",
+              "expression" : "select 'x' from contact_history where client_id = ? and event_time > NOW() - INTERVAL '5 minutes'"
+            }
+          },
+          {
+            "name" : "Cache TTL",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "T(java.time.Duration).parse('PT1M')"
+            }
+          },
+          {
+            "name" : "arg1",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.clientId"
+            }
+          }
+        ]
+      },
+      "output" : "contact_history_entry",
+      "additionalFields" : {
+        "description" : "For the purpose of example we use 5 minutes instead of days or longer period",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 180
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "client is not contacted in last X Days",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#contact_history_entry.empty"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : "",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 360
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "is client on blocked list?",
+      "service" : {
+        "id" : "rtm-near-pos-lookup-enricher",
+        "parameters" : [
+          {
+            "name" : "Table",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'blocked_list'"
+            }
+          },
+          {
+            "name" : "Cache TTL",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "T(java.time.Duration).parse('PT1M')"
+            }
+          },
+          {
+            "name" : "Key column",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'client_id'"
+            }
+          },
+          {
+            "name" : "Key value",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.clientId"
+            }
+          }
+        ]
+      },
+      "output" : "is_client_on_blocked_list",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 540
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "client is not blocked",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#is_client_on_blocked_list == null"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 720
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "enrich with client data",
+      "service" : {
+        "id" : "rtm-near-pos-lookup-enricher",
+        "parameters" : [
+          {
+            "name" : "Table",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'client'"
+            }
+          },
+          {
+            "name" : "Cache TTL",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "T(java.time.Duration).parse('PT5M')"
+            }
+          },
+          {
+            "name" : "Key column",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'id'"
+            }
+          },
+          {
+            "name" : "Key value",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.clientId"
+            }
+          }
+        ]
+      },
+      "output" : "clientData",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 900
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "id" : "extract consents",
+      "varName" : "consents",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#clientData?.consents?.getArray()?.![#this]?:{}"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1080
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "has marketing consents",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "not #consents.isEmpty"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : "#clientData?.consents?",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1260
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "enrich with POS info",
+      "service" : {
+        "id" : "rtm-near-pos-lookup-enricher",
+        "parameters" : [
+          {
+            "name" : "Table",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'pos'"
+            }
+          },
+          {
+            "name" : "Cache TTL",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "T(java.time.Duration).parse('PT10M')"
+            }
+          },
+          {
+            "name" : "Key column",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'id'"
+            }
+          },
+          {
+            "name" : "Key value",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#clientData.pos_id"
+            }
+          }
+        ]
+      },
+      "output" : "pos_data",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1440
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "checking POS opening hours",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#pos_data != null AND #pos_data.open_hour != null AND #pos_data.close_hour != null AND #DATE.isBetween(#DATE.nowAtZone('Europe/Warsaw').toLocalTime, #pos_data.open_hour.toLocalTime(), #pos_data.close_hour.toLocalTime())"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : "POS open weekdays should be checked too",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1620
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "Count when distance to POS is lower than 1 km",
+      "outputVar" : "agg_out",
+      "nodeType" : "aggregate-session",
+      "parameters" : [
+        {
+          "name" : "groupBy",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.clientId + ''"
+          }
+        },
+        {
+          "name" : "aggregator",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#AGG.countWhen"
+          }
+        },
+        {
+          "name" : "aggregateBy",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#GEO.distanceInKm(#input.geo.lat, #input.geo.lon, 1.0, 2.0) <= 1"
+          }
+        },
+        {
+          "name" : "endSessionCondition",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "false"
+          }
+        },
+        {
+          "name" : "sessionTimeout",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "T(java.time.Duration).parse('PT1M')"
+          }
+        },
+        {
+          "name" : "emitWhen",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "T(pl.touk.nussknacker.engine.flink.util.transformer.aggregate.SessionWindowTrigger).OnEvent"
+          }
+        }
+      ],
+      "additionalFields" : {
+        "description" : "",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1800
+        }
+      },
+      "type" : "CustomNode"
+    },
+    {
+      "id" : "notification type and message content",
+      "service" : {
+        "id" : "decision-table",
+        "parameters" : [
+          {
+            "name" : "Decision Table",
+            "expression" : {
+              "language" : "tabularDataDefinition",
+              "expression" : "{\n  \"rows\": [\n    [\n      \"SMS\",\n      \"INDIVIDUAL\",\n      \"false\"\n    ],\n    [\n      \"EMAIL\",\n      \"INDIVIDUAL\",\n      \"false\"\n    ],\n    [\n      \"PUSH\",\n      \"INDIVIDUAL\",\n      \"false\"\n    ],\n    [\n      \"SMS\",\n      \"BUSINESS\",\n      \"false\"\n    ],\n    [\n      \"EMAIL\",\n      \"BUSINESS\",\n      \"false\"\n    ],\n    [\n      \"PUSH\",\n      \"BUSINESS\",\n      \"false\"\n    ],\n    [\n      \"SMS\",\n      \"INDIVIDUAL\",\n      \"true\"\n    ],\n    [\n      \"EMAIL\",\n      \"INDIVIDUAL\",\n      \"true\"\n    ],\n    [\n      \"PUSH\",\n      \"INDIVIDUAL\",\n      \"true\"\n    ],\n    [\n      \"SMS\",\n      \"BUSINESS\",\n      \"true\"\n    ],\n    [\n      \"EMAIL\",\n      \"BUSINESS\",\n      \"true\"\n    ],\n    [\n      \"PUSH\",\n      \"BUSINESS\",\n      \"true\"\n    ]\n  ],\n  \"columns\": [\n    {\n      \"name\": \"Consents\",\n      \"type\": \"java.lang.String\"\n    },\n    {\n      \"name\": \"Client type\",\n      \"type\": \"java.lang.String\"\n    },\n    {\n      \"name\": \"IsVIP\",\n      \"type\": \"java.lang.Boolean\"\n    }\n  ]\n}"
+            }
+          },
+          {
+            "name" : "Match condition",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#consents.contains(#ROW.Consents)"
+            }
+          }
+        ]
+      },
+      "output" : "decisionTableOutput",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 1980
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "id" : "choose best decision",
+      "varName" : "decision",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#decisionTableOutput[0]"
+      },
+      "additionalFields" : {
+        "description" : "We can apply various business rules to choose best record here",
+        "layoutData" : {
+          "x" : 360,
+          "y" : 2160
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "build notification content",
+      "varName" : "notification_content",
+      "value" : {
+        "language" : "spel",
+        "expression" : "'You are close to our shop come and see ' + (#decision['Client type'] == 'INDIVIDUAL' ? 'new' : (#decision.IsVIP ? 'premium' : 'new business')) + ' offers!'"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 2340
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "defaultNext" : [
+      ],
+      "nexts" : [
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#decision?.Consents == \"SMS\""
+          },
+          "nodes" : [
+            {
+              "id" : "SMS",
+              "ref" : {
+                "typ" : "dead-end",
+                "parameters" : [
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 0,
+                  "y" : 2700
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#decision?.Consents == \"EMAIL\""
+          },
+          "nodes" : [
+            {
+              "id" : "EMAIL",
+              "ref" : {
+                "typ" : "dead-end",
+                "parameters" : [
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 720,
+                  "y" : 2700
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#decision?.Consents == 'PUSH'"
+          },
+          "nodes" : [
+            {
+              "id" : "PUSH",
+              "ref" : {
+                "typ" : "dead-end",
+                "parameters" : [
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 360,
+                  "y" : 2700
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        }
+      ],
+      "id" : "split by notification type",
+      "expression" : null,
+      "exprVal" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 360,
+          "y" : 2520
+        }
+      },
+      "type" : "Switch"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}
