@@ -16,12 +16,20 @@ function verifyBashScript() {
   fi
 }
 
+function random_Ndigit_number() {
+  if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) number of digits"
+    exit 1
+  fi
+  od -An -t d -N 2 /dev/urandom |  head -n 1 | tr -d ' ' | head -c "$1"
+}
+
 function random_4digit_number() {
-  od -An -t d -N 2 /dev/urandom |  head -n 1 | tr -d ' ' | head -c 4
+  random_Ndigit_number 4
 }
 
 function random_3digit_number() {
-  random_4digit_number | head -c 3
+  random_Ndigit_number 3
 }
 
 function now() {
