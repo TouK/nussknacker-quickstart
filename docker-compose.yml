@@ -72,6 +72,9 @@ services:
       FLINK_REST_URL: "http://flink-jobmanager:8081"
       JDK_JAVA_OPTIONS: "-Xmx1024M"
       USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 #todo: remove + port
+    ports:
+      - 5005:5005
     depends_on:
       postgres:
         condition: service_healthy

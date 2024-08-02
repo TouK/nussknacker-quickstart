@@ -1,5 +1,9 @@
 FROM holomekc/wiremock-gui:3.8.1 AS wiremock
 
+RUN apt-get update && \ 
+    apt-get install -y wget && \
+    wget -P /var/wiremock/extensions https://repo1.maven.org/maven2/org/wiremock/extensions/wiremock-faker-extension-standalone/0.2.0/wiremock-faker-extension-standalone-0.2.0.jar
+
 FROM phusion/baseimage:noble-1.0.0
 
 # Use baseimage-docker's init system.

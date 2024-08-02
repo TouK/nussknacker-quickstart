@@ -9,7 +9,7 @@
   "properties": {
     "customerId": {
       "description": "The customer unique identifier",
-      "type": "integer"
+      "type": "string"
     },
     "eventType": {
       "description": "Type of event",

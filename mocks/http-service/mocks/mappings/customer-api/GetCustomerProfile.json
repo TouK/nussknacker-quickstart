@@ -1,13 +1,13 @@
 {
     "request": {
-        "urlPattern": "/customer/([0-9]+)/profile",
+        "urlPattern": "/customer/(.+)/profile",
         "method": "GET"
     },
     "response": {
         "status": 200,
-        "body": "{\n  \"id\": 123,\n  \"customerType\": \"Regular\"\n}",
         "headers": {
             "Content-Type": "application/json"
-        }
+        },
+        "bodyFileName": "responses/customer-api/CustomerProfile.json"
     }
 }

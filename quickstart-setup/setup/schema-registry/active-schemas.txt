@@ -3,3 +3,5 @@
 ProcessedTransactions.schema.json
 #SmsesWithOffer.schema.json
 Transactions.schema.json
+CustomerEvents.schema.json
+OfferProposalsBasedOnCustomerEvents.schema.json
