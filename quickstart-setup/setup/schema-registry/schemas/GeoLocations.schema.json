@@ -1,0 +1,31 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "required": [
+    "clientId"
+  ],
+  "properties": {
+    "geo": {
+      "type": "object",
+      "required": [
+        "lat",
+        "lon"
+      ],
+      "properties": {
+        "lon": {
+          "type": "number"
+        },
+        "lat": {
+          "type": "number"
+        }
+      }
+    },
+    "clientId": {
+      "type": "integer"
+    },
+    "eventTime": {
+      "type": "integer"
+    }
+  }
+}

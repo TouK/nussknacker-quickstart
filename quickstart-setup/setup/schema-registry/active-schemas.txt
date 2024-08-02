@@ -5,3 +5,7 @@ ProcessedTransactions.schema.json
 Transactions.schema.json
 CustomerEvents.schema.json
 OfferProposalsBasedOnCustomerEvents.schema.json
+GeoLocations.schema.json
+GeoLocationsOutputEmail.schema.json
+GeoLocationsOutputPush.schema.json
+GeoLocationsOutputSms.schema.json

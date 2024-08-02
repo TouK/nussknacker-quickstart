@@ -44,6 +44,10 @@ function random_3digit_number() {
   random_Ndigit_number 3
 }
 
+function random_1digit_number() {
+  random_4digit_number | head -c 1
+}
+
 function now() {
   echo "$(date +%s)$(random_3digit_number)"
 }

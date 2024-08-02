@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "required": [
+    "email",
+    "content"
+  ],
+  "properties": {
+    "email": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  }
+}

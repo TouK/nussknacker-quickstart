@@ -1,0 +1,17 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "required": [
+    "msisdn",
+    "content"
+  ],
+  "properties": {
+    "msisdn": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    }
+  }
+}
