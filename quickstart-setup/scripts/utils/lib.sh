@@ -21,7 +21,19 @@ function random_Ndigit_number() {
     echo "Error: One parameter required: 1) number of digits"
     exit 1
   fi
-  od -An -t d -N 2 /dev/urandom |  head -n 1 | tr -d ' ' | head -c "$1"
+
+  local LENGTH=$1
+  local RESULT=""
+  
+  local FIRST_DIGIT=$((RANDOM % 9 + 1))
+  RESULT+="$FIRST_DIGIT"
+  
+  while [ ${#RESULT} -lt $LENGTH ]; do
+    local REMAINING=$((LENGTH - ${#RESULT}))
+    local PART=$(printf "%05d" $((RANDOM % 100000)))
+    RESULT+=${PART:0:$REMAINING}
+  done
+  echo "$RESULT"
 }
 
 function random_4digit_number() {
@@ -37,8 +49,8 @@ function now() {
 }
 
 function pick_randomly() {
-  local options=("$@") 
-  local count=${#options[@]} 
-  local random_index=$((RANDOM % count)) 
-  echo "${options[$random_index]}"
+  local OPTIONS=("$@") 
+  local COUNT=${#OPTIONS[@]} 
+  local RANDOM_INDEX=$((RANDOM % COUNT)) 
+  echo "${OPTIONS[$RANDOM_INDEX]}"
 }
