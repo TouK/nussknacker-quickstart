@@ -218,7 +218,7 @@
             "name" : "Match condition",
             "expression" : {
               "language" : "spel",
-              "expression" : "#ROW.DayOfWeek == #DATE.nowAtDefaultTimeZone.getDayOfWeek.toString"
+              "expression" : "#ROW.DayOfWeek == #DATE.nowAtDefaultTimeZone.getDayOfWeek.toString.toUpperCase"
             }
           }
         ]
