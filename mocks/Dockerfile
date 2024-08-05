@@ -12,12 +12,8 @@ CMD ["/sbin/my_init"]
 # install
 USER root
 
-RUN apt-get install -y --no-install-recommends curl ca-certificates && \
-    install -d /usr/share/postgresql-common/pgdg && \
-    curl -o /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc --fail https://www.postgresql.org/media/keys/ACCC4CF8.asc && \
-    echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
-    apt-get update -y && \
-    apt -y install postgresql-16 openjdk-11-jre-headless && \
+RUN apt-get update -y && \
+    apt -y install openjdk-11-jre-headless && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # WIREMOCK
@@ -29,12 +25,6 @@ COPY http-service/scripts /etc/service/http-service
 RUN mv /etc/service/http-service/run-wiremock.sh /etc/service/http-service/run
 
 EXPOSE 8080
-
-# POSTGRES
-COPY postgres/scripts /etc/service/postgresql
-RUN mv /etc/service/postgresql/run_postgres.sh /etc/service/postgresql/run 
-
-EXPOSE 5432
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=30 \
   CMD (curl -f http://localhost:8080/__admin/ && pg_isready -U postgres) || exit 1
