@@ -348,7 +348,7 @@
           "name": "sessionTimeout",
           "expression": {
             "language": "spel",
-            "expression": "T(java.time.Duration).parse('PT1M')"
+            "expression": "T(java.time.Duration).parse('PT10S')"
           }
         },
         {
@@ -360,7 +360,7 @@
         }
       ],
       "additionalFields": {
-        "description": "We are counting events when a customer is within one kilometre of the point of sale assigned to that customer.",
+        "description": "We are counting events when a customer is within one kilometre of the point of sale assigned to that customer. For the purpose of the example we set the timeout to 10 seconds, in the real scenario the value should be higher.",
         "layoutData": {
           "x": 360,
           "y": 1800
@@ -371,14 +371,14 @@
     {
       "nextFalse": [
       ],
-      "id": "at least 2 events received with location near POS",
+      "id": "2 events received with location near POS from session of X time",
       "expression": {
         "language": "spel",
-        "expression": "#agg_out >= 2"
+        "expression": "#agg_out == 2"
       },
       "isDisabled": null,
       "additionalFields": {
-        "description": "If we receive at least 2 events where the customer location meets our requirements within 1 minute, we process further.",
+        "description": "If we receive at least 2 events where the customer location meets our requirements within 10 seconds, we process further.",
         "layoutData": {
           "x": 360,
           "y": 1980

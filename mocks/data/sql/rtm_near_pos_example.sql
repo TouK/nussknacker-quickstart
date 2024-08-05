@@ -48,8 +48,6 @@ insert into client(id, pos_id, msisdn, email, consents, client_type) VALUES (9, 
 
 ---- Blocked
 insert into blocked_list(client_id) values (5);
-insert into blocked_list(client_id) values (7);
-insert into blocked_list(client_id) values (10);
 
 -- Contact history
 insert into contact_history(client_id, event_time) VALUES (9, NOW() - INTERVAL '1 minutes');
