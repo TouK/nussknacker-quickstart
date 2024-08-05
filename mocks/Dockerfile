@@ -27,4 +27,4 @@ RUN mv /etc/service/http-service/run-wiremock.sh /etc/service/http-service/run
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=30 \
-  CMD (curl -f http://localhost:8080/__admin/ && pg_isready -U postgres) || exit 1
+  CMD (curl -f http://localhost:8080/__admin/) || exit 1
