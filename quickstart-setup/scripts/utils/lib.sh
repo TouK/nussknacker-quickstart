@@ -45,7 +45,7 @@ function random_3digit_number() {
 }
 
 function random_1digit_number() {
-  random_4digit_number | head -c 1
+  random_Ndigit_number 1
 }
 
 function now() {

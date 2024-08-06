@@ -1,11 +1,23 @@
 #!/bin/bash -e
 
-script_dir=$(dirname "${BASH_SOURCE[0]}")
+cd "$(dirname "$0")"
+. postgres_operations.sh
+. common.sh
 
-# shellcheck source=/dev/null
-. "${script_dir}"/postgres_operations.sh
-# shellcheck source=/dev/null
-. "${script_dir}"/common.sh
+init_db() {
+  init_bg_log_file
+  init_data_dir
+  init_custom_conf_dir
+  configure_pg_config
+  configure_authentication
+}
+
+configure_users() {
+  create_user
+  create_custom_database
+  grant_privileges
+  alter_pg_user_pass
+}
 
 execute_ddls() {
   local schema_name
@@ -22,14 +34,9 @@ execute_ddls() {
   done
 }
 
-run_startup_scripts() {
-  startup_scripts_executed_file="$PG_BASE_DIR/startup_scripts_executed"
-  if [ ! -f "$startup_scripts_executed_file" ]; then
-    start_bg
-    execute_ddls
-    stop
-    touch "$startup_scripts_executed_file"
-  fi
-}
-
-run_startup_scripts
+init_db
+start_bg
+wait_until_started
+configure_users
+execute_ddls
+stop

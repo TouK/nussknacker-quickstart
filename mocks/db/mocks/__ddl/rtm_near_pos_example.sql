@@ -1,3 +1,11 @@
+-- cleanup for the sake idempotent run
+drop table if exists contact_history;
+drop table if exists blocked_list;
+drop table if exists client;
+drop table if exists pos;
+drop type if exists consent_enum;
+drop type if exists client_type_enum;
+
 create table pos
 (
     id SERIAL PRIMARY KEY,

@@ -46,7 +46,7 @@
     {
       "id": "enrich with contact history data",
       "service": {
-        "id": "rtm-near-pos-query-enricher",
+        "id": "customers-data-query-enricher",
         "parameters": [
           {
             "name": "Result strategy",
@@ -109,7 +109,7 @@
     {
       "id": "enrich with data from list of blocked clients",
       "service": {
-        "id": "rtm-near-pos-lookup-enricher",
+        "id": "customers-data-lookup-enricher",
         "parameters": [
           {
             "name": "Table",
@@ -172,7 +172,7 @@
     {
       "id": "enrich with client data",
       "service": {
-        "id": "rtm-near-pos-lookup-enricher",
+        "id": "customers-data-lookup-enricher",
         "parameters": [
           {
             "name": "Table",
@@ -251,7 +251,7 @@
     {
       "id": "enrich with POS info",
       "service": {
-        "id": "rtm-near-pos-lookup-enricher",
+        "id": "pos-data-lookup-enricher",
         "parameters": [
           {
             "name": "Table",
@@ -407,7 +407,7 @@
           }
         ]
       },
-      "output": "decisionTableOutput",
+      "output": "decisionsWithPrioritiesAndNotificationContent",
       "additionalFields": {
         "description": "In the decision table, we define the business rules that we are trying to match with the 'matching condition' and then pass the matched decisions on.",
         "layoutData": {
@@ -422,7 +422,7 @@
       "varName": "decision",
       "value": {
         "language": "spel",
-        "expression": "#decisionTableOutput?.^[#this.Priority == 3] ?: (#decisionTableOutput?.^[#this.Priority == 2] ?: (#decisionTableOutput?.^[#this.Priority == 1]))"
+        "expression": "#decisionsWithPrioritiesAndNotificationContent?.^[#this.Priority == 3] ?: (#decisionsWithPrioritiesAndNotificationContent?.^[#this.Priority == 2] ?: (#decisionsWithPrioritiesAndNotificationContent?.^[#this.Priority == 1]))"
       },
       "additionalFields": {
         "description": "We can apply various business rules to choose best decisions here",

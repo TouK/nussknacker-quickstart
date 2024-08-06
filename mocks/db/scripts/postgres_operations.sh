@@ -1,33 +1,45 @@
 #!/bin/bash -e
 
 init_data_dir() {
-  mkdir -p "$PG_DATA_DIR"
-  chown postgres "$PG_DATA_DIR"
-  /sbin/setuser postgres "$PG_BIN_DIR"/initdb -D "$PG_DATA_DIR"
+  if [ ! -e "$PG_DATA_DIR" ]; then
+    mkdir -p "$PG_DATA_DIR"
+    chown postgres "$PG_DATA_DIR"
+    /sbin/setuser postgres "$PG_BIN_DIR"/initdb -D "$PG_DATA_DIR"
+  fi
 }
 
 init_custom_conf_dir() {
-  mkdir -p "$PG_CUSTOM_CONF_DIR"
-  chown postgres "$PG_CUSTOM_CONF_DIR"
+  if [ ! -e "$PG_CUSTOM_CONF_DIR" ]; then
+    mkdir -p "$PG_CUSTOM_CONF_DIR"
+    chown postgres "$PG_CUSTOM_CONF_DIR"
+  fi
 }
 
 configure_authentication() {
-  cp "$PG_DATA_DIR/pg_hba.conf" "$PG_HBA_FILE"
-  chown postgres "$PG_HBA_FILE"
-  echo "#<Custom configuration>" >> "$PG_HBA_FILE"
-  echo "host all all all md5" >> "$PG_HBA_FILE"
+  if [ ! -f "$PG_HBA_FILE" ]; then
+    cp "$PG_DATA_DIR/pg_hba.conf" "$PG_HBA_FILE"
+    chown postgres "$PG_HBA_FILE"
+    echo "#<Custom configuration>" >> "$PG_HBA_FILE"
+    echo "host all all all md5" >> "$PG_HBA_FILE"
+  fi
 }
 
 configure_pg_config() {
-  cp "$PG_DATA_DIR/postgresql.conf" "$PG_CONF_FILE"
-  chown postgres "$PG_CONF_FILE"
-  echo "#<Custom configuration>" >> "$PG_CONF_FILE"
-  echo "listen_addresses = '*'" >> "$PG_CONF_FILE"
+  if [ ! -f "$PG_CONF_FILE" ]; then
+    cp "$PG_DATA_DIR/postgresql.conf" "$PG_CONF_FILE"
+    chown postgres "$PG_CONF_FILE"
+    echo "#<Custom configuration>" >> "$PG_CONF_FILE"
+    echo "listen_addresses = '*'" >> "$PG_CONF_FILE"
+  fi
 }
 
 init_bg_log_file() {
-  touch /var/log/postgres_bg.log
-  chown postgres /var/log/postgres_bg.log
+  local log_file
+  log_file="/var/log/postgres_bg.log"
+  if [ ! -f "$log_file" ]; then
+    touch "$log_file"
+    chown postgres "$log_file"
+  fi
 }
 
 wait_until_started() {
@@ -45,11 +57,21 @@ wait_until_started() {
 
 create_custom_database() {
   local db_name="${1:-$PG_DB_NAME}"
-  echo "CREATE DATABASE \"$db_name\"" | execute_sql "" "postgres" ""
+  DB_EXISTS=$(echo "SELECT 1 FROM pg_database WHERE datname='$db_name'" | execute_sql "" "postgres" "" "-tA")
+  if [ "$DB_EXISTS" != "1" ]; then
+    echo "CREATE DATABASE \"$db_name\"" | execute_sql "" "postgres" ""
+  else
+      echo "DB already exists - creation skipped"
+  fi
 }
 
 create_user() {
-  echo "CREATE ROLE \"${PG_USER}\" WITH LOGIN PASSWORD '${PG_PASS}';" | execute_sql "" "postgres" ""
+  ROLE_EXISTS=$(echo "SELECT 1 FROM pg_roles WHERE rolname='$PG_USER'" | execute_sql "" "postgres" "" "-tA")
+  if [ "$ROLE_EXISTS" != "1" ]; then
+    echo "CREATE ROLE \"${PG_USER}\" WITH LOGIN PASSWORD '${PG_PASS}';" | execute_sql "" "postgres" ""
+  else
+    echo "ROLE already exists - creation skipped"
+  fi
 }
 
 grant_privileges() {
@@ -64,7 +86,7 @@ EOF
 create_schema() {
   local user="${1:-$PG_USER}"
   local schema_name="${2:-PUBLIC}"
-  echo "CREATE SCHEMA \"$schema_name\" AUTHORIZATION \"$user\"" | execute_sql "$PG_DB_NAME" "postgres" ""
+  echo "CREATE SCHEMA IF NOT EXISTS \"$schema_name\" AUTHORIZATION \"$user\"" | execute_sql "$PG_DB_NAME" "postgres" ""
 }
 
 wrap_sql_with_current_schema() {

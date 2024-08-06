@@ -1,6 +1,7 @@
 {
   "type": "object",
   "additionalProperties": false,
+  "description": "A schema for a topic used to send emails.",
   "$schema": "http://json-schema.org/draft-07/schema",
   "required": [
     "email",
@@ -8,10 +9,12 @@
   ],
   "properties": {
     "email": {
-      "type": "string"
+      "type": "string",
+      "description": "The email address of the client."
     },
     "content": {
-      "type": "string"
+      "type": "string",
+      "description": "The content or message to be associated with the email."
     }
   }
 }
