@@ -9,4 +9,5 @@ cd "$(dirname "$0")"
 
 TOPIC_NAME=$1
 
-/opt/bitnami/kafka/bin/kafka-topics.sh --create --bootstrap-server kafka:9092 --if-not-exists --topic "$TOPIC_NAME"
+kaf --brokers=kafka:9092 topic delete "$TOPIC_NAME" > /dev/null
+./create-topic-idempotently.sh
