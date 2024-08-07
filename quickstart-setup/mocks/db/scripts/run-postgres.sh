@@ -1,5 +1,8 @@
 #!/bin/sh
 
+set -e
+set -x
+
 export PG_DB_NAME="mocks"
 export PG_USER="mocks"
 export PG_PASS="mocks_pass"
@@ -7,11 +10,10 @@ export PG_PASS="mocks_pass"
 export PG_BIN_DIR="/usr/lib/postgresql/16/bin"
 export PG_BASE_DIR="/home/postgres"
 export PG_DATA_DIR="$PG_BASE_DIR/data"
-export PG_CUSTOM_BIN_DIR="$PG_BASE_DIR/scripts"
-export PG_DDL_DIR="$PG_BASE_DIR/mocks/__ddl"
+export PG_DDL_DIR="$PG_BASE_DIR/__ddl"
 export PG_CUSTOM_CONF_DIR="$PG_BASE_DIR/conf"
 export PG_CONF_FILE="$PG_CUSTOM_CONF_DIR/postgresql.conf"
 export PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
 
-"$PG_CUSTOM_BIN_DIR"/configure.sh
-exec "$PG_CUSTOM_BIN_DIR"/postgres_operations.sh start
+/app/mocks/db/scripts/configure.sh
+exec /app/mocks/db/scripts/postgres-operations.sh start

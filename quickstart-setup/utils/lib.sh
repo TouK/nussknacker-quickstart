@@ -58,3 +58,8 @@ function pick_randomly() {
   local RANDOM_INDEX=$((RANDOM % COUNT)) 
   echo "${OPTIONS[$RANDOM_INDEX]}"
 }
+
+function strip_extension() {
+  local file="$1"
+  echo "${file%.*}"
+}
