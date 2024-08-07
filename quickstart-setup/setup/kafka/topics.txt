@@ -5,3 +5,7 @@ SmsesWithOffer
 Transactions
 CustomerEvents
 OfferProposalsBasedOnCustomerEvents
+GeoLocations
+GeoLocationsOutputEmail
+GeoLocationsOutputSms
+GeoLocationsOutputPush

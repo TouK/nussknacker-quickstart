@@ -3,3 +3,4 @@ DetectLargeTransactions.json
 #DetermineOfferedPlan.json
 LoanRequest.json
 OfferCustomerProposalBasedOnActivityEvent.json
+RTMClientNearPOS.json
