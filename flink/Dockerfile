@@ -1,4 +1,4 @@
-ARG FLINK_VERSION
+ARG FLINK_VERSION=undefined-flink-version
 
 FROM flink:${FLINK_VERSION}
 
