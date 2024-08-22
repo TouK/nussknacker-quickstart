@@ -4,6 +4,8 @@ cd "$(dirname "$0")"
 
 rm -rf /app/healthy
 
+echo "Starting to setup Nu stack ..."
+
 /app/setup/run-setup.sh
 /app/data/keep-sending.sh
 

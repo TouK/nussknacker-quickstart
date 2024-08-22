@@ -12,7 +12,9 @@ function customizeNuConfiguration() {
 
   local EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME=$1
 
-  cp -f "$(realpath configuration/"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME")" "$CONFS_DIR"
+  echo "Including $EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME configuration"
+
+  cp -f "$(realpath configurations/"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME")" "$CONFS_DIR"
   local INCLUDE_CONF_LINE="include \"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME\""
 
   if ! grep -qxF "$INCLUDE_CONF_LINE" "$APP_CUSTOMIZATION_FILE_PATH"; then
@@ -23,7 +25,7 @@ function customizeNuConfiguration() {
 echo "Starting to customize Nu configuration ..."
 
 CONFS_DIR=/opt/nussknacker/conf
-APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customization.conf"
+APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
 
 touch "$APP_CUSTOMIZATION_FILE_PATH"
 
@@ -33,7 +35,11 @@ while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
     continue
   fi
 
-  customizeNuConfiguration "$(basename "$EXAMPLE_SCENARIO_FILENAME" ".conf")"
+  EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME="$(basename "$EXAMPLE_SCENARIO_FILENAME" ".json")-related.conf"
+
+  if [ -e "configurations/$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME" ]; then
+    customizeNuConfiguration "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME"
+  fi
   
 done < "example-scenarios.txt"
 

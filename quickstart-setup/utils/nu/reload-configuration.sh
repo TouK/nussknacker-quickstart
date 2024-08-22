@@ -7,7 +7,7 @@ function reloadConfiguration() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X GET "http://nginx:8080/api/app/processingtype/reload"
+    -X POST "http://nginx:8080/api/app/processingtype/reload"
   )
 
   local HTTP_STATUS
