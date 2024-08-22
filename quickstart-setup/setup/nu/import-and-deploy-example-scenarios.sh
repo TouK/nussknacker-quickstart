@@ -29,6 +29,6 @@ while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
 
   importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$(realpath scenarios/"$EXAMPLE_SCENARIO_FILENAME")"
 
-done < "examples.txt"
+done < "example-scenarios.txt"
 
 echo -e "DONE!\n\n"
