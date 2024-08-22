@@ -11,7 +11,7 @@ services:
       nginx:
         condition: service_healthy
     volumes:
-      - configuration_shared:/opt/nussknacker/conf/
+      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
     deploy:
       resources:
         limits:
@@ -81,8 +81,7 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      # - ./designer/application-customizations.conf:/opt/nussknacker/conf/application-customizations.conf
-      - configuration_shared:/opt/nussknacker/conf
+      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf
     volumes_from:
       - flink-jobmanager
     deploy:
@@ -269,7 +268,7 @@ services:
 volumes:
   nussknacker_designer_data:
     name: nussknacker_designer_data
+  nussknacker_designer_shared_configuration:
+    name: nussknacker_designer_shared_configuration
   nussknacker_flink_data:
     name: nussknacker_flink_data
-  configuration_shared:
-    name: configuration_shared
