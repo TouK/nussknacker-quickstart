@@ -5,13 +5,14 @@
 
 ## About
 
-This repo contains quick start showcases for [Nussknacker](https://nussknacker.io), a visual tool to define and run real-time decision algorithms. The Nussknacker repo can be found [here](https://github.com/TouK/nussknacker).
+This repo contains quick start showcases for [Nussknacker](https://nussknacker.io), a visual tool to define and run real-time decision algorithms. The Nussknacker repository can be found [here](https://github.com/TouK/nussknacker).
 
 &nbsp;
 ## Quickstart documentation
 
-This Quickstart documentation can be found at [Nussknacker's documentation site](https://nussknacker.io/documentation/quickstart/docker/).
-If you don't want to run it on your machine you can check our [Online Demo](https://nussknacker.io/documentation/quickstart/demo/) (but it's read-only, so rather limited) or try our [Nusskacker in our Cloud](https://nussknacker.io/documentation/quickstart/cloud/).
+To figure out what's in the Quickstart and how to run it, please see its documentation at the [Nussknacker's site](https://nussknacker.io/documentation/quickstart/docker/).
+
+You may also be interested in our [Online Demo](https://nussknacker.io/documentation/quickstart/demo/) (it's read-only, so rather limited) or trying out [Nusskacker in our Cloud](https://nussknacker.io/documentation/quickstart/cloud/).
 
 &nbsp;
 ## What's next?
