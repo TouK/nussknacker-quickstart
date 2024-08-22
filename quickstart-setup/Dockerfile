@@ -47,4 +47,4 @@ EXPOSE 8080
 EXPOSE 5432
 
 HEALTHCHECK --interval=10s --timeout=1s --retries=12 --start-period=30s \
-  CMD (/bin/bash -c 'test -f "/app/healthy"' && pg_isready -d mocks -U mocks curl -f http://localhost:8080/__admin/) || exit 1
+  CMD (/bin/bash -c 'test -f "/app/healthy"' && pg_isready -d mocks -U mocks && curl -f http://localhost:8080/__admin/) || exit 1
