@@ -10,24 +10,13 @@ services:
     depends_on:
       nginx:
         condition: service_healthy
+    volumes:
+      - configuration_shared:/opt/nussknacker/conf/
     deploy:
       resources:
         limits:
-          memory: 128M
+          memory: 256M
           cpus: '0.5'
-
-  # ### Quickstart mocks
-  # mocks:
-  #   build:
-  #     context: mocks/
-  #     dockerfile: Dockerfile
-  #   # todo added temporary
-  #   ports:
-  #     - 18080:8080
-  #   deploy:
-  #     resources:
-  #       limits:
-  #         memory: 256M
 
   ### Nussknacker-related services
 
@@ -92,7 +81,8 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      - ./designer/application-customizations.conf:/opt/nussknacker/conf/application-customizations.conf
+      # - ./designer/application-customizations.conf:/opt/nussknacker/conf/application-customizations.conf
+      - configuration_shared:/opt/nussknacker/conf
     volumes_from:
       - flink-jobmanager
     deploy:
@@ -281,3 +271,5 @@ volumes:
     name: nussknacker_designer_data
   nussknacker_flink_data:
     name: nussknacker_flink_data
+  configuration_shared:
+    name: configuration_shared
