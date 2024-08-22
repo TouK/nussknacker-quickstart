@@ -10,6 +10,8 @@ services:
     depends_on:
       nginx:
         condition: service_healthy
+      designer:
+        condition: service_healthy
     volumes:
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
     deploy:
