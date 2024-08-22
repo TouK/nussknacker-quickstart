@@ -51,7 +51,7 @@ services:
     image: touk/nussknacker:${NUSSKNACKER_VERSION:?NUSSKNACKER_VERSION must be defined}_scala-2.12
     restart: unless-stopped
     environment:
-      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/application-customizations.conf"
+      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/additional-configuration.conf,/opt/nussknacker/conf/application-customizations.conf"
       DB_URL: "jdbc:postgresql://postgres:5432/nu-db"
       DB_DRIVER: "org.postgresql.Driver"
       DB_USER: "nu"
@@ -84,6 +84,7 @@ services:
       retries: 10
     volumes:
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf
+      - ./designer/additional-configuration.conf:/opt/nussknacker/conf/additional-configuration.conf
     volumes_from:
       - flink-jobmanager
     deploy:
@@ -212,7 +213,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 256M
+          memory: 512M
 
   ### FLINK-related services
 
