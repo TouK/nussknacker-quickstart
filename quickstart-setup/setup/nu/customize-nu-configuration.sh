@@ -7,7 +7,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-SCENARIO_EXAMPLE_DIR_PATH=$1
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 CONFS_DIR=/opt/nussknacker/conf
 APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
 
@@ -36,10 +36,9 @@ echo "Starting to customize Nu configuration ..."
 
 touch "$APP_CUSTOMIZATION_FILE_PATH"
 
-for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/nu-designer/*; do
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/nu-designer"/*; do
   if [ ! -f "$ITEM" ]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration"
-    exit 2
+    continue
   fi
 
   if [[ ! "$ITEM" == *.conf ]]; then

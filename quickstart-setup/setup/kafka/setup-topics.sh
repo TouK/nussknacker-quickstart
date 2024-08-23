@@ -20,14 +20,13 @@ function createTopic() {
   ../../utils/kafka/create-topic-idempotently.sh "$TOPIC_NAME"
 }
 
-SCENARIO_EXAMPLE_DIR_PATH=$1
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 echo "Starting to create preconfigured topics ..."
 
-for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/kafka/*; do
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
   if [ ! -f "$ITEM" ]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names"
-    exit 2
+    continue
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then

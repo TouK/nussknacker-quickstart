@@ -46,14 +46,13 @@ function createJsonSchema() {
   echo "Schema '$SCHEMA_NAME' created!"
 }
 
-SCENARIO_EXAMPLE_DIR_PATH=$1
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 echo "Starting to add preconfigured schemas ..."
 
-for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/schema-registry/*; do
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/schema-registry"/*; do
   if [ ! -f "$ITEM" ]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.schema.json' and content with JSON schema"
-    exit 2
+    continue
   fi
 
   if [[ ! "$ITEM" == *.schema.json ]]; then

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 
@@ -7,7 +7,7 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-SCENARIO_EXAMPLE_DIR_PATH=$1
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 function importAndDeployScenario() {
   if [ "$#" -ne 2 ]; then
