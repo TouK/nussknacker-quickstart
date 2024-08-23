@@ -15,7 +15,7 @@ function sendRequest() {
 
   echo "Sending request '$REQUEST_BODY' to Request-Response '$OPENAPI_SERVICE_SLUG' OpenAPI service ..."
   local RESPONSE
-  RESPONSE=$(../utils/http/send-request-to-nu-openapi-service.sh "$OPENAPI_SERVICE_SLUG" "$REQUEST_BODY")
+  RESPONSE=$(../../utils/http/send-request-to-nu-openapi-service.sh "$OPENAPI_SERVICE_SLUG" "$REQUEST_BODY")
   echo "Response: $RESPONSE"
 }
 
@@ -27,7 +27,7 @@ while IFS= read -r OPENAPI_SERVICE_SLUG; do
     continue
   fi
 
-  MESSAGES_FILE=$(find ../../data/http/static-requests -iname "$OPENAPI_SERVICE_SLUG.txt" | head)
+  MESSAGES_FILE=$(find static-requests -iname "$OPENAPI_SERVICE_SLUG.txt" | head)
 
   if [[ -f "$MESSAGES_FILE" ]]; then
     while IFS= read -r REQUEST_BODY; do
@@ -39,6 +39,6 @@ while IFS= read -r OPENAPI_SERVICE_SLUG; do
     done < "$MESSAGES_FILE"
   fi
 
-done < "../../data/http/slugs.txt"
+done < "slugs.txt"
 
 echo -e "DONE!\n\n"

@@ -33,7 +33,7 @@ if ! docker compose config > /dev/null; then
   exit 3
 fi
 
-docker compose up -d --build --wait
+docker compose up -d --build --remove-orphans --wait 
 
 echo ""
 echo "Nussknacker and its dependencies are up and running."

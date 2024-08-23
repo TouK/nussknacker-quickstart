@@ -14,7 +14,7 @@ function sendMessage() {
   local MSG=$2
 
   echo "Sending message $MSG to '$TOPIC_NAME'"
-  ../utils/kafka/send-to-topic.sh "$TOPIC_NAME" "$MSG"
+  ../../utils/kafka/send-to-topic.sh "$TOPIC_NAME" "$MSG"
   echo "Message sent!"
 }
 
@@ -26,7 +26,7 @@ while IFS= read -r TOPIC_NAME; do
     continue
   fi
 
-  MESSAGES_FILE=$(find ../../data/kafka/static-messages -iname "$TOPIC_NAME.txt" | head)
+  MESSAGES_FILE=$(find static-messages -iname "$TOPIC_NAME.txt" | head)
 
   if [[ -f "$MESSAGES_FILE" ]]; then
     while IFS= read -r MSG; do
@@ -38,6 +38,6 @@ while IFS= read -r TOPIC_NAME; do
     done < "$MESSAGES_FILE"
   fi
 
-done < "../../data/kafka/topics.txt"
+done < "topics.txt"
 
 echo -e "DONE!\n\n"

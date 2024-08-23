@@ -12,7 +12,7 @@ function createTopic() {
   local TOPIC_NAME=$1
 
   echo "Creating topic '$TOPIC_NAME'"
-  ../utils/kafka/create-topic-idempotently.sh "$TOPIC_NAME"
+  ../../utils/kafka/create-topic-idempotently.sh "$TOPIC_NAME"
 }
 
 echo "Starting to create preconfigured topics ..."
@@ -25,6 +25,6 @@ while IFS= read -r TOPIC_NAME; do
 
   createTopic "$TOPIC_NAME"
 
-done < "../../setup/kafka/topics.txt"
+done < "topics.txt"
 
 echo -e "DONE!\n\n"

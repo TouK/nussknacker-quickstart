@@ -23,7 +23,7 @@ if errorlevel 1 (
     exit /b 3
 )
 
-docker compose up -d --build --wait
+docker compose up -d --build --remove-orphans --wait 
 
 echo.
 echo Nussknacker and its dependencies are up and running.
