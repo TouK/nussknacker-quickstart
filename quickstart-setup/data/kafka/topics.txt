@@ -1,4 +1,0 @@
-# Topic name the static and generated messages should be sent to
-Transactions
-CustomerEvents
-GeoLocations
