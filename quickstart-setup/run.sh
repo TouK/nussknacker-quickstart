@@ -6,6 +6,7 @@ rm -rf /app/healthy
 
 echo "Starting to setup Nu stack ..."
 
+/app/mocks/configure.sh
 /app/setup/run-setup.sh
 /app/data/keep-sending.sh
 
