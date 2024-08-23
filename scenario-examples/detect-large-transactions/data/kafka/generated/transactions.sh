@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 
-source ../../../utils/lib.sh
+source /app/utils/lib.sh
 
 ID=$((1 + $(random_4digit_number) % 5))
 AMOUNT=$((1 + $(random_4digit_number) % 30))

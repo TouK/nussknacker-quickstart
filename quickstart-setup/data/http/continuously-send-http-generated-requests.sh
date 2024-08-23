@@ -2,6 +2,11 @@
 
 cd "$(dirname "$0")"
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) scenario example folder path"
+    exit 1
+fi
+
 function runRequestSending() {
   if [ "$#" -ne 2 ]; then
     echo "Error: Two parameters required: 1) OpenAPI service slug, 2) request generator script"
@@ -19,20 +24,24 @@ function runRequestSending() {
   nohup ../../utils/http/continuously-send-http-requests.sh "$OPENAPI_SERVICE_SLUG" "$REQUEST_GENERATOR_SCRIPT" > /var/log/continuously-send-http-requests/output.log 2>&1 &
 }
 
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
+
 echo "Starting to send generated requests to Nu OpenAPI services ..."
 
-while IFS= read -r OPENAPI_SERVICE_SLUG; do
-
-  if [[ $OPENAPI_SERVICE_SLUG == "#"* ]]; then
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/generated"/*; do
+  if [ ! -f "$ITEM" ]; then
     continue
   fi
 
-  REQUEST_GENERATOR_SCRIPT=$(find generate-requests -iname "$OPENAPI_SERVICE_SLUG.sh" | head)
-
-  if [[ -f "$REQUEST_GENERATOR_SCRIPT" ]]; then
-    runRequestSending "$OPENAPI_SERVICE_SLUG" "$(realpath $REQUEST_GENERATOR_SCRIPT)"
+  if [[ ! "$ITEM" == *.sh ]]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script"
+    exit 3
   fi
 
-done < "slugs.txt"
+  OPENAPI_SERVICE_SLUG=$(basename "$ITEM" ".txt")
+
+  runRequestSending "$OPENAPI_SERVICE_SLUG" "$ITEM"
+
+done
 
 echo -e "DONE!\n\n"

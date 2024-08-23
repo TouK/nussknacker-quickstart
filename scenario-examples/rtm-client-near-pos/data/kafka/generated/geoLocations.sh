@@ -2,7 +2,7 @@
 
 cd "$(dirname "$0")"
 
-source ../../../utils/lib.sh
+source /app/utils/lib.sh
 
 case $(($(random_1digit_number) % 3)) in
   0)

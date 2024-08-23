@@ -2,6 +2,11 @@
 
 cd "$(dirname "$0")"
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) scenario example folder path"
+    exit 1
+fi
+
 function runMessageSending() {
   if [ "$#" -ne 2 ]; then
     echo "Error: Two parameters required: 1) topic name, 2) message generator script"
@@ -19,20 +24,24 @@ function runMessageSending() {
   nohup ../../utils/kafka/continuously-send-to-topic.sh "$TOPIC_NAME" "$MSG_GENERATOR_SCRIPT" > /var/log/continuously-send-to-topic/output.log 2>&1 &
 }
 
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
+
 echo "Starting to send generated messages ..."
 
-while IFS= read -r TOPIC_NAME; do
-
-  if [[ $TOPIC_NAME == "#"* ]]; then
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/generated"/*; do
+  if [ ! -f "$ITEM" ]; then
     continue
   fi
 
-  MSG_GENERATION_SCRIPT=$(find generate-messages -iname "$TOPIC_NAME.sh" | head)
-
-  if [[ -f "$MSG_GENERATION_SCRIPT" ]]; then
-    runMessageSending "$TOPIC_NAME" "$(realpath $MSG_GENERATION_SCRIPT)"
+  if [[ ! "$ITEM" == *.sh ]]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script"
+    exit 3
   fi
 
-done < "topics.txt"
+  TOPIC_NAME=$(basename "$ITEM" ".sh")
+
+  runMessageSending "$TOPIC_NAME" "$ITEM"
+
+done
 
 echo -e "DONE!\n\n"

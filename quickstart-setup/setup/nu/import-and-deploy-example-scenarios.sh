@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash -e
 
 cd "$(dirname "$0")"
 
@@ -36,7 +36,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/*; do
     exit 2
   fi
 
-  EXAMPLE_SCENARIO_NAME="$(basename "$ITEM")"
+  EXAMPLE_SCENARIO_NAME="$(basename "$ITEM" ".json")"
 
   importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$ITEM"
 done
