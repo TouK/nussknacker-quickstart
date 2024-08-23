@@ -2,6 +2,13 @@
 
 cd "$(dirname "$0")"
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) scenario example folder path"
+    exit 1
+fi
+
+SCENARIO_EXAMPLE_DIR_PATH=$1
+
 function importAndDeployScenario() {
   if [ "$#" -ne 2 ]; then
     echo "Error: Two parameters required: 1) scenario name, 2) example scenario file path"
@@ -19,16 +26,19 @@ function importAndDeployScenario() {
 
 echo "Starting to import and deploy example scenarios ..."
 
-while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
-
-  if [[ $EXAMPLE_SCENARIO_FILENAME == "#"* ]]; then
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/*; do
+  if [ ! -f "$ITEM" ]; then
     continue
   fi
 
-  EXAMPLE_SCENARIO_NAME=$(basename "$EXAMPLE_SCENARIO_FILENAME" ".json")
+  if [[ ! "$ITEM" == *.json ]]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.json' and content with Nu scenario JSON"
+    exit 2
+  fi
 
-  importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$(realpath scenarios/"$EXAMPLE_SCENARIO_FILENAME")"
+  EXAMPLE_SCENARIO_NAME="$(basename "$ITEM")"
 
-done < "example-scenarios.txt"
+  importAndDeployScenario "$EXAMPLE_SCENARIO_NAME" "$ITEM"
+done
 
 echo -e "DONE!\n\n"

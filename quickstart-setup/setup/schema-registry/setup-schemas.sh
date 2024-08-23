@@ -1,6 +1,11 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
+
+if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) scenario example folder path"
+    exit 1
+fi
 
 function createJsonSchema() {
   if [ "$#" -ne 2 ]; then
@@ -41,18 +46,23 @@ function createJsonSchema() {
   echo "Schema '$SCHEMA_NAME' created!"
 }
 
+SCENARIO_EXAMPLE_DIR_PATH=$1
+
 echo "Starting to add preconfigured schemas ..."
 
-while IFS= read -r SCHEMA_FILENAME; do
-
-  if [[ $SCHEMA_FILENAME == "#"* ]]; then
-    continue
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/schema-registry/*; do
+  if [ ! -f "$ITEM" ]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.schema.json' and content with JSON schema"
+    exit 2
   fi
 
-  SCHEMA_NAME="$(basename "$SCHEMA_FILENAME" ".schema.json")-value"
-  createJsonSchema "$SCHEMA_NAME" "$(realpath schemas/"$SCHEMA_FILENAME")"
+  if [[ ! "$ITEM" == *.schema.json ]]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.schema.json' and content with JSON schema"
+    exit 3
+  fi
 
-done < "active-schemas.txt"
-
+  SCHEMA_NAME="$(basename "$ITEM" ".schema.json")-value"
+  createJsonSchema "$SCHEMA_NAME" "$ITEM"
+done
 
 echo -e "DONE!\n\n"

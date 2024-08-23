@@ -1,20 +1,30 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 cd "$(dirname "$0")"
 
+if [ "$#" -ne 1 ]; then
+    echo "Error: One parameter required: 1) scenario example folder path"
+    exit 1
+fi
+
+SCENARIO_EXAMPLE_DIR_PATH=$1
+CONFS_DIR=/opt/nussknacker/conf
+APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
+
 function customizeNuConfiguration() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) configuration file name"
+    echo "Error: One parameter required: 1) configuration file path"
     exit 11
   fi
 
   set -e
 
-  local EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME=$1
+  local EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH=$1
+  local EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME=$(basename "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH")
 
-  echo "Including $EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME configuration"
+  echo "Including $EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH configuration"
 
-  cp -f "$(realpath configurations/"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME")" "$CONFS_DIR"
+  cp -f "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH" "$CONFS_DIR"
   local INCLUDE_CONF_LINE="include \"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME\""
 
   if ! grep -qxF "$INCLUDE_CONF_LINE" "$APP_CUSTOMIZATION_FILE_PATH"; then
@@ -24,24 +34,21 @@ function customizeNuConfiguration() {
 
 echo "Starting to customize Nu configuration ..."
 
-CONFS_DIR=/opt/nussknacker/conf
-APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
-
 touch "$APP_CUSTOMIZATION_FILE_PATH"
 
-while IFS= read -r EXAMPLE_SCENARIO_FILENAME; do
-
-  if [[ $EXAMPLE_SCENARIO_FILENAME == "#"* ]]; then
-    continue
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/nu-designer/*; do
+  if [ ! -f "$ITEM" ]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration"
+    exit 2
   fi
 
-  EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME="$(basename "$EXAMPLE_SCENARIO_FILENAME" ".json")-related.conf"
-
-  if [ -e "configurations/$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME" ]; then
-    customizeNuConfiguration "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME"
+  if [[ ! "$ITEM" == *.conf ]]; then
+    echo "Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration"
+    exit 3
   fi
-  
-done < "example-scenarios.txt"
+
+  customizeNuConfiguration "$ITEM"
+done
 
 ../../utils/nu/reload-configuration.sh
 
