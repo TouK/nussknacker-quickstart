@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ARG FLINK_VERSION="FLINK_VERSION_IS_UNDEFINED"
 
 FROM curlimages/curl:8.9.1 AS lib_provider
@@ -7,9 +6,6 @@ FROM curlimages/curl:8.9.1 AS lib_provider
 # https://nightlies.apache.org/flink/flink-docs-master/docs/deployment/resource-providers/standalone/docker/#further-customization
 WORKDIR /libs
 RUN curl -k --output /libs/postgresql-42.6.0.jar https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar
-=======
-ARG FLINK_VERSION=undefined-flink-version
->>>>>>> origin/main
 
 FROM flink:${FLINK_VERSION}
 
