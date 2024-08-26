@@ -35,13 +35,13 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     curl https://raw.githubusercontent.com/birdayz/kaf/master/godownloader.sh | BINDIR=/bin bash && \
     # wiremock service
-    mv /app/mocks/http-service/mocks/ /home/wiremock/ && \
+    # mv /app/mocks/http-service/mocks/ /home/wiremock/ && \
     mkdir -p /etc/service/http-service && \
-    mv /app/mocks/http-service/scripts/run-wiremock.sh /etc/service/http-service/run && \
+    mv /app/mocks/http-service/run-wiremock.sh /etc/service/http-service/run && \
     # postgres service
-    mv /app/mocks/db/mocks /home/postgres && \
+    # mv /app/mocks/db/mocks /home/postgres && \
     mkdir /etc/service/postgres && \
-    mv /app/mocks/db/scripts/run-postgres.sh /etc/service/postgres/run
+    mv /app/mocks/db/run-postgres.sh /etc/service/postgres/run
 
 EXPOSE 8080
 EXPOSE 5432

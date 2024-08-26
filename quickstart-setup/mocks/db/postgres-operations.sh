@@ -43,7 +43,7 @@ init_bg_log_file() {
 }
 
 wait_until_started() {
-  local max_startup_timeout_in_s=10
+  local max_startup_timeout_in_s=${1:-10}
   while ! pg_isready >/dev/null 2>&1; do
     sleep 1
     max_startup_timeout_in_s=$((max_startup_timeout_in_s - 1))
@@ -124,7 +124,5 @@ start() {
 }
 
 stop() {
-  /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl stop -w -D "$PG_DATA_DIR"
+  /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl stop -m fast -w -D "$PG_DATA_DIR"
 }
-
-"$@"

@@ -1,5 +1,7 @@
 #!/bin/sh -e
 
+echo "RUNNING Wiremock service ..."
+
 java $JAVA_OPTS -cp /var/wiremock/lib/*:/var/wiremock/extensions/* wiremock.Run \
     --port=8080 \
     --root-dir=/home/wiremock/mocks \

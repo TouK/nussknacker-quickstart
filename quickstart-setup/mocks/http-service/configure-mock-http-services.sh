@@ -7,49 +7,35 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-# source postgres-operations.sh
-# source ../../../utils/lib.sh
-
-# SCENARIO_EXAMPLE_DIR_PATH=${1%/}
-
-# function execute_ddls() {
-#   if [ "$#" -ne 2 ]; then
-#     echo "Error: Two parameters required: 1) DB name, 2) DDLs folder path"
-#     exit 11
-#   fi
-
-#   set -e
-
-#   local DB_NAME=$1
-#   local DDLs_FOLDER_NAME=$2
-
-#   local SCHEMA_NAME
-#   local DDL_CONTENT
-
-#   for file in "$DDLs_FOLDER_NAME"/*; do
-#     if [ -f "$file" ]; then
-#       SCHEMA_NAME=$(basename "$(strip_extension "$file")")
-#       echo "Creating schema: $SCHEMA_NAME"
-#       create_schema "$PG_USER" "$SCHEMA_NAME"
-#       DDL_CONTENT=$(wrap_sql_with_current_schema "$SCHEMA_NAME" "$(cat "$file")")
-#       echo "Executing ddl: $file with content: $DDL_CONTENT"
-#       echo "$DDL_CONTENT" | execute_sql "" "$PG_USER" "$PG_PASS"
-#     fi
-#   done
-# }
-
-# start_bg
-# wait_until_started
-
-for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/mocks/db"/*; do
-  if [ -f "$ITEM" ]; then
-    continue
+function copyFilesAndMappings() {
+  if [ "$#" -ne 2 ]; then
+    echo "Error: Two parameters required: 1) HTTP service name, 2) mocks folder path"
+    exit 11
   fi
 
-  DB_NAME=$(basename "$ITEM")
+  set -e
 
-  execute_ddls "$DB_NAME" "$ITEM"
+  local HTTP_SERVICE_NAME=$1
+  local MOCKS_FOLDER_NAME=$2 
+
+  mkdir -p /home/wiremock/mocks/__files/
+  cp -r "$MOCKS_FOLDER_NAME/__files"/* /home/wiremock/mocks/__files/
   
-done
+  mkdir -p /home/wiremock/mocks/mappings/
+  cp -r "$MOCKS_FOLDER_NAME/mappings"/* /home/wiremock/mocks/mappings/
+}
 
-stop
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
+
+if [ -d "$SCENARIO_EXAMPLE_DIR_PATH/mocks/http-service" ]; then
+
+  for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/mocks/http-service"/*; do
+    if [ -d "$ITEM" ]; then
+      # todo: remove?
+      HTTP_SERVICE_NAME=$(basename "$ITEM")
+
+      copyFilesAndMappings "$HTTP_SERVICE_NAME" "$ITEM"
+    fi
+  done
+
+fi

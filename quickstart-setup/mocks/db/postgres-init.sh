@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 source postgres-operations.sh
-source ../../../utils/lib.sh
+source ../../utils/lib.sh
 
 init_db() {
   init_bg_log_file
@@ -23,5 +23,6 @@ configure_users() {
 init_db
 start_bg
 wait_until_started
+trap stop
+
 configure_users
-stop
