@@ -7,6 +7,7 @@ services:
     build:
       context: quickstart-setup/
       dockerfile: Dockerfile
+      no_cache: true
     depends_on:
       nginx:
         condition: service_healthy
@@ -223,6 +224,7 @@ services:
       context: ./flink/
       args:
         FLINK_VERSION: "1.18.1-scala_2.12-java11"
+      no_cache: true
     restart: unless-stopped
     command: jobmanager
     environment:
@@ -239,6 +241,7 @@ services:
       context: ./flink/
       args:
         FLINK_VERSION: "1.18.1-scala_2.12-java11"
+      no_cache: true
     restart: unless-stopped
     command: taskmanager
     environment:
