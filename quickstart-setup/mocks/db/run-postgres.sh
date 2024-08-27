@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e
+set -x
 
 export PG_DB_NAME="mocks"
 export PG_USER="mocks"
@@ -16,5 +17,7 @@ export PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
 echo "RUNNING Postgres service ..."
 
 /app/mocks/db/postgres-init.sh
-trap '/app/mocks/db/postgres-operations.sh stop' EXIT
+
 exec /app/mocks/db/postgres-operations.sh start
+
+echo "RUNNING Postgres service stopped"

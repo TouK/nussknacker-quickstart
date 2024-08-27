@@ -23,6 +23,5 @@ configure_users() {
 init_db
 start_bg
 wait_until_started
-trap stop
-
 configure_users
+stop
