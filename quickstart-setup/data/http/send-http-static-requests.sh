@@ -49,7 +49,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/static"/*; do
 
     sendRequest "$OPENAPI_SERVICE_SLUG" "$REQUEST_BODY"
 
-  done < "$MESSAGES_FILE"
+  done < "$ITEM"
 done
 
 echo -e "DONE!\n\n"

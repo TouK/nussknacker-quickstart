@@ -7,11 +7,11 @@ function verifyBashScript() {
     if [[ $(head -n 1 "$FILE") =~ ^#!/bin/bash ]]; then
       return 0
     else
-      echo "$FILE exists but is not a Bash script."
+      echo "File '$FILE' exists but is not a Bash script."
       return 1
     fi
   else
-    echo "$FILE does not exist."
+    echo "File '$FILE' does not exist."
     return 2
   fi
 }

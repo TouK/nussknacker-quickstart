@@ -11,4 +11,5 @@ for FOLDER in /scenario-examples/*; do
   ./db/execute-ddls.sh "$FOLDER"
   ./http-service/configure-mock-http-services.sh "$FOLDER"
 
+  echo -e "DONE!\n\n"
 done

@@ -13,6 +13,6 @@ MESSAGE=$2
 if kaf --brokers=kafka:9092 topics ls | awk '{print $1}' | grep "^$TOPIC_NAME$" > /dev/null 2>&1; then
   echo "$MESSAGE" | kaf --brokers=kafka:9092 produce "$TOPIC_NAME" > /dev/null
 else
-  echo "TOPIC_NAME $TOPIC_NAME not found"
+  echo "Topic name '$TOPIC_NAME' not found"
   exit 2
 fi

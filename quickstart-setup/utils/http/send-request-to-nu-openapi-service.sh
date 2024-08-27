@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -ex
 
 if [ "$#" -ne 2 ]; then
     echo "Two parameters required: 1) Nu OpenAPI service slug, 2) request payload"

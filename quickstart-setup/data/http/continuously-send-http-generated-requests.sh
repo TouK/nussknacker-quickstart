@@ -40,7 +40,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/generated"/*; do
     exit 3
   fi
 
-  OPENAPI_SERVICE_SLUG=$(basename "$ITEM" ".txt")
+  OPENAPI_SERVICE_SLUG=$(basename "$ITEM" ".sh")
 
   runRequestSending "$OPENAPI_SERVICE_SLUG" "$ITEM"
 

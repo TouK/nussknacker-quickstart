@@ -1,16 +1,18 @@
-#!/bin/sh
+#!/bin/bash -e
 
-set -e
+cd "$(dirname "$0")"
+
+source postgres-operations.sh
 
 echo "Starting Postgres service ..."
 
-/app/mocks/db/postgres-init.sh
+./postgres-init.sh
 
 stop() {
   echo "Stopping Postgres service ..."
-  /app/mocks/db/postgres-operations.sh stop
+  postgres_stop
 }
 
 trap stop EXIT
 
-exec /app/mocks/db/postgres-operations.sh start
+postgres_start

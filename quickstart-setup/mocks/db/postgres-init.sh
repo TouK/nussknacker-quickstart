@@ -21,7 +21,7 @@ configure_users() {
 }
 
 init_db
-start_bg
+postgres_start_bg
 wait_until_started
 configure_users
-stop
+postgres_stop

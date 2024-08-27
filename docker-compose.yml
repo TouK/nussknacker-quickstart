@@ -13,8 +13,6 @@ services:
         condition: service_healthy
       designer:
         condition: service_healthy
-    ports:
-      - 18080:8080
     volumes:
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
       - ./scenario-examples:/scenario-examples

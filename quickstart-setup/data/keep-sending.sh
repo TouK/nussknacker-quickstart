@@ -13,4 +13,5 @@ for FOLDER in /scenario-examples/*; do
   ./http/continuously-send-http-generated-requests.sh "$FOLDER"
   ./kafka/continuously-send-kafka-generated-messages.sh "$FOLDER"
 
+  echo -e "DONE!\n\n"
 done

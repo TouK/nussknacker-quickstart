@@ -40,7 +40,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/generated"/*; do
     exit 3
   fi
 
-  TOPIC_NAME=$(basename "$ITEM" ".sh")
+  TOPIC_NAME=$(basename "$ITEM" ".sh" | sed 's/.*/\u&/')
 
   runMessageSending "$TOPIC_NAME" "$ITEM"
 

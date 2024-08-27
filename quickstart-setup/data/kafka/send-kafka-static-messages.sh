@@ -39,7 +39,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/static"/*; do
     exit 3
   fi
 
-  TOPIC_NAME=$(basename "$ITEM" ".txt")
+  TOPIC_NAME=$(basename "$ITEM" ".sh" | sed 's/.*/\u&/')
 
   while IFS= read -r MSG; do
     if [[ $MSG == "#"* ]]; then

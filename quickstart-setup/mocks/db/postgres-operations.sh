@@ -126,16 +126,14 @@ execute_sql() {
   PGPASSWORD=$pass psql "${args[@]}"
 }
 
-start_bg() {
+postgres_start_bg() {
   /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl start -D "$PG_DATA_DIR" -l /var/log/postgres_bg.log
 }
 
-start() {
+postgres_start() {
   /sbin/setuser postgres "$PG_BIN_DIR"/postgres -D "$PG_DATA_DIR" "--hba_file=$PG_HBA_FILE" "--config-file=$PG_CONF_FILE"
 }
 
-stop() {
+postgres_stop() {
   /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl stop -w -D "$PG_DATA_DIR"
 }
-
-"$@"
