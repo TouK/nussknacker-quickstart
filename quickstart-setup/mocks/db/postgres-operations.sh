@@ -1,4 +1,4 @@
-#!/bin/bash -ex
+#!/bin/bash 
 
 PG_DB_NAME="mocks"
 PG_USER="mocks"
