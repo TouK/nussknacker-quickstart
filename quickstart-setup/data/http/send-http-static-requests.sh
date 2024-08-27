@@ -28,6 +28,8 @@ SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 echo "Starting to send preconfigured Request-Response OpenAPI service requests ..."
 
+shopt -s nullglob
+
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/static"/*; do
   if [ ! -f "$ITEM" ]; then
     continue

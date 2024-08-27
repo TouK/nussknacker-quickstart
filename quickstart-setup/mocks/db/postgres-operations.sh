@@ -1,4 +1,15 @@
-#!/bin/bash -e
+#!/bin/bash -ex
+
+PG_DB_NAME="mocks"
+PG_USER="mocks"
+PG_PASS="mocks_pass"
+
+PG_BIN_DIR="/usr/lib/postgresql/16/bin"
+PG_BASE_DIR="/home/postgres"
+PG_DATA_DIR="$PG_BASE_DIR/data"
+PG_CUSTOM_CONF_DIR="$PG_BASE_DIR/conf"
+PG_CONF_FILE="$PG_CUSTOM_CONF_DIR/postgresql.conf"
+PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
 
 init_data_dir() {
   if [ ! -e "$PG_DATA_DIR" ]; then
@@ -104,15 +115,15 @@ alter_pg_user_pass() {
 }
 
 execute_sql() {
-    local -r db="${1:-}"
-    local -r user="${2:-postgres}"
-    local -r pass="${3:-}"
-    local opts
-    read -r -a opts <<<"${@:4}"
-    local args=("-U" "$user" "-p" "${PG_PORT:-5432}" "-h" "127.0.0.1")
-    [[ -n "$db" ]] && args+=("-d" "$db")
-    [[ "${#opts[@]}" -gt 0 ]] && args+=("${opts[@]}")
-    PGPASSWORD=$pass psql "${args[@]}"
+  local -r db="${1:-}"
+  local -r user="${2:-postgres}"
+  local -r pass="${3:-}"
+  local opts
+  read -r -a opts <<<"${@:4}"
+  local args=("-U" "$user" "-p" "${PG_PORT:-5432}" "-h" "127.0.0.1")
+  [[ -n "$db" ]] && args+=("-d" "$db")
+  [[ "${#opts[@]}" -gt 0 ]] && args+=("${opts[@]}")
+  PGPASSWORD=$pass psql "${args[@]}"
 }
 
 start_bg() {
@@ -124,5 +135,7 @@ start() {
 }
 
 stop() {
-  /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl stop -m fast -w -D "$PG_DATA_DIR"
+  /sbin/setuser postgres "$PG_BIN_DIR"/pg_ctl stop -w -D "$PG_DATA_DIR"
 }
+
+"$@"

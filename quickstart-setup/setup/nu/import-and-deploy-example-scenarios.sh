@@ -26,6 +26,8 @@ function importAndDeployScenario() {
 
 echo "Starting to import and deploy example scenarios ..."
 
+shopt -s nullglob
+
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/*; do
   if [ ! -f "$ITEM" ]; then
     continue

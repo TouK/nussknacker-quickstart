@@ -28,6 +28,8 @@ SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 echo "Starting to send generated messages ..."
 
+shopt -s nullglob
+
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/generated"/*; do
   if [ ! -f "$ITEM" ]; then
     continue

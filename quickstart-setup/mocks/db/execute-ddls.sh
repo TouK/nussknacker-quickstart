@@ -7,24 +7,6 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-source postgres-operations.sh
-source ../../utils/lib.sh
-
-
-export PG_DB_NAME="mocks"
-export PG_USER="mocks"
-export PG_PASS="mocks_pass"
-
-export PG_BIN_DIR="/usr/lib/postgresql/16/bin"
-export PG_BASE_DIR="/home/postgres"
-export PG_DATA_DIR="$PG_BASE_DIR/data"
-export PG_CUSTOM_CONF_DIR="$PG_BASE_DIR/conf"
-export PG_CONF_FILE="$PG_CUSTOM_CONF_DIR/postgresql.conf"
-export PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
-
-
-SCENARIO_EXAMPLE_DIR_PATH=${1%/}
-
 function execute_ddls() {
   if [ "$#" -ne 2 ]; then
     echo "Error: Two parameters required: 1) DB name, 2) DDLs folder path"
@@ -39,6 +21,7 @@ function execute_ddls() {
   local SCHEMA_NAME
   local DDL_CONTENT
 
+  shopt -s nullglob
   for file in "$DDLs_FOLDER_NAME"/*; do
     if [ -f "$file" ]; then
       SCHEMA_NAME=$(basename "$(strip_extension "$file")")
@@ -51,21 +34,19 @@ function execute_ddls() {
   done
 }
 
-if [ -d "$SCENARIO_EXAMPLE_DIR_PATH/mocks/db" ]; then
+source postgres-operations.sh
+source ../../utils/lib.sh
 
-  # start_bg
-  wait_until_started 60
-  # trap stop
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
-  for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/mocks/db"/*; do
-    if [ -f "$ITEM" ]; then
-      continue
-    fi
+shopt -s nullglob
 
-    DB_NAME=$(basename "$ITEM")
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/mocks/db"/*; do
+  if [ -f "$ITEM" ]; then
+    continue
+  fi
 
-    execute_ddls "$DB_NAME" "$ITEM"
+  DB_NAME=$(basename "$ITEM")
 
-  done
-
-fi
+  execute_ddls "$DB_NAME" "$ITEM"
+done

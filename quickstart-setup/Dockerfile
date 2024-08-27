@@ -39,6 +39,7 @@ RUN apt update && \
     mkdir -p /etc/service/http-service && \
     mv /app/mocks/http-service/run-wiremock.sh /etc/service/http-service/run && \
     # postgres service
+    mkdir /home/postgres && \
     # mv /app/mocks/db/mocks /home/postgres && \
     mkdir /etc/service/postgres && \
     mv /app/mocks/db/run-postgres.sh /etc/service/postgres/run

@@ -2,7 +2,9 @@
 
 cd "$(dirname "$0")"
 
-for FOLDER in /scenario-examples/*/; do
+shopt -s nullglob
+
+for FOLDER in /scenario-examples/*; do
     
   echo "Starting to send static and generated data for scenario from $FOLDER directory ..."
 

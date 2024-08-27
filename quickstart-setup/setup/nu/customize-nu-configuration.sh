@@ -37,6 +37,8 @@ echo "Starting to customize Nu configuration ..."
 
 touch "$APP_CUSTOMIZATION_FILE_PATH"
 
+shopt -s nullglob
+
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/nu-designer"/*; do
   if [ ! -f "$ITEM" ]; then
     continue

@@ -24,6 +24,8 @@ SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 echo "Starting to create preconfigured topics ..."
 
+shopt -s nullglob
+
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
   if [ ! -f "$ITEM" ]; then
     continue
