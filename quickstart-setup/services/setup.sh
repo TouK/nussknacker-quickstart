@@ -1,3 +1,3 @@
 #!/bin/sh 
 
-exec /app/start.sh
+exec /app/run-mocks-setup-data.sh

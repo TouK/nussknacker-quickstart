@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 if [ "$#" -ne 2 ]; then
-    echo "Two parameters required: 1) topic name, 2) generator script path"
+    echo "ERROR: Two parameters required: 1) topic name, 2) generator script path"
     exit 1
 fi
 

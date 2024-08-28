@@ -15,6 +15,7 @@ COPY setup/ /app/setup/
 COPY mocks/ /app/mocks/
 COPY data/ /app/data/
 COPY utils/ /app/utils/
+COPY run-mocks-setup-data.sh /app/run-mocks-setup-data.sh
 
 COPY services/postgres.sh /etc/service/db/run
 COPY services/wiremock.sh /etc/service/http-service/run

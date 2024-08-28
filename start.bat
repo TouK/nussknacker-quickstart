@@ -7,19 +7,19 @@ echo.
 
 docker --version >nul 2>&1
 if errorlevel 1 (
-    echo No Docker found. Docker is required to run this Quickstart. See https://docs.docker.com/engine/install/
+    echo ERROR: No Docker found. Docker is required to run this Quickstart. See https://docs.docker.com/engine/install/
     exit /b 1
 )
 
 docker compose version >nul 2>&1
 if errorlevel 1 (
-    echo No docker compose found. It seems you have to upgrade your Docker installation. See https://docs.docker.com/engine/install/
+    echo ERROR: No docker compose found. It seems you have to upgrade your Docker installation. See https://docs.docker.com/engine/install/
     exit /b 2
 )
 
 docker compose config >nul 2>&1
 if errorlevel 1 (
-    echo Cannot validate docker compose configuration. It seems you have to upgrade your Docker installation. See https://docs.docker.com/engine/install/
+    echo ERROR: Cannot validate docker compose configuration. It seems you have to upgrade your Docker installation. See https://docs.docker.com/engine/install/
     exit /b 3
 )
 

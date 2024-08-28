@@ -3,13 +3,13 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
 function createJsonSchema() {
   if [ "$#" -ne 2 ]; then
-    echo "Error: Two parameters required: 1) schema name, 2) schema file path"
+    echo "ERROR: Two parameters required: 1) schema name, 2) schema file path"
     exit 11
   fi
 
@@ -39,7 +39,7 @@ function createJsonSchema() {
   if [[ "$HTTP_STATUS" != 200 ]] ; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "Error: Cannot create schema $SCHEMA_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "ERROR: Cannot create schema $SCHEMA_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
     exit 12
   fi
 
@@ -58,8 +58,8 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/schema-registry"/*; do
   fi
 
   if [[ ! "$ITEM" == *.schema.json ]]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.schema.json' and content with JSON schema"
-    exit 3
+    echo "ERROR: Unrecognized file '$ITEM'. Required file with extension '.schema.json' and content with JSON schema"
+    exit 2
   fi
 
   SCHEMA_NAME="$(basename "$ITEM" ".schema.json")-value"

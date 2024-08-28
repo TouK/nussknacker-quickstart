@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
@@ -34,7 +34,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/*; do
   fi
 
   if [[ ! "$ITEM" == *.json ]]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.json' and content with Nu scenario JSON"
+    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.json' and content with Nu scenario JSON"
     exit 2
   fi
 

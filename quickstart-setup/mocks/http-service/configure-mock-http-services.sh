@@ -3,13 +3,13 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
 function copyFilesAndMappings() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) HTTP mocks folder path"
+    echo "ERROR: One parameter required: 1) HTTP mocks folder path"
     exit 11
   fi
 
@@ -33,7 +33,7 @@ function resetMappings() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [[ "$HTTP_STATUS" != 200 ]] ; then
-    echo -e "Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "ERROR: Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
     exit 12
   fi
 }

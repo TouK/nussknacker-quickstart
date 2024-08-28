@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -lt 1 ]; then
-  echo "Error: One parameter required: 1) scenario name"
+  echo "ERROR: One parameter required: 1) scenario name"
   exit 1
 fi
 
@@ -13,7 +13,7 @@ WAIT_INTERVAL=5
 
 function deployScenario() {
   if [ "$#" -ne 1 ]; then
-      echo "Error: One parameter required: 1) scenario name"
+      echo "ERROR: One parameter required: 1) scenario name"
       exit 11
   fi
 
@@ -32,7 +32,7 @@ function deployScenario() {
   if [ "$HTTP_STATUS" != "200" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "Error: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "ERROR: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
     exit 12
   fi
 
@@ -41,7 +41,7 @@ function deployScenario() {
 
 function checkDeploymentStatus() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario name"
+    echo "ERROR: One parameter required: 1) scenario name"
     exit 21
   fi
 
@@ -60,7 +60,7 @@ function checkDeploymentStatus() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [ "$HTTP_STATUS" != "200" ]; then
-    echo -e "Error: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "ERROR: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
     exit 22
   fi
 
@@ -85,7 +85,7 @@ while true; do
 
   CURRENT_TIME=$(date +%s)
   if [ $CURRENT_TIME -gt $END_TIME ]; then
-    echo "Error: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!"
+    echo "ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!"
     exit 2
   fi
 

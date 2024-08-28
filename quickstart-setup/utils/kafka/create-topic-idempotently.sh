@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 if [ "$#" -ne 1 ]; then
-    echo "One parameter required: 1) topic name"
+    echo "ERROR: One parameter required: 1) topic name"
     exit 1
 fi
 

@@ -59,7 +59,7 @@ wait_until_started() {
     sleep 1
     max_startup_timeout_in_s=$((max_startup_timeout_in_s - 1))
     if ((max_startup_timeout_in_s <= 0)); then
-        echo "Postgres is not started"
+        echo "ERROR: Postgres is not started"
         exit 1
     fi
   done
@@ -72,7 +72,7 @@ create_custom_database() {
   if [ "$DB_EXISTS" != "1" ]; then
     echo "CREATE DATABASE \"$db_name\"" | execute_sql "" "postgres" ""
   else
-      echo "DB already exists - creation skipped"
+    echo "DB already exists - creation skipped"
   fi
 }
 

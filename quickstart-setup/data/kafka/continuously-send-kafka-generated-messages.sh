@@ -3,13 +3,13 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
 function runMessageSending() {
   if [ "$#" -ne 2 ]; then
-    echo "Error: Two parameters required: 1) topic name, 2) message generator script"
+    echo "ERROR: Two parameters required: 1) topic name, 2) message generator script"
     exit 11
   fi
 
@@ -36,7 +36,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/generated"/*; do
   fi
 
   if [[ ! "$ITEM" == *.sh ]]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script"
+    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script"
     exit 3
   fi
 

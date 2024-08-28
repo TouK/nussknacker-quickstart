@@ -16,7 +16,7 @@ function reloadConfiguration() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [ "$HTTP_STATUS" != "204" ]; then
-    echo -e "Error: Cannot reload Nu configuration.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "ERROR: Cannot reload Nu configuration.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
     exit 22
   fi
 }

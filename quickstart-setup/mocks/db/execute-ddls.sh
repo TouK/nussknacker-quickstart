@@ -3,7 +3,7 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
@@ -12,7 +12,7 @@ source ../../utils/lib.sh
 
 function execute_ddl_script() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) DDL file path"
+    echo "ERROR: One parameter required: 1) DDL file path"
     exit 11
   fi
 

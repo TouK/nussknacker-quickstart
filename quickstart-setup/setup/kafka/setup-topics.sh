@@ -3,13 +3,13 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
 function createTopic() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) topic name"
+    echo "ERROR: One parameter required: 1) topic name"
     exit 11
   fi
 
@@ -32,8 +32,8 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names"
-    exit 3
+    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names"
+    exit 2
   fi
 
   while IFS= read -r TOPIC_NAME; do

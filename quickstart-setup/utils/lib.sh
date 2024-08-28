@@ -18,7 +18,7 @@ function verifyBashScript() {
 
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) number of digits"
+    echo "ERROR: One parameter required: 1) number of digits"
     exit 1
   fi
 

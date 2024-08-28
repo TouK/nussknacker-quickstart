@@ -3,13 +3,13 @@
 cd "$(dirname "$0")"
 
 if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) scenario example folder path"
+    echo "ERROR: One parameter required: 1) scenario example folder path"
     exit 1
 fi
 
 function sendRequest() {
   if [ "$#" -ne 2 ]; then
-    echo "Error: Two parameters required: 1) Request-Response OpenAPI service slug, 2) request body"
+    echo "ERROR: Two parameters required: 1) Request-Response OpenAPI service slug, 2) request body"
     exit 11
   fi
 
@@ -36,7 +36,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/static"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    echo "Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages"
+    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages"
     exit 3
   fi
 
