@@ -11,8 +11,6 @@ CMD ["/sbin/my_init"]
 
 WORKDIR /app
 
-COPY run.sh /etc/service/setup/run
-
 COPY setup/ /app/setup/
 COPY mocks/ /app/mocks/
 COPY data/ /app/data/
@@ -20,6 +18,7 @@ COPY utils/ /app/utils/
 
 COPY services/postgres.sh /etc/service/db/run
 COPY services/wiremock.sh /etc/service/http-service/run
+COPY services/setup.sh /etc/service/setup/run
 
 # WIREMOCK & POSTGRES
 COPY --from=wiremock /var/wiremock /var/wiremock
