@@ -19,7 +19,7 @@ function verifyBashScript() {
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
     echo "ERROR: One parameter required: 1) number of digits"
-    exit 1
+    return 1
   fi
 
   local LENGTH=$1
@@ -62,4 +62,21 @@ function pick_randomly() {
 function strip_extension() {
   local file="$1"
   echo "${file%.*}"
+}
+
+function isScenarioEnabled() {
+  if [ "$#" -ne 1 ]; then
+    echo "ERROR: One parameter required: 1) scenario folder path"
+    return 1
+  fi
+
+  SCENARIO_DIR=$1
+  SCENARIO_NAME=$(basename "$SCENARIO_DIR")
+
+  IS_DISABLED=$(echo "${SCENARIO_NAME}_DISABLED" | tr '-' '_' | awk '{print toupper($0)}')
+  if [[ "${!IS_DISABLED,,}" == "true" ]]; then
+    return 2
+  fi
+
+  return 0
 }

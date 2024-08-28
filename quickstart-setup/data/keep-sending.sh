@@ -2,10 +2,12 @@
 
 cd "$(dirname "$0")"
 
+source ../utils/lib.sh
+
 shopt -s nullglob
 
 for FOLDER in /scenario-examples/*; do   
-  if [ ! -f "$FOLDER/disabled" ]; then
+  if isScenarioEnabled "$FOLDER"; then
     echo "Starting to send static and generated data for scenario from $FOLDER directory ..."
 
     ./http/send-http-static-requests.sh "$FOLDER"
