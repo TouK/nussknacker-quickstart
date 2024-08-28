@@ -7,6 +7,11 @@ if [ "$#" -lt 1 ]; then
   exit 1
 fi
 
+if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
+  echo "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty"
+  exit 2
+fi
+
 SCENARIO_NAME=$1
 TIMEOUT_SECONDS=${2:-60}
 WAIT_INTERVAL=5
@@ -23,7 +28,7 @@ function deployScenario() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/processManagement/deploy/$SCENARIO_NAME"
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/processManagement/deploy/$SCENARIO_NAME"
   )
 
   local HTTP_STATUS
@@ -51,7 +56,7 @@ function checkDeploymentStatus() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X GET "http://nginx:8080/api/processes/$SCENARIO_NAME/status"
+    -X GET "http://${NU_DESIGNER_ADDRESS}/api/processes/$SCENARIO_NAME/status"
   )
 
   local HTTP_STATUS
@@ -86,7 +91,7 @@ while true; do
   CURRENT_TIME=$(date +%s)
   if [ $CURRENT_TIME -gt $END_TIME ]; then
     echo "ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!"
-    exit 2
+    exit 3
   fi
 
   echo "$SCENARIO_NAME deployment state is $DEPLOYMENT_STATUS. Checking again in $WAIT_INTERVAL seconds..."

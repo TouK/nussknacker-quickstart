@@ -2,12 +2,17 @@
 
 cd "$(dirname "$0")"
 
+if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
+  echo "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty"
+  exit 1
+fi
+
 function reloadConfiguration() {
   set -e
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/app/processingtype/reload"
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/app/processingtype/reload"
   )
 
   local HTTP_STATUS

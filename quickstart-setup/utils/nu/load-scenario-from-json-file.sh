@@ -7,13 +7,18 @@ if [ "$#" -lt 2 ]; then
   exit 1
 fi
 
+if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
+  echo "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty"
+  exit 2
+fi
+
 SCENARIO_NAME=$1
 SCENARIO_FILE_PATH=$2
 CATEGORY=${3:-"Default"}
 
 if [ ! -f "$SCENARIO_FILE_PATH" ]; then
   echo "ERROR: Cannot find file $SCENARIO_FILE_PATH with scenario"
-  exit 2
+  exit 3
 fi
 
 function createEmptyScenario() {
@@ -39,7 +44,7 @@ function createEmptyScenario() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/processes" \
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/processes" \
     -H "Content-Type: application/json" -d "$REQUEST_BODY"
   )
 
@@ -80,7 +85,7 @@ function importScenarioFromFile() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/processes/import/$SCENARIO_NAME" \
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/processes/import/$SCENARIO_NAME" \
     -F "process=@$SCENARIO_FILE"
   )
 
@@ -119,7 +124,7 @@ function saveScenario() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X PUT "http://nginx:8080/api/processes/$SCENARIO_NAME" \
+    -X PUT "http://${NU_DESIGNER_ADDRESS}/api/processes/$SCENARIO_NAME" \
     -H "Content-Type: application/json" -d "$REQUEST_BODY"
   )
 
@@ -152,7 +157,7 @@ case "$META_DATA_TYPE" in
     ;;
   *)
     echo "ERROR: Cannot import scenario with metadata type: $META_DATA_TYPE"
-    exit 3
+    exit 4
     ;;
 esac
 
