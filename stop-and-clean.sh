@@ -3,7 +3,7 @@ set -e
 
 cd "$(dirname "$0")"
 
-echo "Running Nussknacker Quickstart clean up ..."
+echo "Running Nussknacker Quickstart clean up... "
 echo ""
 
 if ! docker version &>/dev/null; then

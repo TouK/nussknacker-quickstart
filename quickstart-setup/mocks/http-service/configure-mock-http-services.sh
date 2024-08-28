@@ -2,14 +2,16 @@
 
 cd "$(dirname "$0")"
 
+source ../../utils/lib.sh
+
 if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) scenario example folder path"
+    echo -e "${RED}ERROR: One parameter required: 1) scenario example folder path${RESET}\n"
     exit 1
 fi
 
 function copyFilesAndMappings() {
   if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) HTTP mocks folder path"
+    echo -e "${RED}ERROR: One parameter required: 1) HTTP mocks folder path${RESET}\n"
     exit 11
   fi
 
@@ -33,14 +35,14 @@ function resetMappings() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [[ "$HTTP_STATUS" != 200 ]] ; then
-    echo -e "ERROR: Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "${RED}ERROR: Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
     exit 12
   fi
 }
 
 SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
-echo "Starting to configure Wiremock mappings and files ..."
+echo "Starting to configure Wiremock mappings and files..."
 
 shopt -s nullglob
 
@@ -52,4 +54,4 @@ done
 
 resetMappings
 
-echo -e "DONE!\n\n"
+echo -e "Wirmock configured!\n"

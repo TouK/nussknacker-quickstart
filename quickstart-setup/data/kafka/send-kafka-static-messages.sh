@@ -2,14 +2,16 @@
 
 cd "$(dirname "$0")"
 
+source ../../utils/lib.sh
+
 if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) scenario example folder path"
+    echo -e "${RED}ERROR: One parameter required: 1) scenario example folder path${RESET}\n"
     exit 1
 fi
 
 function sendMessage() {
   if [ "$#" -ne 2 ]; then
-    echo "ERROR: Two parameters required: 1) topic name, 2) message"
+    echo -e "${RED}ERROR: Two parameters required: 1) topic name, 2) message${RESET}\n"
     exit 11
   fi
 
@@ -18,14 +20,14 @@ function sendMessage() {
   local TOPIC_NAME=$1
   local MSG=$2
 
-  echo "Sending message $MSG to '$TOPIC_NAME'"
+  echo -n "Sending message $MSG to '$TOPIC_NAME'"
   ../../utils/kafka/send-to-topic.sh "$TOPIC_NAME" "$MSG"
-  echo "Message sent!"
+  echo "OK"
 }
 
 SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
-echo "Starting to send preconfigured messages ..."
+echo "Starting to send preconfigured messages..."
 
 shopt -s nullglob
 
@@ -35,7 +37,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/static"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages"
+    echo -e "${RED}ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages${RESET}\n"
     exit 3
   fi
 
@@ -51,4 +53,4 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/static"/*; do
   done < "$ITEM"
 done
 
-echo -e "DONE!\n\n"
+echo -e "Messages sent!\n"

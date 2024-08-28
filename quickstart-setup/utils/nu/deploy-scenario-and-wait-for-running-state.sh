@@ -2,13 +2,15 @@
 
 cd "$(dirname "$0")"
 
+source ../lib.sh
+
 if [ "$#" -lt 1 ]; then
-  echo "ERROR: One parameter required: 1) scenario name"
+  echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
   exit 1
 fi
 
 if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
-  echo "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty"
+  echo -e "${RED}ERROR: required variable NU_DESIGNER_ADDRESS not set or empty${RESET}\n"
   exit 2
 fi
 
@@ -18,7 +20,7 @@ WAIT_INTERVAL=5
 
 function deployScenario() {
   if [ "$#" -ne 1 ]; then
-      echo "ERROR: One parameter required: 1) scenario name"
+      echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
       exit 11
   fi
 
@@ -37,16 +39,16 @@ function deployScenario() {
   if [ "$HTTP_STATUS" != "200" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "ERROR: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "${RED}ERROR: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
     exit 12
   fi
 
-  echo "Scenario $SCENARIO_NAME deployment started ..."
+  echo "Scenario $SCENARIO_NAME deployment started..."
 }
 
 function checkDeploymentStatus() {
   if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) scenario name"
+    echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
     exit 21
   fi
 
@@ -65,7 +67,7 @@ function checkDeploymentStatus() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [ "$HTTP_STATUS" != "200" ]; then
-    echo -e "ERROR: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    echo -e "${RED}ERROR: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
     exit 22
   fi
 
@@ -74,7 +76,7 @@ function checkDeploymentStatus() {
   echo "$SCENARIO_STATUS"
 }
 
-echo "Deploying scenario $SCENARIO_NAME ..."
+echo "Deploying scenario $SCENARIO_NAME..."
 
 START_TIME=$(date +%s)
 END_TIME=$((START_TIME + TIMEOUT_SECONDS))
@@ -90,7 +92,7 @@ while true; do
 
   CURRENT_TIME=$(date +%s)
   if [ $CURRENT_TIME -gt $END_TIME ]; then
-    echo "ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!"
+    echo -e "${RED}ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!${RESET}\n"
     exit 3
   fi
 

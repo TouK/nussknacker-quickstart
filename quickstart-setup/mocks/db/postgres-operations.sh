@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -e
 
 PG_DB_NAME="mocks"
 PG_USER="mocks"
@@ -10,6 +10,8 @@ PG_DATA_DIR="$PG_BASE_DIR/data"
 PG_CUSTOM_CONF_DIR="$PG_BASE_DIR/conf"
 PG_CONF_FILE="$PG_CUSTOM_CONF_DIR/postgresql.conf"
 PG_HBA_FILE="$PG_CUSTOM_CONF_DIR/pg_hba.conf"
+
+source /app/utils/lib.sh
 
 init_data_dir() {
   if [ ! -e "$PG_DATA_DIR" ]; then
@@ -59,7 +61,7 @@ wait_until_started() {
     sleep 1
     max_startup_timeout_in_s=$((max_startup_timeout_in_s - 1))
     if ((max_startup_timeout_in_s <= 0)); then
-        echo "ERROR: Postgres is not started"
+        echo -e "${RED}ERROR: Postgres is not started${RESET}\n"
         exit 1
     fi
   done

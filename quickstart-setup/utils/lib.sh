@@ -1,5 +1,10 @@
 #!/bin/bash -e
 
+RED='\033[31m'
+GREEN='\033[32m'
+MAGENTA='\033[35m'
+RESET='\033[0m'
+
 function verifyBashScript() {
   local FILE=$1
 
@@ -18,7 +23,7 @@ function verifyBashScript() {
 
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) number of digits"
+    echo -e "${RED}ERROR: One parameter required: 1) number of digits${RESET}\n"
     return 1
   fi
 
@@ -66,7 +71,7 @@ function strip_extension() {
 
 function isScenarioEnabled() {
   if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) scenario folder path"
+    echo -e "${RED}ERROR: One parameter required: 1) scenario folder path${RESET}\n"
     return 1
   fi
 

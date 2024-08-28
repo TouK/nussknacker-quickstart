@@ -2,7 +2,7 @@
 chcp 65001 >nul
 setlocal enabledelayedexpansion
 
-echo Running Nussknacker Quickstart ...
+echo Running Nussknacker Quickstart...
 echo.
 
 docker --version >nul 2>&1
@@ -27,4 +27,4 @@ docker compose up -d --build --remove-orphans --wait
 
 echo.
 echo Nussknacker and its dependencies are up and running.
-echo Open http://localhost:8080 and log in as admin:admin ...
+echo Open http://localhost:8080 and log in as admin:admin...

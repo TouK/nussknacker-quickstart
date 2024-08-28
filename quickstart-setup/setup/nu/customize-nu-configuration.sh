@@ -2,8 +2,10 @@
 
 cd "$(dirname "$0")"
 
+source ../../utils/lib.sh
+
 if [ "$#" -ne 1 ]; then
-    echo "ERROR: One parameter required: 1) scenario example folder path"
+    echo -e "${RED}ERROR: One parameter required: 1) scenario example folder path${RESET}\n"
     exit 1
 fi
 
@@ -13,7 +15,7 @@ APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
 
 function customizeNuConfiguration() {
   if [ "$#" -ne 2 ]; then
-    echo "ERROR: Two parameters required: 1) configuration file path 2) example scenario id"
+    echo -e "${RED}ERROR: Two parameters required: 1) configuration file path 2) example scenario id${RESET}\n"
     exit 11
   fi
 
@@ -23,7 +25,7 @@ function customizeNuConfiguration() {
   local EXAMPLE_SCENARIO_ID=$2
   local EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME="${EXAMPLE_SCENARIO_ID}-$(basename "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH")"
 
-  echo "Including $EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH configuration"
+  echo -n "Including $EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH configuration... "
 
   cp -f "$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_PATH" "$CONFS_DIR/$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME"
   local INCLUDE_CONF_LINE="include \"$EXAMPLE_SCENARIO_RELATED_CONFIGURAION_FILE_NAME\""
@@ -31,9 +33,10 @@ function customizeNuConfiguration() {
   if ! grep -qxF "$INCLUDE_CONF_LINE" "$APP_CUSTOMIZATION_FILE_PATH"; then
     echo "$INCLUDE_CONF_LINE" >> "$APP_CUSTOMIZATION_FILE_PATH"
   fi
+  echo "OK"
 }
 
-echo "Starting to customize Nu configuration ..."
+echo "Starting to customize Nu configuration..."
 
 touch "$APP_CUSTOMIZATION_FILE_PATH"
 
@@ -45,7 +48,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/nu-designer"/*; do
   fi
 
   if [[ ! "$ITEM" == *.conf ]]; then
-    echo "ERROR: Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration"
+    echo -e "${RED}ERROR: Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration${RESET}\n"
     exit 2
   fi
 
@@ -55,4 +58,4 @@ done
 
 ../../utils/nu/reload-configuration.sh
 
-echo -e "DONE!\n\n"
+echo -e "Configuration customized!\n"

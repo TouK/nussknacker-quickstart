@@ -3,7 +3,7 @@ setlocal enabledelayedexpansion
 
 cd /d "%~dp0"
 
-echo Running Nussknacker Quickstart clean up ...
+echo Running Nussknacker Quickstart clean up...
 echo.
 
 docker --version >nul 2>&1

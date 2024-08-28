@@ -4,12 +4,12 @@ cd "$(dirname "$0")"
 
 source postgres-operations.sh
 
-echo "Starting Postgres service ..."
+echo "Starting Postgres service..."
 
 ./postgres-init.sh
 
 stop() {
-  echo "Stopping Postgres service ..."
+  echo "Stopping Postgres service..."
   postgres_stop
 }
 

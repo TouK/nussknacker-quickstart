@@ -1,16 +1,18 @@
 #!/bin/bash -e
 
+cd "$(dirname "$0")"
+
+source ../lib.sh
+
 if [ "$#" -ne 1 ]; then
-  echo "ERROR: One parameter required: 1) topic name"
+  echo -e "${RED}ERROR: One parameter required: 1) topic name${RESET}\n"
   exit 1
 fi
 
 if ! [ -v KAFKA_ADDRESS ] || [ -z "$KAFKA_ADDRESS" ]; then
-  echo "ERROR: required variable KAFKA_ADDRESS not set or empty"
+  echo -e "${RED}ERROR: required variable KAFKA_ADDRESS not set or empty${RESET}\n"
   exit 2
 fi
-
-cd "$(dirname "$0")"
 
 TOPIC_NAME=$1
 
