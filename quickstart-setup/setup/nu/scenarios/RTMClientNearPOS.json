@@ -299,7 +299,7 @@
       "id": "POS is currently opened",
       "expression": {
         "language": "spel",
-        "expression": "#pos_data != null AND #pos_data.open_hour != null AND #pos_data.close_hour != null AND #DATE.isBetween(#DATE.nowAtZone('Europe/Warsaw').toLocalTime, #pos_data.open_hour.toLocalTime(), #pos_data.close_hour.toLocalTime())"
+        "expression": "#pos_data != null AND #pos_data.open_hour != null AND #pos_data.close_hour != null AND #DATE.isBetween(#DATE.nowAtZone('Europe/Warsaw').toLocalTime, #pos_data.open_hour, #pos_data.close_hour)"
       },
       "isDisabled": null,
       "additionalFields": {
