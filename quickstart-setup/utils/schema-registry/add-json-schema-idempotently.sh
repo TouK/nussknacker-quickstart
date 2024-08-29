@@ -5,12 +5,12 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -ne 2 ]; then
-  redEcho "ERROR: Two parameters required: 1) schema name, 2) schema file path\n"
+  red_echo "ERROR: Two parameters required: 1) schema name, 2) schema file path\n"
   exit 1
 fi
 
 if ! [ -v SCHEMA_REGISTRY_ADDRESS ] || [ -z "$SCHEMA_REGISTRY_ADDRESS" ]; then
-  redEcho "ERROR: required variable SCHEMA_REGISTRY_ADDRESS not set or empty\n"
+  red_echo "ERROR: required variable SCHEMA_REGISTRY_ADDRESS not set or empty\n"
   exit 2
 fi
 
@@ -35,6 +35,6 @@ HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1)
 if [[ "$HTTP_STATUS" != 200 ]] ; then
   RESPONSE_BODY
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-  redEcho "ERROR: Cannot create schema $SCHEMA_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
+  red_echo "ERROR: Cannot create schema $SCHEMA_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
   exit 3
 fi

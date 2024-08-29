@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
-function sendRequest() {
+function send_request() {
   if [ "$#" -ne 2 ]; then
-    redEcho "ERROR: Two parameters required: 1) Request-Response OpenAPI service slug, 2) request body\n"
+    red_echo "ERROR: Two parameters required: 1) Request-Response OpenAPI service slug, 2) request body\n"
     exit 11
   fi
 
@@ -37,7 +37,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/static"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages\n"
+    red_echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages\n"
     exit 3
   fi
 
@@ -48,7 +48,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/http/static"/*; do
       continue
     fi
 
-    sendRequest "$OPENAPI_SERVICE_SLUG" "$REQUEST_BODY"
+    send_request "$OPENAPI_SERVICE_SLUG" "$REQUEST_BODY"
 
   done < "$ITEM"
 done

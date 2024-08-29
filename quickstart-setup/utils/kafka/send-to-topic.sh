@@ -5,12 +5,12 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -ne 2 ]; then
-  redEcho "ERROR: Two parameters required: 1) topic name, 2) message\n"
+  red_echo "ERROR: Two parameters required: 1) topic name, 2) message\n"
   exit 1
 fi
 
 if ! [ -v KAFKA_ADDRESS ] || [ -z "$KAFKA_ADDRESS" ]; then
-  redEcho "ERROR: required variable KAFKA_ADDRESS not set or empty\n"
+  red_echo "ERROR: required variable KAFKA_ADDRESS not set or empty\n"
   exit 2
 fi
 
@@ -20,6 +20,6 @@ MESSAGE=$2
 if kaf --brokers="$KAFKA_ADDRESS" topics ls | awk '{print $1}' | grep "^$TOPIC_NAME$" > /dev/null 2>&1; then
   echo "$MESSAGE" | kaf --brokers="$KAFKA_ADDRESS" produce "$TOPIC_NAME" > /dev/null
 else
-  redEcho "ERROR: Topic name '$TOPIC_NAME' not found\n"
+  red_echo "ERROR: Topic name '$TOPIC_NAME' not found\n"
   exit 3
 fi

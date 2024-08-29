@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
@@ -13,9 +13,9 @@ SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 CONFS_DIR=/opt/nussknacker/conf
 APP_CUSTOMIZATION_FILE_PATH="$CONFS_DIR/application-customizations.conf"
 
-function customizeNuConfiguration() {
+function customize_nu_configuration() {
   if [ "$#" -ne 2 ]; then
-    redEcho "ERROR: Two parameters required: 1) configuration file path 2) example scenario id\n"
+    red_echo "ERROR: Two parameters required: 1) configuration file path 2) example scenario id\n"
     exit 11
   fi
 
@@ -48,12 +48,12 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/nu-designer"/*; do
   fi
 
   if [[ ! "$ITEM" == *.conf ]]; then
-    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration\n"
+    red_echo "ERROR: Unrecognized file $ITEM. Required file with extension '.conf' and content with HOCON Nu configuration\n"
     exit 2
   fi
 
   SCENARIO_EXAMPLE_ID=$(basename "$SCENARIO_EXAMPLE_DIR_PATH")
-  customizeNuConfiguration "$ITEM" "$SCENARIO_EXAMPLE_ID"
+  customize_nu_configuration "$ITEM" "$SCENARIO_EXAMPLE_ID"
 done
 
 ../../utils/nu/reload-configuration.sh

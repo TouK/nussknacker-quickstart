@@ -5,15 +5,15 @@ GREEN='\033[32m'
 MAGENTA='\033[35m'
 RESET='\033[0m'
 
-function redEcho() {
+function red_echo() {
   echo -e "${RED}$1${RESET}"
 }
 
-function greenEcho() {
+function green_echo() {
   echo -e "${GREEN}$1${RESET}"
 }
 
-function magentaEcho() {
+function magenta_echo() {
   echo -e "${MAGENTA}$1${RESET}"
 }
 
@@ -35,7 +35,7 @@ function verify_bash_script() {
 
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) number of digits\n"
+    red_echo "ERROR: One parameter required: 1) number of digits\n"
     return 1
   fi
 
@@ -83,7 +83,7 @@ function strip_extension() {
 
 function is_scenario_enabled() {
   if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario folder path\n"
     return 1
   fi
 

@@ -6,13 +6,13 @@ source postgres-operations.sh
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
 function execute_ddl_script() {
   if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) DDL file path\n"
+    red_echo "ERROR: One parameter required: 1) DDL file path\n"
     exit 11
   fi
 

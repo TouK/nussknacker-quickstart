@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
-function sendMessage() {
+function send_message() {
   if [ "$#" -ne 2 ]; then
-    redEcho "ERROR: Two parameters required: 1) topic name, 2) message\n"
+    red_echo "ERROR: Two parameters required: 1) topic name, 2) message\n"
     exit 11
   fi
 
@@ -37,7 +37,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/static"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages\n"
+    red_echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with JSON messages\n"
     exit 3
   fi
 
@@ -48,7 +48,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/static"/*; do
       continue
     fi
 
-    sendMessage "$TOPIC_NAME" "$MSG"
+    send_message "$TOPIC_NAME" "$MSG"
 
   done < "$ITEM"
 done

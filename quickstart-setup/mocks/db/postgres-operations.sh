@@ -61,7 +61,7 @@ wait_until_started() {
     sleep 1
     max_startup_timeout_in_s=$((max_startup_timeout_in_s - 1))
     if ((max_startup_timeout_in_s <= 0)); then
-        redEcho "ERROR: Postgres is not started\n"
+        red_echo "ERROR: Postgres is not started\n"
         exit 1
     fi
   done

@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 
 source ../utils/lib.sh
 
-magentaEcho "-------- DATA GENERATION ACTIVATION STAGE is starting... ------\n"
+magenta_echo "-------- DATA GENERATION ACTIVATION STAGE is starting... ------\n"
 
 shopt -s nullglob
 
@@ -23,4 +23,4 @@ for FOLDER in /scenario-examples/*; do
   fi
 done
 
-magentaEcho "-------- DATA GENERATION ACTIVATION STAGE is finished! --------\n\n"
+magenta_echo "-------- DATA GENERATION ACTIVATION STAGE is finished! --------\n\n"

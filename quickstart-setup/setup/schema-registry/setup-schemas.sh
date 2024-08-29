@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
-function createJsonSchema() {
+function create_json_schema() {
   if [ "$#" -ne 2 ]; then
-    redEcho "ERROR: Two parameters required: 1) schema name, 2) schema file path\n"
+    red_echo "ERROR: Two parameters required: 1) schema name, 2) schema file path\n"
     exit 11
   fi
 
@@ -37,12 +37,12 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/schema-registry"/*; do
   fi
 
   if [[ ! "$ITEM" == *.schema.json ]]; then
-    redEcho "ERROR: Unrecognized file '$ITEM'. Required file with extension '.schema.json' and content with JSON schema\n"
+    red_echo "ERROR: Unrecognized file '$ITEM'. Required file with extension '.schema.json' and content with JSON schema\n"
     exit 2
   fi
 
   SCHEMA_NAME="$(basename "$ITEM" ".schema.json")-value"
-  createJsonSchema "$SCHEMA_NAME" "$ITEM"
+  create_json_schema "$SCHEMA_NAME" "$ITEM"
 done
 
 echo -e "Schemas added!\n"

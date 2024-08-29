@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
-function copyFilesAndMappings() {
+function copy_files_and_mappings() {
   if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) HTTP mocks folder path\n"
+    red_echo "ERROR: One parameter required: 1) HTTP mocks folder path\n"
     exit 11
   fi
 
@@ -26,7 +26,7 @@ function copyFilesAndMappings() {
   cp -r "$MOCKS_FOLDER_NAME/mappings/." /home/wiremock/mocks/mappings/
 }
 
-function resetMappings() {
+function reset_mappings() {
   RESPONSE=$(curl -s -L -w "\n%{http_code}" \
     -X POST "http://localhost:8080/__admin/mappings/reset" \
   )
@@ -35,7 +35,7 @@ function resetMappings() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [[ "$HTTP_STATUS" != 200 ]] ; then
-    redEcho "ERROR: Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
+    red_echo "ERROR: Cannot reset Wiremock mappings.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 12
   fi
 }
@@ -48,10 +48,10 @@ shopt -s nullglob
 
 for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/mocks/http-service"/*; do
   if [ -d "$ITEM" ]; then
-    copyFilesAndMappings "$ITEM"
+    copy_files_and_mappings "$ITEM"
   fi
 done
 
-resetMappings
+reset_mappings
 
 echo -e "Wirmock configured!\n"

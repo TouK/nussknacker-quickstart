@@ -6,7 +6,7 @@ source ../utils/lib.sh
 
 shopt -s nullglob
 
-magentaEcho "-------- SETUP STAGE is starting... -------\n"
+magenta_echo "-------- SETUP STAGE is starting... -------\n"
 
 for FOLDER in /scenario-examples/*; do
   if is_scenario_enabled "$FOLDER"; then
@@ -23,4 +23,4 @@ for FOLDER in /scenario-examples/*; do
   fi
 done
 
-magentaEcho "-------- SETUP STAGE is finished! ---------\n\n"
+magenta_echo "-------- SETUP STAGE is finished! ---------\n\n"

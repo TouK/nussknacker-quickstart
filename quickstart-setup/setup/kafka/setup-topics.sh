@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
-function createTopic() {
+function create_topic() {
   if [ "$#" -ne 1 ]; then
-    redEcho "ERROR: One parameter required: 1) topic name\n"
+    red_echo "ERROR: One parameter required: 1) topic name\n"
     exit 11
   fi
 
@@ -35,7 +35,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
   fi
 
   if [[ ! "$ITEM" == *.txt ]]; then
-    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names\n"
+    red_echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names\n"
     exit 2
   fi
 
@@ -45,7 +45,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
       continue
     fi
 
-    createTopic "$TOPIC_NAME"
+    create_topic "$TOPIC_NAME"
 
   done < "$ITEM"
 done

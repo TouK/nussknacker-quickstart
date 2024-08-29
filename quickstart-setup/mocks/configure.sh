@@ -6,7 +6,7 @@ source ../utils/lib.sh
 
 shopt -s nullglob
 
-magentaEcho "-------- MOCK CONFIGURATION STAGE is starting... ----\n"
+magenta_echo "-------- MOCK CONFIGURATION STAGE is starting... ----\n"
 
 for FOLDER in /scenario-examples/*; do
   if is_scenario_enabled "$SCENARIO_DIR"; then
@@ -21,4 +21,4 @@ for FOLDER in /scenario-examples/*; do
   fi
 done
 
-magentaEcho "-------- MOCK CONFIGURATION STAGE is finished! ------\n\n"
+magenta_echo "-------- MOCK CONFIGURATION STAGE is finished! ------\n\n"
