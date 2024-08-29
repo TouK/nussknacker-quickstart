@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
-  echo -e "${RED}ERROR: required variable NU_DESIGNER_ADDRESS not set or empty${RESET}\n"
+  redEcho "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty\n"
   exit 1
 fi
 
@@ -23,7 +23,7 @@ function reloadConfiguration() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [ "$HTTP_STATUS" != "204" ]; then
-    echo -e "${RED}ERROR: Cannot reload Nu configuration.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot reload Nu configuration.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 22
   fi
 }

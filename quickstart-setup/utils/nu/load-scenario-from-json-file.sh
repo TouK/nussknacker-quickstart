@@ -5,12 +5,12 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -lt 2 ]; then
-  echo -e "${RED}ERROR: Two parameters required: 1) scenario name, 2) scenario file path${RESET}\n"
+  redEcho "ERROR: Two parameters required: 1) scenario name, 2) scenario file path\n"
   exit 1
 fi
 
 if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
-  echo -e "${RED}ERROR: required variable NU_DESIGNER_ADDRESS not set or empty${RESET}\n"
+  redEcho "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty\n"
   exit 2
 fi
 
@@ -19,13 +19,13 @@ SCENARIO_FILE_PATH=$2
 CATEGORY=${3:-"Default"}
 
 if [ ! -f "$SCENARIO_FILE_PATH" ]; then
-  echo -e "${RED}ERROR: Cannot find file $SCENARIO_FILE_PATH with scenario${RESET}\n"
+  redEcho "ERROR: Cannot find file $SCENARIO_FILE_PATH with scenario\n"
   exit 3
 fi
 
 function createEmptyScenario() {
   if [ "$#" -ne 4 ]; then
-    echo -e "${RED}ERROR: Four parameters required: 1) scenario name, 2) processing mode, 3) category, 4) engine${RESET}\n"
+    redEcho "ERROR: Four parameters required: 1) scenario name, 2) processing mode, 3) category, 4) engine\n"
     exit 11
   fi
 
@@ -61,13 +61,13 @@ function createEmptyScenario() {
       echo "Scenario already exists."
       exit 0
     else
-      echo -e "${RED}ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+      redEcho "ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
       exit 12
     fi
   elif [ "$HTTP_STATUS" != "201" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "${RED}ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 13
   fi
 
@@ -76,7 +76,7 @@ function createEmptyScenario() {
 
 function importScenarioFromFile() {
   if [ "$#" -ne 2 ]; then
-    echo -e "${RED}ERROR: Two parameters required: 1) scenario name, 2) scenario file path${RESET}\n"
+    redEcho "ERROR: Two parameters required: 1) scenario name, 2) scenario file path\n"
     exit 21
   fi
 
@@ -103,14 +103,14 @@ function importScenarioFromFile() {
     SCENARIO_GRAPH=$(echo "$RESPONSE_BODY" | jq '.scenarioGraph')
     echo "$SCENARIO_GRAPH"
   else
-    echo -e "${RED}ERROR: Cannot import scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot import scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 22
   fi
 }
 
 function saveScenario() {
   if [ "$#" -ne 2 ]; then
-    echo -e "${RED}ERROR: Two parameters required: 1) scenario name, 2) scenario graph JSON representation${RESET}\n"
+    redEcho "ERROR: Two parameters required: 1) scenario name, 2) scenario graph JSON representation\n"
     exit 31
   fi
 
@@ -136,7 +136,7 @@ function saveScenario() {
   if [ "$HTTP_STATUS" != "200" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "${RED}ERROR: Cannot save scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot save scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 32
   fi
 
@@ -158,7 +158,7 @@ case "$META_DATA_TYPE" in
     PROCESSING_MODE="Request-Response"
     ;;
   *)
-    echo -e "${RED}ERROR: Cannot import scenario with metadata type: $META_DATA_TYPE${RESET}\n"
+    redEcho "ERROR: Cannot import scenario with metadata type: $META_DATA_TYPE\n"
     exit 4
     ;;
 esac

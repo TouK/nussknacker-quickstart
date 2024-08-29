@@ -5,7 +5,19 @@ GREEN='\033[32m'
 MAGENTA='\033[35m'
 RESET='\033[0m'
 
-function verifyBashScript() {
+function redEcho() {
+  echo -e "${RED}$1${RESET}"
+}
+
+function greenEcho() {
+  echo -e "${GREEN}$1${RESET}"
+}
+
+function magentaEcho() {
+  echo -e "${MAGENTA}$1${RESET}"
+}
+
+function verify_bash_script() {
   local FILE=$1
 
   if [[ -f "$FILE" ]]; then
@@ -23,7 +35,7 @@ function verifyBashScript() {
 
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
-    echo -e "${RED}ERROR: One parameter required: 1) number of digits${RESET}\n"
+    redEcho "ERROR: One parameter required: 1) number of digits\n"
     return 1
   fi
 
@@ -69,9 +81,9 @@ function strip_extension() {
   echo "${file%.*}"
 }
 
-function isScenarioEnabled() {
+function is_scenario_enabled() {
   if [ "$#" -ne 1 ]; then
-    echo -e "${RED}ERROR: One parameter required: 1) scenario folder path${RESET}\n"
+    redEcho "ERROR: One parameter required: 1) scenario folder path\n"
     return 1
   fi
 

@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -lt 2 ]; then
-  echo -e "${RED}ERROR: Two parameters required: 1) scenario name, 2) scenario JSON${RESET}\n"
+  redEcho "ERROR: Two parameters required: 1) scenario name, 2) scenario JSON\n"
   exit 1
 fi
 

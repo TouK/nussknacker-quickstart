@@ -5,12 +5,12 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -lt 1 ]; then
-  echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
+  redEcho "ERROR: One parameter required: 1) scenario name\n"
   exit 1
 fi
 
 if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
-  echo -e "${RED}ERROR: required variable NU_DESIGNER_ADDRESS not set or empty${RESET}\n"
+  redEcho "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty\n"
   exit 2
 fi
 
@@ -20,7 +20,7 @@ WAIT_INTERVAL=5
 
 function deployScenario() {
   if [ "$#" -ne 1 ]; then
-      echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
+      redEcho "ERROR: One parameter required: 1) scenario name\n"
       exit 11
   fi
 
@@ -39,7 +39,7 @@ function deployScenario() {
   if [ "$HTTP_STATUS" != "200" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "${RED}ERROR: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot run scenario $SCENARIO_NAME deployment.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 12
   fi
 
@@ -48,7 +48,7 @@ function deployScenario() {
 
 function checkDeploymentStatus() {
   if [ "$#" -ne 1 ]; then
-    echo -e "${RED}ERROR: One parameter required: 1) scenario name${RESET}\n"
+    redEcho "ERROR: One parameter required: 1) scenario name\n"
     exit 21
   fi
 
@@ -67,7 +67,7 @@ function checkDeploymentStatus() {
   RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
 
   if [ "$HTTP_STATUS" != "200" ]; then
-    echo -e "${RED}ERROR: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY${RESET}\n"
+    redEcho "ERROR: Cannot check scenario $SCENARIO_NAME deployment status.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 22
   fi
 
@@ -92,7 +92,7 @@ while true; do
 
   CURRENT_TIME=$(date +%s)
   if [ $CURRENT_TIME -gt $END_TIME ]; then
-    echo -e "${RED}ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!${RESET}\n"
+    redEcho "ERROR: Timeout for waiting for the RUNNING state of $SCENARIO_NAME deployment reached!\n"
     exit 3
   fi
 

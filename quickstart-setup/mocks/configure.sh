@@ -6,19 +6,19 @@ source ../utils/lib.sh
 
 shopt -s nullglob
 
-echo -e "${MAGENTA}-------- MOCK CONFIGURATION STAGE is starting... ----${RESET}\n"
+magentaEcho "-------- MOCK CONFIGURATION STAGE is starting... ----\n"
 
 for FOLDER in /scenario-examples/*; do
-  if isScenarioEnabled "$SCENARIO_DIR"; then
-    echo -e "Starting to configure mocks for scenarios from ${GREEN}$FOLDER${RESET} directory...\n\n"
+  if is_scenario_enabled "$SCENARIO_DIR"; then
+    echo -e "Starting to configure mocks for scenarios from ${GREEN}$FOLDER directory...\n\n"
 
     ./db/execute-ddls.sh "$FOLDER"
     ./http-service/configure-mock-http-services.sh "$FOLDER"
 
-    echo -e "Mocks for scenarios from ${GREEN}$FOLDER${RESET} directory configured!\n\n"
+    echo -e "Mocks for scenarios from ${GREEN}$FOLDER directory configured!\n\n"
   else
-    echo "Skipping configuring mocks for scenario from ${GREEN}$FOLDER${RESET} directory."
+    echo "Skipping configuring mocks for scenario from ${GREEN}$FOLDER directory."
   fi
 done
 
-echo -e "${MAGENTA}-------- MOCK CONFIGURATION STAGE is finished! ------${RESET}\n\n"
+magentaEcho "-------- MOCK CONFIGURATION STAGE is finished! ------\n\n"

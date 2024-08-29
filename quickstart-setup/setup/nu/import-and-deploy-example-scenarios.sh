@@ -5,7 +5,7 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    echo -e "${RED}ERROR: One parameter required: 1) scenario example folder path${RESET}\n"
+    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
@@ -13,7 +13,7 @@ SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
 function importAndDeployScenario() {
   if [ "$#" -ne 2 ]; then
-    echo -e "${RED}Error: Two parameters required: 1) scenario name, 2) example scenario file path${RESET}\n"
+    redEcho "Error: Two parameters required: 1) scenario name, 2) example scenario file path\n"
     exit 11
   fi
 
@@ -36,7 +36,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH"/*; do
   fi
 
   if [[ ! "$ITEM" == *.json ]]; then
-    echo -e "${RED}ERROR: Unrecognized file $ITEM. Required file with extension '.json' and content with Nu scenario JSON${RESET}\n"
+    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.json' and content with Nu scenario JSON\n"
     exit 2
   fi
 

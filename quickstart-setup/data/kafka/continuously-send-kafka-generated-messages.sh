@@ -5,13 +5,13 @@ cd "$(dirname "$0")"
 source ../../utils/lib.sh
 
 if [ "$#" -ne 1 ]; then
-    echo -e "${RED}ERROR: One parameter required: 1) scenario example folder path${RESET}\n"
+    redEcho "ERROR: One parameter required: 1) scenario example folder path\n"
     exit 1
 fi
 
 function runMessageSending() {
   if [ "$#" -ne 2 ]; then
-    echo -e "${RED}ERROR: Two parameters required: 1) topic name, 2) message generator script${RESET}\n"
+    redEcho "ERROR: Two parameters required: 1) topic name, 2) message generator script\n"
     exit 11
   fi
 
@@ -40,7 +40,7 @@ for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/data/kafka/generated"/*; do
   fi
 
   if [[ ! "$ITEM" == *.sh ]]; then
-    echo -e "${RED}ERROR: Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script${RESET}\n"
+    redEcho "ERROR: Unrecognized file $ITEM. Required file with extension '.sh' and content with bash script\n"
     exit 3
   fi
 

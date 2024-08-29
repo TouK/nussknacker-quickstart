@@ -7,13 +7,13 @@ source /app/utils/lib.sh
 rm -rf /app/healthy
 
 if /app/mocks/db/is-postgres-ready.sh && /app/mocks/http-service/is-wiremock-ready.sh; then
-  echo -e "\n${GREEN}------ Nu scenarios library is being prepared... ---------${RESET}\n\n"
+  greenEcho "------ Nu scenarios library is being prepared... ---------\n"
   
   /app/mocks/configure.sh
   /app/setup/run-setup.sh
   /app/data/keep-sending.sh
   
-  echo -e "\n${GREEN}------ Nu scenarios library sucessfully bootstrapped! ----${RESET}\n\n"
+  greenEcho "------ Nu scenarios library sucessfully bootstrapped! ----\n\n"
   
   touch /app/healthy
   

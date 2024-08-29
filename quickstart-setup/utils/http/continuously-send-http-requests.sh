@@ -5,14 +5,14 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -ne 2 ]; then
-    echo -e "${RED}ERROR: Two parameters required: 1) OpenAPI service slug, 2) request generator script path${RESET}\n"
+    redEcho "ERROR: Two parameters required: 1) OpenAPI service slug, 2) request generator script path\n"
     exit 1
 fi
 
 OPENAPI_SERVICE_SLUG=$1
 REQUEST_GENERATOR_SCRIPT=$2
 
-verifyBashScript "$REQUEST_GENERATOR_SCRIPT"
+verify_bash_script "$REQUEST_GENERATOR_SCRIPT"
 
 while true; do
   sleep 0.1

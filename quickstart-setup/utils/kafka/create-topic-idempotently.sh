@@ -5,12 +5,12 @@ cd "$(dirname "$0")"
 source ../lib.sh
 
 if [ "$#" -ne 1 ]; then
-  echo -e "${RED}ERROR: One parameter required: 1) topic name${RESET}\n"
+  redEcho "ERROR: One parameter required: 1) topic name\n"
   exit 1
 fi
 
 if ! [ -v KAFKA_ADDRESS ] || [ -z "$KAFKA_ADDRESS" ]; then
-  echo -e "${RED}ERROR: required variable KAFKA_ADDRESS not set or empty${RESET}\n"
+  redEcho "ERROR: required variable KAFKA_ADDRESS not set or empty\n"
   exit 2
 fi
 
