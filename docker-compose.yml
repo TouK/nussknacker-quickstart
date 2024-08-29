@@ -4,14 +4,15 @@ services:
 
   ### Quickstart setup container 
   quickstart-setup:
-    build:
-      context: quickstart-setup/
-      dockerfile: Dockerfile
-      no_cache: true
+    image: nussknacker-example-scenarios-library:latest
     depends_on:
       nginx:
         condition: service_healthy
       designer:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      schema-registry:
         condition: service_healthy
     environment:
       NU_DESIGNER_ADDRESS: "nginx:8080"
@@ -20,7 +21,6 @@ services:
       SCHEMA_REGISTRY_ADDRESS: "schema-registry:8081"
     volumes:
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
-      - ./scenario-examples:/scenario-examples
     deploy:
       resources:
         limits:
@@ -58,7 +58,8 @@ services:
     image: touk/nussknacker:${NUSSKNACKER_VERSION:?NUSSKNACKER_VERSION must be defined}_scala-2.12
     restart: unless-stopped
     environment:
-      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/additional-configuration.conf,/opt/nussknacker/conf/application-customizations.conf"
+      EXAMPLE_SCENARIOS_LIBRARY_SERVICE_NAME: quickstart-setup
+      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/application-customizations.conf,/opt/nussknacker/conf/additional-configuration.conf"
       DB_URL: "jdbc:postgresql://postgres:5432/nu-db"
       DB_DRIVER: "org.postgresql.Driver"
       DB_USER: "nu"
