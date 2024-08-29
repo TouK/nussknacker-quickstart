@@ -2,29 +2,52 @@
 
 cd "$(dirname "$0")"
 
-function createTopic() {
+source ../../utils/lib.sh
+
+if [ "$#" -ne 1 ]; then
+    red_echo "ERROR: One parameter required: 1) scenario example folder path\n"
+    exit 1
+fi
+
+function create_topic() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) topic name"
+    red_echo "ERROR: One parameter required: 1) topic name\n"
     exit 11
   fi
 
   set -e
   local TOPIC_NAME=$1
 
-  echo "Creating topic '$TOPIC_NAME'"
+  echo -n "Creating topic '$TOPIC_NAME'... "
   ../../utils/kafka/create-topic-idempotently.sh "$TOPIC_NAME"
+  echo "OK"
 }
 
-echo "Starting to create preconfigured topics ..."
+SCENARIO_EXAMPLE_DIR_PATH=${1%/}
 
-while IFS= read -r TOPIC_NAME; do
+echo "Starting to create preconfigured topics..."
 
-  if [[ $TOPIC_NAME == "#"* ]]; then
+shopt -s nullglob
+
+for ITEM in "$SCENARIO_EXAMPLE_DIR_PATH/setup/kafka"/*; do
+  if [ ! -f "$ITEM" ]; then
     continue
   fi
 
-  createTopic "$TOPIC_NAME"
+  if [[ ! "$ITEM" == *.txt ]]; then
+    red_echo "ERROR: Unrecognized file $ITEM. Required file with extension '.txt' and content with topic names\n"
+    exit 2
+  fi
 
-done < "topics.txt"
+  while IFS= read -r TOPIC_NAME; do
 
-echo -e "DONE!\n\n"
+    if [[ $TOPIC_NAME == "#"* ]]; then
+      continue
+    fi
+
+    create_topic "$TOPIC_NAME"
+
+  done < "$ITEM"
+done
+
+echo -e "Topics created!\n"

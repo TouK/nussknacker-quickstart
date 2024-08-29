@@ -2,8 +2,10 @@
 
 cd "$(dirname "$0")"
 
+source ../lib.sh
+
 if [ "$#" -lt 2 ]; then
-  echo "Error: Two parameters required: 1) scenario name, 2) scenario JSON"
+  red_echo "ERROR: Two parameters required: 1) scenario name, 2) scenario JSON\n"
   exit 1
 fi
 

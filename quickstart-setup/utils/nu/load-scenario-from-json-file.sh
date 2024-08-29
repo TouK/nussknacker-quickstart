@@ -2,9 +2,16 @@
 
 cd "$(dirname "$0")"
 
+source ../lib.sh
+
 if [ "$#" -lt 2 ]; then
-  echo "Error: Two parameters required: 1) scenario name, 2) scenario file path"
+  red_echo "ERROR: Two parameters required: 1) scenario name, 2) scenario file path\n"
   exit 1
+fi
+
+if ! [ -v NU_DESIGNER_ADDRESS ] || [ -z "$NU_DESIGNER_ADDRESS" ]; then
+  red_echo "ERROR: required variable NU_DESIGNER_ADDRESS not set or empty\n"
+  exit 2
 fi
 
 SCENARIO_NAME=$1
@@ -12,14 +19,14 @@ SCENARIO_FILE_PATH=$2
 CATEGORY=${3:-"Default"}
 
 if [ ! -f "$SCENARIO_FILE_PATH" ]; then
-  echo "Error: Cannot find file $SCENARIO_FILE_PATH with scenario"
-  exit 2
+  red_echo "ERROR: Cannot find file $SCENARIO_FILE_PATH with scenario\n"
+  exit 3
 fi
 
-function createEmptyScenario() {
+function create_empty_scenario() {
   if [ "$#" -ne 4 ]; then
-      echo "Error: Four parameters required: 1) scenario name, 2) processing mode, 3) category, 4) engine"
-      exit 11
+    red_echo "ERROR: Four parameters required: 1) scenario name, 2) processing mode, 3) category, 4) engine\n"
+    exit 11
   fi
 
   set -e
@@ -39,7 +46,7 @@ function createEmptyScenario() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/processes" \
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/processes" \
     -H "Content-Type: application/json" -d "$REQUEST_BODY"
   )
 
@@ -54,22 +61,22 @@ function createEmptyScenario() {
       echo "Scenario already exists."
       exit 0
     else
-      echo -e "Error: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+      red_echo "ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
       exit 12
     fi
   elif [ "$HTTP_STATUS" != "201" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "Error: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
-    exit 12
+    red_echo "ERROR: Cannot create empty scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
+    exit 13
   fi
 
   echo "Empty scenario $SCENARIO_NAME created successfully."
 }
 
-function importScenarioFromFile() {
+function import_scenario_from_file() {
   if [ "$#" -ne 2 ]; then
-    echo "Error: Two parameters required: 1) scenario name, 2) scenario file path"
+    red_echo "ERROR: Two parameters required: 1) scenario name, 2) scenario file path\n"
     exit 21
   fi
 
@@ -80,7 +87,7 @@ function importScenarioFromFile() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X POST "http://nginx:8080/api/processes/import/$SCENARIO_NAME" \
+    -X POST "http://${NU_DESIGNER_ADDRESS}/api/processes/import/$SCENARIO_NAME" \
     -F "process=@$SCENARIO_FILE"
   )
 
@@ -96,14 +103,14 @@ function importScenarioFromFile() {
     SCENARIO_GRAPH=$(echo "$RESPONSE_BODY" | jq '.scenarioGraph')
     echo "$SCENARIO_GRAPH"
   else
-    echo -e "Error: Cannot import scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    red_echo "ERROR: Cannot import scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 22
   fi
 }
 
-function saveScenario() {
+function save_scenario() {
   if [ "$#" -ne 2 ]; then
-    echo "Error: Two parameters required: 1) scenario name, 2) scenario graph JSON representation"
+    red_echo "ERROR: Two parameters required: 1) scenario name, 2) scenario graph JSON representation\n"
     exit 31
   fi
 
@@ -119,7 +126,7 @@ function saveScenario() {
 
   local RESPONSE
   RESPONSE=$(curl -s -L -w "\n%{http_code}" -u admin:admin \
-    -X PUT "http://nginx:8080/api/processes/$SCENARIO_NAME" \
+    -X PUT "http://${NU_DESIGNER_ADDRESS}/api/processes/$SCENARIO_NAME" \
     -H "Content-Type: application/json" -d "$REQUEST_BODY"
   )
 
@@ -129,7 +136,7 @@ function saveScenario() {
   if [ "$HTTP_STATUS" != "200" ]; then
     local RESPONSE_BODY
     RESPONSE_BODY=$(echo "$RESPONSE" | sed \$d)
-    echo -e "Error: Cannot save scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY"
+    red_echo "ERROR: Cannot save scenario $SCENARIO_NAME.\nHTTP status: $HTTP_STATUS, response body: $RESPONSE_BODY\n"
     exit 32
   fi
 
@@ -151,11 +158,11 @@ case "$META_DATA_TYPE" in
     PROCESSING_MODE="Request-Response"
     ;;
   *)
-    echo "Error: Cannot import scenario with metadata type: $META_DATA_TYPE"
-    exit 2
+    red_echo "ERROR: Cannot import scenario with metadata type: $META_DATA_TYPE\n"
+    exit 4
     ;;
 esac
 
-createEmptyScenario "$SCENARIO_NAME" "$PROCESSING_MODE" "$CATEGORY" "$ENGINE"
-SCENARIO_GRAPH=$(importScenarioFromFile "$SCENARIO_NAME" "$SCENARIO_FILE_PATH")
-saveScenario "$SCENARIO_NAME" "$SCENARIO_GRAPH"
+create_empty_scenario "$SCENARIO_NAME" "$PROCESSING_MODE" "$CATEGORY" "$ENGINE"
+SCENARIO_GRAPH=$(import_scenario_from_file "$SCENARIO_NAME" "$SCENARIO_FILE_PATH")
+save_scenario "$SCENARIO_NAME" "$SCENARIO_GRAPH"

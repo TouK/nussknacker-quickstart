@@ -1,2 +1,0 @@
-# Request-Response OpenAPI services slugs the static and generated requests should be sent to
-loan

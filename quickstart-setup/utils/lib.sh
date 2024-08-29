@@ -1,25 +1,42 @@
 #!/bin/bash -e
 
-function verifyBashScript() {
+RED='\033[31m'
+GREEN='\033[32m'
+MAGENTA='\033[35m'
+RESET='\033[0m'
+
+function red_echo() {
+  echo -e "${RED}$1${RESET}"
+}
+
+function green_echo() {
+  echo -e "${GREEN}$1${RESET}"
+}
+
+function magenta_echo() {
+  echo -e "${MAGENTA}$1${RESET}"
+}
+
+function verify_bash_script() {
   local FILE=$1
 
   if [[ -f "$FILE" ]]; then
     if [[ $(head -n 1 "$FILE") =~ ^#!/bin/bash ]]; then
       return 0
     else
-      echo "$FILE exists but is not a Bash script."
+      echo "File '$FILE' exists but is not a Bash script."
       return 1
     fi
   else
-    echo "$FILE does not exist."
+    echo "File '$FILE' does not exist."
     return 2
   fi
 }
 
 function random_Ndigit_number() {
   if [ "$#" -ne 1 ]; then
-    echo "Error: One parameter required: 1) number of digits"
-    exit 1
+    red_echo "ERROR: One parameter required: 1) number of digits\n"
+    return 1
   fi
 
   local LENGTH=$1
@@ -62,4 +79,21 @@ function pick_randomly() {
 function strip_extension() {
   local file="$1"
   echo "${file%.*}"
+}
+
+function is_scenario_enabled() {
+  if [ "$#" -ne 1 ]; then
+    red_echo "ERROR: One parameter required: 1) scenario folder path\n"
+    return 1
+  fi
+
+  SCENARIO_DIR=$1
+  SCENARIO_NAME=$(basename "$SCENARIO_DIR")
+
+  IS_DISABLED=$(echo "${SCENARIO_NAME}_DISABLED" | tr '-' '_' | awk '{print toupper($0)}')
+  if [[ "${!IS_DISABLED,,}" == "true" ]]; then
+    return 2
+  fi
+
+  return 0
 }
