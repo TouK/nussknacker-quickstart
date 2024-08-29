@@ -92,13 +92,13 @@ services:
       retries: 10
     volumes:
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf
-      - ./designer/additional-configuration.conf:/opt/nussknacker/conf/additional-configuration.conf
+      - ./designer/application-customizations.conf:/opt/nussknacker/conf/application-customizations.conf
     volumes_from:
       - flink-jobmanager
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 2048M
 
   postgres:
     image: postgres:13
