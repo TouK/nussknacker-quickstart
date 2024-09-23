@@ -15,11 +15,13 @@ services:
       schema-registry:
         condition: service_healthy
     environment:
+      DISABLE_EMBEDDED_EXAMPLES: true
       NU_DESIGNER_ADDRESS: "nginx:8080"
       NU_REQUEST_RESPONSE_OPEN_API_SERVICE_ADDRESS: "nginx:8181"
       KAFKA_ADDRESS: "kafka:9092"
       SCHEMA_REGISTRY_ADDRESS: "schema-registry:8081"
     volumes:
+      - ./examples/zbyszek-example:/scenario-examples/zbyszek-example
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
     deploy:
       resources:
