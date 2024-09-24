@@ -1,6 +1,6 @@
 taskmanager.numberOfTaskSlots: 8
 
-state.backend: filesystem
+state.backend.type: filesystem
 state.checkpoints.dir: file:///opt/flink/data/checkpoints
 state.savepoints.dir: file:///opt/flink/data/savepoints
 
