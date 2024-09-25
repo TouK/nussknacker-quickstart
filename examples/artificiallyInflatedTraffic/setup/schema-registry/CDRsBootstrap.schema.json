@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "CDRbootstrap",
+    "properties": {
+      "record_type": {
+        "type": "integer",
+        "description": "Message type: 1 for SMO (outgoing message), 2 for SMT (terminated/handled message)"
+      },
+      "message_status": {
+        "type": "integer",
+        "description": "Message status: 1 for NROUTE, 2 for DELIVERED, 3 for EXPIRED, 4 for DELETED, 5 for UNDELIVERABLE, 6 for ACCEPTED, 7 for UNKNOWN, 8 for REJECTED"
+      },
+      "msisdn_a": {
+        "type": "string",
+        "description": "Sender's MSISDN"
+      },
+      "msisdn_b": {
+        "type": "string",
+        "description": "Receiver's MSISDN"
+      }
+    
+    },
+    "required": [
+      "record_type", 
+      "message_status", 
+      "msisdn_a", 
+      "msisdn_b"
+    ]
+  }

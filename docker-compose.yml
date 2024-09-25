@@ -21,7 +21,7 @@ services:
       KAFKA_ADDRESS: "kafka:9092"
       SCHEMA_REGISTRY_ADDRESS: "schema-registry:8081"
     volumes:
-      - ./examples/zbyszek-example:/scenario-examples/zbyszek-example
+      - ./examples/artificiallyInflatedTraffic:/scenario-examples/artificiallyInflatedTraffic
       - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
     deploy:
       resources:
