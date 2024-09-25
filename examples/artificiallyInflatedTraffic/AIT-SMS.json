@@ -1,0 +1,68 @@
+{
+  "metaData" : {
+    "id" : "AIT-SMS",
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "parallelism" : "1",
+        "spillStateToDisk" : "true",
+        "useAsyncInterpretation" : "",
+        "checkpointIntervalInSeconds" : ""
+      },
+      "metaDataType" : "StreamMetaData",
+      "showDescription" : false
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "read from CDRs topic",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'CDRs'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          }
+        ]
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -444,
+          "y" : -347
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "id" : "dead-end",
+      "ref" : {
+        "typ" : "dead-end",
+        "parameters" : [
+        ]
+      },
+      "endResult" : null,
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : -439,
+          "y" : -201
+        }
+      },
+      "type" : "Sink"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}

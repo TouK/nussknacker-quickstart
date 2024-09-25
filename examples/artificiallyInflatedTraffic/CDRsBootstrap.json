@@ -1,0 +1,238 @@
+{
+  "metaData" : {
+    "id" : "CDRsBootstrap",
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "parallelism" : "1",
+        "spillStateToDisk" : "true",
+        "useAsyncInterpretation" : "",
+        "checkpointIntervalInSeconds" : ""
+      },
+      "metaDataType" : "StreamMetaData",
+      "showDescription" : false
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "read from CDRsBootstrap topic",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'CDRsBootstrap'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          }
+        ]
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 0,
+          "y" : 0
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "id" : "traffic from bad guy",
+      "varName" : "msisdna",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#RANDOM.nextInt(0,10) == 0l ? \"+48666666666\" : \"+48\" + #input.msisdn_a"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 0,
+          "y" : 180
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "CDRs topic",
+      "ref" : {
+        "typ" : "kafka",
+        "parameters" : [
+          {
+            "name" : "Topic",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'CDRs'"
+            }
+          },
+          {
+            "name" : "Schema version",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "'latest'"
+            }
+          },
+          {
+            "name" : "Key",
+            "expression" : {
+              "language" : "spel",
+              "expression" : ""
+            }
+          },
+          {
+            "name" : "Raw editor",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "false"
+            }
+          },
+          {
+            "name" : "msisdn_b",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#msisdna == \"+48666666666\" ? \"+48666666666\": \"+48\" + #input.msisdn_b"
+            }
+          },
+          {
+            "name" : "msisdn_a",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#msisdna != \"+48666666666\"  ? \n   ( #RANDOM.nextInt(0,10) < 2 ? \"+48700000000\" : #msisdna) : \"+48666666666\" "
+            }
+          },
+          {
+            "name" : "destination_smsc",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "ton_a_number",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "1"
+            }
+          },
+          {
+            "name" : "delivery_attempts",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "1"
+            }
+          },
+          {
+            "name" : "ton_b_number",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "1"
+            }
+          },
+          {
+            "name" : "text_length",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#RANDOM.nextInt(1,128)"
+            }
+          },
+          {
+            "name" : "record_type",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.record_type"
+            }
+          },
+          {
+            "name" : "entry_date",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#DATE.toEpochMilli(#DATE.nowAtDefaultTimeZone) - #RANDOM.nextInt(10,200)"
+            }
+          },
+          {
+            "name" : "smsc_class",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "message_status",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.message_status"
+            }
+          },
+          {
+            "name" : "delivery_date",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.message_status == 2l ? #DATE.toEpochMilli(#DATE.nowAtDefaultTimeZone) : 0l"
+            }
+          },
+          {
+            "name" : "destination_ei_id",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "source_ei_id",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "source_smsc",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "imsi_a",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "smsc_id",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          },
+          {
+            "name" : "imsi_b",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "''"
+            }
+          }
+        ]
+      },
+      "endResult" : null,
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 0,
+          "y" : 360
+        }
+      },
+      "type" : "Sink"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}
