@@ -1,0 +1,99 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "MessageRecord",
+    "properties": {
+      "smsc_id": {
+        "type": "string",
+        "description": "Unique identifier of the message"
+      },
+      "smsc_class": {
+        "type": "string",
+        "description": "Message class"
+      },
+      "record_type": {
+        "type": "integer",
+        "description": "Message type: 1 for SMO (outgoing message), 2 for SMT (terminated/handled message)"
+      },
+      "message_status": {
+        "type": "integer",
+        "description": "Message status: 1 for NROUTE, 2 for DELIVERED, 3 for EXPIRED, 4 for DELETED, 5 for UNDELIVERABLE, 6 for ACCEPTED, 7 for UNKNOWN, 8 for REJECTED"
+      },
+      "msisdn_a": {
+        "type": "string",
+        "description": "Sender's MSISDN"
+      },
+      "msisdn_b": {
+        "type": "string",
+        "description": "Receiver's MSISDN"
+      },
+      "ton_a_number": {
+        "type": "integer",
+        "description": "Sender's type of number"
+      },
+      "ton_b_number": {
+        "type": "integer",
+        "description": "Receiver's type of number"
+      },
+      "text_length": {
+        "type": "integer",
+        "description": "Message length"
+      },
+      "imsi_a": {
+        "type": "string",
+        "description": "Sender's international mobile subscriber ID"
+      },
+      "imsi_b": {
+        "type": "string",
+        "description": "Receiver's international mobile subscriber ID"
+      },
+      "entry_date": {
+        "type": "integer",
+        "description": "Timestamp of creating message (epoch time)"
+      },
+      "delivery_date": {
+        "type": "integer",
+        "description": "Timestamp of message delivery (epoch time)"
+      },
+      "delivery_attempts": {
+        "type": "integer",
+        "description": "Number of delivery tries"
+      },
+      "source_smsc": {
+        "type": "string",
+        "description": "Sender's SMSC MSISDN"
+      },
+      "destination_smsc": {
+        "type": "string",
+        "description": "Receiver's SMSC MSISDN"
+      },
+      "source_ei_id": {
+        "type": "string",
+        "description": "Source type of traffic"
+      },
+      "destination_ei_id": {
+        "type": "string",
+        "description": "Destination type of traffic"
+      }
+    },
+    "required": [
+      "smsc_id", 
+      "smsc_class", 
+      "record_type", 
+      "message_status", 
+      "msisdn_a", 
+      "msisdn_b", 
+      "ton_a_number", 
+      "ton_b_number", 
+      "text_length", 
+      "imsi_a", 
+      "imsi_b", 
+      "entry_date", 
+      "delivery_date", 
+      "delivery_attempts", 
+      "source_smsc", 
+      "destination_smsc", 
+      "source_ei_id", 
+      "destination_ei_id"
+    ]
+  }
