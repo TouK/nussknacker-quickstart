@@ -5,16 +5,16 @@ info:
   description: API for retrieving customer profiles and offers based on customer type.
 
 paths:
-  '/customer/{customerId}/profile':
+  '/customer/{msisdn}/profile':
     get:
       summary: Get customer profile by customer's ID
       description: Retrieve detailed profile information for a customer using their unique customer ID.
       operationId: getCustomerProfile
       parameters:
-        - name: customerId
+        - name: msisdn
           in: path
           required: true
-          description: The unique identifier of the customer.
+          description: The unique msisdn  of the customer.
           schema:
             type: string
       responses:
@@ -61,10 +61,10 @@ components:
         id:
           type: string
           description: The unique identifier of the customer profile.
-        customerId: 
+        contractNumber: 
           type: string 
           description: The identifier of customer
-        customerType:
+        contractType:
           type: string
           description: The type or category of the customer.
         customerName:

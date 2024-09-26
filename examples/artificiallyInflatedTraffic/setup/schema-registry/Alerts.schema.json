@@ -1,0 +1,55 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "title": "Alerts",
+    "properties": {
+      "alertName": {
+        "type": "string",
+        "description": "AIT-SMS, WANGIRI, etc"
+      },
+     
+      "msisdn_a": {
+        "type": "string",
+        "description": "Sender's MSISDN"
+      },
+      "msisdn_b": {
+        "type": "string",
+        "description": "Receiver's MSISDN"
+      },
+
+      "metricName": {
+        "type": "string",
+        "description": "name of metric"
+      },
+
+      "metricValue": {
+        "type": "number",
+        "description": ""
+      },
+    
+      "metricName2": {
+        "type": "string",
+        "description": "name of metric"
+      },
+
+      "metricValue2": {
+        "type": "number",
+        "description": ""
+      },
+      
+      "metricName3": {
+        "type": "string",
+        "description": "name of metric"
+      },
+
+      "metricValue3": {
+        "type": "number",
+        "description": ""
+      }
+    },
+    "required": [
+      "msisdn_a", 
+      "metricName", 
+      "metricValue" 
+    ]
+  }
