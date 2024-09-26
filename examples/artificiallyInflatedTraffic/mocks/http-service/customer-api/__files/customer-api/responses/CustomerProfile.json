@@ -1,7 +1,7 @@
 {
     "id": "{{randomValue length=10 type='NUMERIC'}}",
-    "customerId": "{{request.path.[1]}}",
-    "customerType": "{{{pickRandom 'Freemium' 'Regular' 'VIP'}}}",
+    "contractNumber": "{{request.path.[1]}}",
+    "contractType": "{{{pickRandom 'external' 'prepaid' 'prepaid' 'prepaid' 'prepaid' 'prepaid' 'postpaid' 'business'}}}",
     "customerName": "{{random 'Name.fullName'}}",
     "customerMsisdn": "{{random 'PhoneNumber.phoneNumber'}}",
     "customerAge": {{randomInt lower=10 upper=99}},

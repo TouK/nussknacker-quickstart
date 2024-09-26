@@ -38,29 +38,409 @@
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : -444,
-          "y" : -347
+          "x" : 180,
+          "y" : 0
         }
       },
       "type" : "Source"
     },
     {
-      "id" : "dead-end",
-      "ref" : {
-        "typ" : "dead-end",
-        "parameters" : [
-        ]
+      "id" : "rename input",
+      "varName" : "CDR",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#input"
       },
-      "endResult" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 180
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "Whitelist",
+      "varName" : "whitelist",
+      "value" : {
+        "language" : "spel",
+        "expression" : "{\"+48700000000\", \"+48710000000\", \"+48720000000\", \"+48740000000\"}"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 360
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "international outgoing & delivered only",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "(#CDR.record_type == 1) \nAND \n(#CDR.message_status == 2) \nAND \n(#CDR.ton_a_number == 1)"
+      },
       "isDisabled" : null,
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : -439,
-          "y" : -201
+          "x" : 180,
+          "y" : 540
         }
       },
-      "type" : "Sink"
+      "type" : "Filter"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "filter out whitelisted numbers",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#whitelist.?[#this == #CDR.msisdn_a].size == 0"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 720
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "getCustomerProfile",
+      "service" : {
+        "id" : "getCustomerProfile",
+        "parameters" : [
+          {
+            "name" : "msisdn",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#CDR.msisdn_a"
+            }
+          }
+        ]
+      },
+      "output" : "customerProfile",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 900
+        }
+      },
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "prepaid only",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#customerProfile.contractType == \"prepaid\""
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 1080
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "5 minutes sliding window",
+      "outputVar" : "timeWindowAggr",
+      "nodeType" : "aggregate-sliding",
+      "parameters" : [
+        {
+          "name" : "groupBy",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#CDR.msisdn_a"
+          }
+        },
+        {
+          "name" : "aggregator",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#AGG.map({\n    \"count\" : #AGG.sum,\n    \"msisdnList\": #AGG.list\n})"
+          }
+        },
+        {
+          "name" : "aggregateBy",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "{\n    \"count\" : 1,\n    \"msisdnList\" : #CDR.msisdn_b\n}"
+          }
+        },
+        {
+          "name" : "windowLength",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "T(java.time.Duration).parse('PT5M')"
+          }
+        },
+        {
+          "name" : "emitWhenEventLeft",
+          "expression" : {
+            "language" : "spel",
+            "expression" : "false"
+          }
+        }
+      ],
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 1260
+        }
+      },
+      "type" : "CustomNode"
+    },
+    {
+      "nextFalse" : [
+      ],
+      "id" : "only more than N SMS",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#timeWindowAggr.count > 30"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 1440
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "compute spread",
+      "varName" : "spread",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#CONV.toNumber(#COLLECTION.distinct(#timeWindowAggr.msisdnList).size)/\n#CONV.toNumber(#timeWindowAggr.msisdnList.size).floatValue"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 1620
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "nexts" : [
+        [
+          {
+            "nextFalse" : [
+            ],
+            "id" : "only if weak spread",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#spread < 0.2"
+            },
+            "isDisabled" : null,
+            "additionalFields" : {
+              "description" : null,
+              "layoutData" : {
+                "x" : 0,
+                "y" : 1980
+              }
+            },
+            "type" : "Filter"
+          },
+          {
+            "id" : "Alerts",
+            "ref" : {
+              "typ" : "kafka",
+              "parameters" : [
+                {
+                  "name" : "Topic",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "'Alerts'"
+                  }
+                },
+                {
+                  "name" : "Schema version",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "'latest'"
+                  }
+                },
+                {
+                  "name" : "Key",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
+                  }
+                },
+                {
+                  "name" : "msisdn_b",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#COLLECTION.join( #COLLECTION.take( #timeWindowAggr.msisdnList, 10), \", \")"
+                  }
+                },
+                {
+                  "name" : "metricName3",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "\"count of unique recipients\""
+                  }
+                },
+                {
+                  "name" : "msisdn_a",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#CDR.msisdn_a"
+                  }
+                },
+                {
+                  "name" : "metricName",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "\"AIT-SMS-spread\""
+                  }
+                },
+                {
+                  "name" : "alertName",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "\"AIT-SMS\""
+                  }
+                },
+                {
+                  "name" : "metricValue",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#spread"
+                  }
+                },
+                {
+                  "name" : "metricValue2",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#timeWindowAggr.msisdnList.size"
+                  }
+                },
+                {
+                  "name" : "metricName2",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "\"count of SMS sent\""
+                  }
+                },
+                {
+                  "name" : "metricValue3",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#COLLECTION.distinct(#timeWindowAggr.msisdnList).size"
+                  }
+                }
+              ]
+            },
+            "endResult" : null,
+            "isDisabled" : false,
+            "additionalFields" : {
+              "description" : null,
+              "layoutData" : {
+                "x" : 0,
+                "y" : 2160
+              }
+            },
+            "type" : "Sink"
+          }
+        ],
+        [
+          {
+            "id" : "Monitor",
+            "ref" : {
+              "typ" : "kafka",
+              "parameters" : [
+                {
+                  "name" : "Topic",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "'Monitor'"
+                  }
+                },
+                {
+                  "name" : "Schema version",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "'latest'"
+                  }
+                },
+                {
+                  "name" : "Key",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : ""
+                  }
+                },
+                {
+                  "name" : "Raw editor",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "false"
+                  }
+                },
+                {
+                  "name" : "msisdnA",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "#CONV.toNumber(#COLLECTION.distinct(#timeWindowAggr.msisdnList).size).toString + \"  \" + #CONV.toNumber(#timeWindowAggr.size).floatValue.toString + \"  \" + \n\n(#CONV.toNumber(#COLLECTION.distinct(#timeWindowAggr.msisdnList).size)/ #CONV.toNumber(#timeWindowAggr.msisdnList.size).floatValue).toString\n"
+                  }
+                },
+                {
+                  "name" : "msisdnBList",
+                  "expression" : {
+                    "language" : "spel",
+                    "expression" : "{}"
+                  }
+                }
+              ]
+            },
+            "endResult" : null,
+            "isDisabled" : null,
+            "additionalFields" : {
+              "description" : null,
+              "layoutData" : {
+                "x" : 360,
+                "y" : 1980
+              }
+            },
+            "type" : "Sink"
+          }
+        ]
+      ],
+      "id" : "split",
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 180,
+          "y" : 1800
+        }
+      },
+      "type" : "Split"
     }
   ],
   "additionalBranches" : [
