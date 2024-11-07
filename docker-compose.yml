@@ -55,7 +55,11 @@ services:
   ### Nussknacker designer service
 
   designer:
-    image: touk/nussknacker:${NUSSKNACKER_VERSION:?NUSSKNACKER_VERSION must be defined}_scala-2.12
+    build:
+      context: ./designer/
+      args:
+        NUSSKNACKER_VERSION: ${NUSSKNACKER_VERSION:?NUSSKNACKER_VERSION must be defined}
+        NU_COMPAT_VERSION: ${NU_COMPAT_VERSION:?NU_COMPAT_VERSION must be defined}
     restart: unless-stopped
     environment:
       EXAMPLE_SCENARIOS_LIBRARY_SERVICE_NAME: quickstart-setup
@@ -70,7 +74,9 @@ services:
       INFLUXDB_URL: "http://influxdb:8086"
       FLINK_REST_URL: "http://flink-jobmanager:8081"
       JDK_JAVA_OPTIONS: "-Xmx1024M"
-      USAGE_REPORTS_SOURCE: "quickstart-docker-compose"
+      USAGE_REPORTS_SOURCE: "flink-compat-docker-compose"
+      # Flink TypeInfo registration have to be disabled as it is supported from version 1.19 on
+      NU_DISABLE_FLINK_TYPE_INFO_REGISTRATION: true
     depends_on:
       postgres:
         condition: service_healthy
@@ -229,12 +235,14 @@ services:
     build:
       context: ./flink/
       args:
-        FLINK_VERSION: "1.19.1-scala_2.12-java11"
+        FLINK_VERSION: "1.18.1-scala_2.12-java11"
       no_cache: true
     restart: unless-stopped
     command: jobmanager
     environment:
       JOB_MANAGER_RPC_ADDRESS: "flink-jobmanager"
+      # Flink TypeInfo registration have to be disabled as it is supported from version 1.19 on
+      NU_DISABLE_FLINK_TYPE_INFO_REGISTRATION: true
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8081/jobs/overview" ]
       interval: 10s
@@ -246,12 +254,14 @@ services:
     build:
       context: ./flink/
       args:
-        FLINK_VERSION: "1.19.1-scala_2.12-java11"
+        FLINK_VERSION: "1.18.1-scala_2.12-java11"
       no_cache: true
     restart: unless-stopped
     command: taskmanager
     environment:
       JOB_MANAGER_RPC_ADDRESS: "flink-jobmanager"
+      # Flink TypeInfo registration have to be disabled as it is supported from version 1.19 on
+      NU_DISABLE_FLINK_TYPE_INFO_REGISTRATION: true
     depends_on:
       flink-jobmanager:
         condition: service_healthy
