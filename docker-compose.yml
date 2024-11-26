@@ -262,7 +262,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 1024M
+          memory: 1500M
 
   telegraf:
     image: telegraf:1.30.2
