@@ -1,6 +1,6 @@
 {
   "metaData" : {
-    "id" : "loan-approval",
+    "id" : "loan-approval-4",
     "additionalFields" : {
       "description" : null,
       "properties" : {
@@ -64,7 +64,7 @@
           "additionalFields" : {
             "description" : null,
             "layoutData" : {
-              "x" : 1080,
+              "x" : 720,
               "y" : 360
             }
           },
@@ -87,20 +87,85 @@
       "type" : "Filter"
     },
     {
-      "id" : "# months with more than 5 days in red",
-      "varName" : "varName",
-      "value" : {
-        "language" : "spel",
-        "expression" : "#input.finHistory.?[#this.daysNegative > 5].size"
+      "id" : "getBankruptcyStatus",
+      "service" : {
+        "id" : "getBankruptcyStatus",
+        "parameters" : [
+          {
+            "name" : "SIN",
+            "expression" : {
+              "language" : "spel",
+              "expression" : "#input.SIN"
+            }
+          }
+        ]
       },
+      "output" : "bankruptcyStatus",
       "additionalFields" : {
         "description" : null,
         "layoutData" : {
-          "x" : 720,
+          "x" : 1080,
           "y" : 360
         }
       },
-      "type" : "Variable"
+      "type" : "Enricher"
+    },
+    {
+      "nextFalse" : [
+        {
+          "id" : "Response - bankruptcy declared",
+          "ref" : {
+            "typ" : "response",
+            "parameters" : [
+              {
+                "name" : "Raw editor",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "false"
+                }
+              },
+              {
+                "name" : "acceptedAmount",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "0"
+                }
+              },
+              {
+                "name" : "message",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "'Bankruptcy declared'"
+                }
+              }
+            ]
+          },
+          "endResult" : null,
+          "isDisabled" : null,
+          "additionalFields" : {
+            "description" : null,
+            "layoutData" : {
+              "x" : 1260,
+              "y" : 720
+            }
+          },
+          "type" : "Sink"
+        }
+      ],
+      "id" : "filter out bankrupcies",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "! #bankruptcyStatus.bankruptcyDeclared"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 1080,
+          "y" : 540
+        }
+      },
+      "type" : "Filter"
     },
     {
       "id" : "# days in red",
@@ -113,7 +178,7 @@
         "description" : null,
         "layoutData" : {
           "x" : 720,
-          "y" : 540
+          "y" : 720
         }
       },
       "type" : "Variable"
@@ -129,7 +194,23 @@
         "description" : null,
         "layoutData" : {
           "x" : 720,
-          "y" : 720
+          "y" : 900
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "# months with more than 5 days in red",
+      "varName" : "varName",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#input.finHistory.?[#this.daysNegative > 5].size"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 1080
         }
       },
       "type" : "Variable"
@@ -169,8 +250,8 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 0,
-                  "y" : 1080
+                  "x" : 720,
+                  "y" : 1440
                 }
               },
               "type" : "Enricher"
@@ -208,8 +289,8 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 0,
-                  "y" : 1260
+                  "x" : 720,
+                  "y" : 1620
                 }
               },
               "type" : "Sink"
@@ -255,8 +336,8 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 360,
-                  "y" : 1080
+                  "x" : 0,
+                  "y" : 1440
                 }
               },
               "type" : "Sink"
@@ -302,8 +383,8 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 1080,
-                  "y" : 1080
+                  "x" : 360,
+                  "y" : 1440
                 }
               },
               "type" : "Sink"
@@ -349,8 +430,8 @@
               "additionalFields" : {
                 "description" : null,
                 "layoutData" : {
-                  "x" : 720,
-                  "y" : 1080
+                  "x" : 1080,
+                  "y" : 1440
                 }
               },
               "type" : "Sink"
@@ -397,7 +478,7 @@
                 "description" : null,
                 "layoutData" : {
                   "x" : 1440,
-                  "y" : 1080
+                  "y" : 1440
                 }
               },
               "type" : "Sink"
@@ -412,7 +493,7 @@
         "description" : null,
         "layoutData" : {
           "x" : 720,
-          "y" : 900
+          "y" : 1260
         }
       },
       "type" : "Switch"
