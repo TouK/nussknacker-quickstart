@@ -1,0 +1,423 @@
+{
+  "metaData" : {
+    "id" : "loan-approval",
+    "additionalFields" : {
+      "description" : null,
+      "properties" : {
+        "inputSchema" : "{\n  \"type\": \"object\",\n  \"properties\": {\n    \"SIN\": {\n      \"type\": \"string\"\n    },\n    \"location\": {\n      \"type\": \"object\",\n      \"properties\": {\n        \"city\": {\n          \"type\": \"string\"\n        },\n        \"zip\": {\n          \"type\": \"string\"\n        }\n      }\n    },\n    \"requestType\": {\n      \"type\": \"string\"\n    },\n    \"requestedAmount\": {\n      \"type\": \"number\"\n    },\n    \"finHistory\": {\n      \"type\": \"array\",\n      \"items\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"year\": { \"type\": \"integer\" },\n          \"month\": { \"type\": \"integer\" },\n          \"avgIncome\": { \"type\": \"number\" },\n          \"avgBalance\" : {\"type\" : \"number\"},\n          \"daysNegative\": {\"type\" : \"integer\"},\n          \"avgNegative\": {\"type\" : \"number\"}\n        }\n      }\n    }\n  },\n\n  \"required\": [\"SIN\", \"location\", \"requestType\", \"requestedAmount\", \"finHistory\"],\n  \"additionalProperties\": false\n}",
+        "outputSchema" : "{\n    \"type\": \"object\",\n  \"properties\": {\n    \"acceptedAmount\": {\n      \"type\": \"number\",\n      \"description\": \"Accepted amount\"\n    },\n    \"message\": {\n      \"type\": \"string\",\n      \"description\": \"Additional message\"\n    }\n  },\n  \"required\": [\"acceptedAmount\", \"message\"],\n  \"additionalProperties\": false\n}",
+        "slug" : "loan"
+      },
+      "metaDataType" : "RequestResponseMetaData",
+      "showDescription" : false
+    }
+  },
+  "nodes" : [
+    {
+      "id" : "request",
+      "ref" : {
+        "typ" : "request",
+        "parameters" : [
+        ]
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 900,
+          "y" : 0
+        }
+      },
+      "type" : "Source"
+    },
+    {
+      "nextFalse" : [
+        {
+          "id" : "Too short financial history response",
+          "ref" : {
+            "typ" : "response",
+            "parameters" : [
+              {
+                "name" : "Raw editor",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "false"
+                }
+              },
+              {
+                "name" : "acceptedAmount",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "0"
+                }
+              },
+              {
+                "name" : "message",
+                "expression" : {
+                  "language" : "spel",
+                  "expression" : "'Too short history'"
+                }
+              }
+            ]
+          },
+          "endResult" : null,
+          "isDisabled" : null,
+          "additionalFields" : {
+            "description" : null,
+            "layoutData" : {
+              "x" : 1080,
+              "y" : 360
+            }
+          },
+          "type" : "Sink"
+        }
+      ],
+      "id" : "filter out too short financial history",
+      "expression" : {
+        "language" : "spel",
+        "expression" : "#input.finHistory.size > 18"
+      },
+      "isDisabled" : null,
+      "additionalFields" : {
+        "description" : "Checks how many elemnents the finHistory list has. One element = one month.",
+        "layoutData" : {
+          "x" : 900,
+          "y" : 180
+        }
+      },
+      "type" : "Filter"
+    },
+    {
+      "id" : "# months with more than 5 days in red",
+      "varName" : "varName",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#input.finHistory.?[#this.daysNegative > 5].size"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 360
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "# days in red",
+      "varName" : "daysInRed",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#COLLECTION.sum( #input.finHistory.![#this.daysNegative] )"
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 540
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "id" : "days in red - percentage",
+      "varName" : "daysInRedPercentage",
+      "value" : {
+        "language" : "spel",
+        "expression" : "#daysInRed / (#input.finHistory.size * 30) "
+      },
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 720
+        }
+      },
+      "type" : "Variable"
+    },
+    {
+      "defaultNext" : [
+      ],
+      "nexts" : [
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.requestType == 'Personal loan'"
+          },
+          "nodes" : [
+            {
+              "id" : "Personal loan decision-table",
+              "service" : {
+                "id" : "decision-table",
+                "parameters" : [
+                  {
+                    "name" : "Decision Table",
+                    "expression" : {
+                      "language" : "tabularDataDefinition",
+                      "expression" : "{\n  \"columns\": [\n    {\n      \"name\": \"amountFrom\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"amountTo\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"percentageInRedTreshold\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"Decision\",\n      \"type\": \"java.lang.Boolean\"\n    }\n  ],\n  \"rows\": [\n    [\n      \"0\",\n      \"500\",\n      \"0.15\",\n      \"true\"\n    ],\n    [\n      \"500\",\n      \"5000\",\n      \"0.1\",\n      \"true\"\n    ],\n    [\n      \"5000\",\n      \"15000\",\n      \"0.05\",\n      null\n    ]\n  ]\n}"
+                    }
+                  },
+                  {
+                    "name" : "Match condition",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "#input.requestedAmount > #ROW.amountFrom && #input.requestedAmount <= #ROW.amountTo"
+                    }
+                  }
+                ]
+              },
+              "output" : "dtOutput",
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 0,
+                  "y" : 1080
+                }
+              },
+              "type" : "Enricher"
+            },
+            {
+              "id" : "Personal loan response",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "Raw editor",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "false"
+                    }
+                  },
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "50"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'only small amount available'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 0,
+                  "y" : 1260
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.requestType == 'Auto loan'"
+          },
+          "nodes" : [
+            {
+              "id" : "Auto loan response",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "Raw editor",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "false"
+                    }
+                  },
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "1000"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'Drive safely'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 360,
+                  "y" : 1080
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.requestType == 'HELOC'"
+          },
+          "nodes" : [
+            {
+              "id" : "HELOC response",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "Raw editor",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "false"
+                    }
+                  },
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "100"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'Large sum for other city'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 1080,
+                  "y" : 1080
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "#input.requestType == 'Payday loan'"
+          },
+          "nodes" : [
+            {
+              "id" : "Payday loan response",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "Raw editor",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "false"
+                    }
+                  },
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "0.0"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "''"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 720,
+                  "y" : 1080
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        },
+        {
+          "expression" : {
+            "language" : "spel",
+            "expression" : "true"
+          },
+          "nodes" : [
+            {
+              "id" : "erroneous loan type",
+              "ref" : {
+                "typ" : "response",
+                "parameters" : [
+                  {
+                    "name" : "Raw editor",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "false"
+                    }
+                  },
+                  {
+                    "name" : "acceptedAmount",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "0"
+                    }
+                  },
+                  {
+                    "name" : "message",
+                    "expression" : {
+                      "language" : "spel",
+                      "expression" : "'Unknown loan type'"
+                    }
+                  }
+                ]
+              },
+              "endResult" : null,
+              "isDisabled" : null,
+              "additionalFields" : {
+                "description" : null,
+                "layoutData" : {
+                  "x" : 1440,
+                  "y" : 1080
+                }
+              },
+              "type" : "Sink"
+            }
+          ]
+        }
+      ],
+      "id" : "loan type",
+      "expression" : null,
+      "exprVal" : null,
+      "additionalFields" : {
+        "description" : null,
+        "layoutData" : {
+          "x" : 720,
+          "y" : 900
+        }
+      },
+      "type" : "Switch"
+    }
+  ],
+  "additionalBranches" : [
+  ]
+}

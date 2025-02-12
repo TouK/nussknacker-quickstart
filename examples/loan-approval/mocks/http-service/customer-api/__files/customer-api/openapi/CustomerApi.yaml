@@ -1,0 +1,103 @@
+openapi: 3.0.0
+info:
+  title: Customer API
+  version: 1.0.0
+  description: API for retrieving customer profiles and offers based on customer type.
+
+paths:
+  '/customer/{SIN}/bankruptcy':
+    get:
+      summary: Get customer bankruptcy status by customer's SIN
+      description: Nothing more
+      operationId: getBankruptcyStatus
+      parameters:
+        - name: SIN
+          in: path
+          required: true
+          description: Customer Social Insurance Number
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Customer bankrupcy status found successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankruptcyStatus'
+        '404':
+          description: No customer bankruptcy status found for the given ID.
+
+  '/customer/{customerType}/offers':
+    get:  
+      summary: Get offers by customer type
+      description: Retrieve offers available for a specific type of customer.
+      operationId: getOffersForCustomerType
+      parameters:
+        - name: customerType
+          in: path
+          required: true
+          description: The type/category of the customer.
+          schema: 
+            type: string
+      responses:
+        '200': 
+          description: Offers found for the specified customer type.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomerTypeOffer'
+        '404':
+          description: No offer found for the specified customer type.
+
+components:
+  schemas:
+    BankruptcyStatus:
+      title: BankruptcyStatus
+      type: object
+      description: Schema representing a customer's bankruptcy information.
+      properties:
+        SIN: 
+          type: string 
+          description: The Social Insurance Number of thecustomer
+        customerType:
+          type: string
+          description: The type or category of the customer.
+        customerName:
+          type: string
+          description: The customer's name
+        customerMsisdn:
+          type: string
+          description: The customer's phone number
+        customerAge:
+          type: integer
+          description: The customer's age
+        customerSex:
+          type: string
+          description: The customer's sex
+        bankruptcyDeclared:
+          type: boolean
+          description: set to true if bankruptcy was ever declared
+
+    CustomerTypeOffer:
+      title: CustomerTypeOffer
+      type: object
+      description: Schema representing an offer available for a specific type of customer.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the offer.
+        name:
+          type: string
+          description: The name or title of the offer.
+        message:
+          type: string
+          description: A human-readable offer description
+        price:
+          type: integer
+          description: Price of the offer
+        validity:
+          type: string
+          format: date-time
+          description: The validity date of the offer.

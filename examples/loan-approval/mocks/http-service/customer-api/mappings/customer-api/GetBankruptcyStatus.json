@@ -1,0 +1,13 @@
+{
+    "request": {
+        "urlPattern": "/customer/(.+)/bankruptcy",
+        "method": "GET"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json"
+        },
+        "bodyFileName": "customer-api/responses/BankruptcyStatus.json"
+    }
+}
