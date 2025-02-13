@@ -1,6 +1,6 @@
 {
   "metaData" : {
-    "id" : "loan-approval-4",
+    "id" : "loan-approval-4-3",
     "additionalFields" : {
       "description" : null,
       "properties" : {
@@ -74,7 +74,7 @@
       "id" : "filter out too short financial history",
       "expression" : {
         "language" : "spel",
-        "expression" : "#input.finHistory.size > 18"
+        "expression" : "#input.finHistory.size > 2"
       },
       "isDisabled" : null,
       "additionalFields" : {
@@ -87,7 +87,7 @@
       "type" : "Filter"
     },
     {
-      "id" : "getBankruptcyStatus",
+      "id" : "get bankruptcy status",
       "service" : {
         "id" : "getBankruptcyStatus",
         "parameters" : [
@@ -152,7 +152,7 @@
           "type" : "Sink"
         }
       ],
-      "id" : "filter out bankrupcies",
+      "id" : "filter out customers with bankrupcy",
       "expression" : {
         "language" : "spel",
         "expression" : "! #bankruptcyStatus.bankruptcyDeclared"
@@ -168,8 +168,8 @@
       "type" : "Filter"
     },
     {
-      "id" : "# days in red",
-      "varName" : "daysInRed",
+      "id" : "# total days in red",
+      "varName" : "totalDaysInRed",
       "value" : {
         "language" : "spel",
         "expression" : "#COLLECTION.sum( #input.finHistory.![#this.daysNegative] )"
@@ -188,7 +188,7 @@
       "varName" : "daysInRedPercentage",
       "value" : {
         "language" : "spel",
-        "expression" : "#daysInRed / (#input.finHistory.size * 30) "
+        "expression" : "#totalDaysInRed.toDouble / (#input.finHistory.size * 30)"
       },
       "additionalFields" : {
         "description" : null,
@@ -201,7 +201,7 @@
     },
     {
       "id" : "# months with more than 5 days in red",
-      "varName" : "varName",
+      "varName" : "monthsIntenseRed",
       "value" : {
         "language" : "spel",
         "expression" : "#input.finHistory.?[#this.daysNegative > 5].size"
@@ -234,7 +234,7 @@
                     "name" : "Decision Table",
                     "expression" : {
                       "language" : "tabularDataDefinition",
-                      "expression" : "{\n  \"columns\": [\n    {\n      \"name\": \"amountFrom\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"amountTo\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"percentageInRedTreshold\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"Decision\",\n      \"type\": \"java.lang.Boolean\"\n    }\n  ],\n  \"rows\": [\n    [\n      \"0\",\n      \"500\",\n      \"0.15\",\n      \"true\"\n    ],\n    [\n      \"500\",\n      \"5000\",\n      \"0.1\",\n      \"true\"\n    ],\n    [\n      \"5000\",\n      \"15000\",\n      \"0.05\",\n      null\n    ]\n  ]\n}"
+                      "expression" : "{\n  \"rows\": [\n    [\n      \"0\",\n      \"500\",\n      \"0.15\",\n      \"true\"\n    ],\n    [\n      \"500\",\n      \"5000\",\n      \"0.1\",\n      \"true\"\n    ],\n    [\n      \"5000\",\n      \"15000\",\n      \"0.05\",\n      null\n    ]\n  ],\n  \"columns\": [\n    {\n      \"name\": \"amountFrom\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"amountTo\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"percentageInRedTreshold\",\n      \"type\": \"java.lang.Double\"\n    },\n    {\n      \"name\": \"Decision\",\n      \"type\": \"java.lang.Boolean\"\n    }\n  ]\n}"
                     }
                   },
                   {
