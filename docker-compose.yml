@@ -4,7 +4,7 @@ services:
 
   ### Quickstart setup container 
   quickstart-setup:
-    image: touk/nussknacker-example-scenarios-library:0.5.0
+    image: touk/nussknacker-example-scenarios-library:1.0.0
     depends_on:
       nginx:
         condition: service_healthy
@@ -19,13 +19,19 @@ services:
       NU_REQUEST_RESPONSE_OPEN_API_SERVICE_ADDRESS: "nginx:8181"
       KAFKA_ADDRESS: "kafka:9092"
       SCHEMA_REGISTRY_ADDRESS: "schema-registry:8081"
+    healthcheck:
+      test: [ "CMD-SHELL", "/healthcheck.sh" ]
+      interval: 5s
+      retries: 25
+      timeout: 10s
+      start_period: 10s
     volumes:
-      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/
+      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/additional
     deploy:
       resources:
         limits:
-          memory: 256M
-          cpus: '0.5'
+          memory: 512M
+          cpus: '1'
 
   ### Nussknacker-related services
 
@@ -59,7 +65,7 @@ services:
     restart: unless-stopped
     environment:
       EXAMPLE_SCENARIOS_LIBRARY_SERVICE_NAME: quickstart-setup
-      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/additional-configuration.conf,/opt/nussknacker/conf/application-customizations.conf"
+      CONFIG_FILE: "/opt/nussknacker/conf/application.conf,/opt/nussknacker/conf/additional/additional-configuration.conf,/opt/nussknacker/conf/application-customizations.conf"
       DB_URL: "jdbc:postgresql://postgres:5432/nu-db"
       DB_DRIVER: "org.postgresql.Driver"
       DB_USER: "nu"
@@ -91,7 +97,7 @@ services:
       interval: 10s
       retries: 10
     volumes:
-      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf
+      - nussknacker_designer_shared_configuration:/opt/nussknacker/conf/additional
       - ./designer/application-customizations.conf:/opt/nussknacker/conf/application-customizations.conf
     volumes_from:
       - flink-jobmanager
