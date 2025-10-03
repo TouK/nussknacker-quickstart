@@ -166,7 +166,7 @@ services:
   ### KAFKA-related services:
 
   kafka:
-    image: bitnami/kafka:3.7.0
+    image: bitnamilegacy/kafka:3.7.0
     restart: unless-stopped
     hostname: nu-kafka
     environment:
@@ -186,7 +186,7 @@ services:
           memory: 512M
 
   schema-registry:
-    image: bitnami/schema-registry:7.6.1
+    image: bitnamilegacy/schema-registry:7.6.1
     restart: unless-stopped
     environment:
       SCHEMA_REGISTRY_LISTENERS: "http://0.0.0.0:8081"
@@ -236,7 +236,7 @@ services:
     build:
       context: ./flink/
       args:
-        FLINK_VERSION: "1.19.1-scala_2.12-java11"
+        TOUK_FLINK_VERSION: "1.1.4-flink1.20.2-scala_2.12"
       no_cache: true
     restart: unless-stopped
     command: jobmanager
@@ -257,7 +257,7 @@ services:
     build:
       context: ./flink/
       args:
-        FLINK_VERSION: "1.19.1-scala_2.12-java11"
+        TOUK_FLINK_VERSION: "1.1.4-flink1.20.2-scala_2.12"
       no_cache: true
     restart: unless-stopped
     command: taskmanager
