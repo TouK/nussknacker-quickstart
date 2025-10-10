@@ -4,7 +4,7 @@ services:
 
   ### Quickstart setup container 
   quickstart-setup:
-    image: touk/nussknacker-example-scenarios-library:1.4.0
+    image: touk/nussknacker-example-scenarios-library:1.5.0
     depends_on:
       nginx:
         condition: service_healthy
@@ -19,7 +19,6 @@ services:
       NU_REQUEST_RESPONSE_OPEN_API_SERVICE_ADDRESS: "nginx:8181"
       KAFKA_ADDRESS: "kafka:9092"
       SCHEMA_REGISTRY_ADDRESS: "schema-registry:8081"
-      DISABLE_SCENARIO_REDEPLOY: "true"
     healthcheck:
       test: [ "CMD-SHELL", "/healthcheck.sh" ]
       interval: 5s
