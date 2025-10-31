@@ -4,7 +4,7 @@ services:
 
   ### Quickstart setup container 
   quickstart-setup:
-    image: touk/nussknacker-example-scenarios-library:0.4.1
+    image: touk/nussknacker-example-scenarios-library:1.10.0
     depends_on:
       nginx:
         condition: service_healthy
