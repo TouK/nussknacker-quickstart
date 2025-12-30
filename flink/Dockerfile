@@ -4,8 +4,7 @@ FROM touk/flink:${TOUK_FLINK_VERSION}
 
 USER root
 
-ADD https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar /opt/flink/lib/postgresql-42.6.0.jar
-RUN chmod 644 /opt/flink/lib/postgresql-42.6.0.jar
+ADD --chmod=644 https://repo1.maven.org/maven2/org/postgresql/postgresql/42.6.0/postgresql-42.6.0.jar /opt/flink/lib/postgresql-42.6.0.jar
 
 RUN echo '#!/bin/sh' > /ex-docker-entrypoint.sh && \
     echo 'export FLINK_PROPERTIES=$(cat /opt/flink/conf/flink-properties.yml) && /docker-entrypoint.sh "$@"' >> /ex-docker-entrypoint.sh && \
